@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="W:\TFS School_Projects\8INF257\Pebble_Test_Project\android\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.0.0"
+        sha1="c109d4c9ed6968c702858bcc8f3db3588913c45b">
+        <dex dex="W:\TFS School_Projects\8INF257\Pebble_Test_Project\android\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_de54d71eb54465dd739a66201fa65105e15d610b\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="W:\TFS School_Projects\8INF257\Pebble_Test_Project\android\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.0.0"
+        sha1="60f86063b03432881bbf4edb2244d4d7afaef3bc">
+        <dex dex="W:\TFS School_Projects\8INF257\Pebble_Test_Project\android\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_acff6787a6ced9c1330f3c0da5bada6593242bf2\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\AndroidProjects\android\Android Studio\android\build\intermediates\exploded-aar\com.getpebble\pebblekit\3.0.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.0.0"
+        sha1="bd72bf60a6e56573eecb0e6abf419fac2b1fc1e6">
+        <dex dex="C:\AndroidProjects\android\Android Studio\android\build\intermediates\transforms\dex\debug\folders\1000\10\com.getpebble-pebblekit-3.0.0_5beb3a3bc580acddffd111beda0360b64fa45c85\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\AndroidProjects\android\Android Studio\android\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.0.0"
+        sha1="c595bbb19cc7c942f56bb0f1ae267c0d8b344a81">
+        <dex dex="C:\AndroidProjects\android\Android Studio\android\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_62c13b80a4f12a13600e92079b3466a88daae2f3\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="W:\TFS School_Projects\8INF257\Pebble_Test_Project\android\build\intermediates\exploded-aar\com.getpebble\pebblekit\3.0.0\jars\classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.0.0"
+        sha1="bd72bf60a6e56573eecb0e6abf419fac2b1fc1e6">
+        <dex dex="W:\TFS School_Projects\8INF257\Pebble_Test_Project\android\build\intermediates\transforms\dex\debug\folders\1000\10\com.getpebble-pebblekit-3.0.0_79ff1ba341f3262dc21239d4a33a335d928c142c\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\AndroidProjects\android\Android Studio\android\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="21.0.0"
+        sha1="10e856d22d625aee2dafc847efa1241235ea16a8">
+        <dex dex="C:\AndroidProjects\android\Android Studio\android\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_27461d66776828bdc04b3775d45aa4771bb573a7\classes.dex" />
+    </item>
+
+</items>
