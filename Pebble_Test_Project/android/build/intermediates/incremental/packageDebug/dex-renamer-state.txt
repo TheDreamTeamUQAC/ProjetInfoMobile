@@ -1,7 +1,0 @@
-#Tue Feb 07 22:52:54 EST 2017
-base.0=W\:\\TFS School_Projects\\8INF257\\Pebble_Test_Project\\android\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_de54d71eb54465dd739a66201fa65105e15d610b
-renamed.1=classes.dex
-renamed.0=classes2.dex
-file.1=W\:\\TFS School_Projects\\8INF257\\Pebble_Test_Project\\android\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_acff6787a6ced9c1330f3c0da5bada6593242bf2\\classes.dex
-base.1=W\:\\TFS School_Projects\\8INF257\\Pebble_Test_Project\\android\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run_acff6787a6ced9c1330f3c0da5bada6593242bf2
-file.0=W\:\\TFS School_Projects\\8INF257\\Pebble_Test_Project\\android\\build\\intermediates\\transforms\\dex\\debug\\folders\\1000\\10\\instant-run-bootstrap_de54d71eb54465dd739a66201fa65105e15d610b\\classes.dex
