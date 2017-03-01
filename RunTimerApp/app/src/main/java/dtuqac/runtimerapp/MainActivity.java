@@ -15,9 +15,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.content.Intent;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +26,12 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+<<<<<<< HEAD
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.);
+=======
+        /*
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+>>>>>>> origin/master
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,6 +88,7 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+<<<<<<< HEAD
         if (id == R.id.nav_timer) {
 
         } else if (id == R.id.nav_edit_splits) {
@@ -96,6 +102,12 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_pebble) {
 
+=======
+        if (id == R.id.nav_timer)
+        {
+            Intent intent = new Intent(MainActivity.this, Timer.class);
+            startActivity(intent);
+>>>>>>> origin/master
         }
 
         //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
