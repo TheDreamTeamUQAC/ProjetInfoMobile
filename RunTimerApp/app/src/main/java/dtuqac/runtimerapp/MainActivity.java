@@ -26,12 +26,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-<<<<<<< HEAD
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.);
-=======
         /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
->>>>>>> origin/master
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,9 +84,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-<<<<<<< HEAD
-        if (id == R.id.nav_timer) {
 
+        if (id == R.id.nav_timer) {
+            Intent intent = new Intent(MainActivity.this, Timer.class);
+            startActivity(intent);
         } else if (id == R.id.nav_edit_splits) {
             setContentView(R.layout.app_bar_main);
         } else if (id == R.id.nav_save_splits) {
@@ -102,13 +99,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_pebble) {
 
-=======
-        if (id == R.id.nav_timer)
-        {
-            Intent intent = new Intent(MainActivity.this, Timer.class);
-            startActivity(intent);
->>>>>>> origin/master
-        }
 
         //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         //drawer.closeDrawer(GravityCompat.START);
