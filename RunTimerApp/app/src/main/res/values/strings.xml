@@ -1,8 +1,21 @@
 <resources>
+    <!-->
+    ************************************************************
+    Strings pour l'application
+    ************************************************************
+    <!-->
     <string name="app_name">RunTimerApp</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <!-->
+    ************************************************************
+    Strings pour l'activité Add/Load Splits
+    ************************************************************
+    <!-->
+    <string name="Load_Activity_Name">Add/Load Splits</string>
+
 </resources>
