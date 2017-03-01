@@ -3,19 +3,19 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/nav_timer"
             android:icon="@drawable/ic_alarm_black_24dp"
             android:title="Timer" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_edit"
             android:icon="@drawable/ic_alarm_add_black_24dp"
             android:title="Edit Splits" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_save"
             android:icon="@drawable/ic_update_black_24dp"
             android:title="Save Splits" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_load"
             android:icon="@drawable/ic_history_black_24dp"
             android:title="Load Split" />
     </group>
@@ -23,11 +23,11 @@
     <item android:title="Other">
         <menu>
             <item
-                android:id="@+id/nav_share"
+                android:id="@+id/nav_stats"
                 android:icon="@drawable/ic_menu_share"
                 android:title="Stats" />
             <item
-                android:id="@+id/nav_send"
+                android:id="@+id/nav_pebble"
                 android:icon="@drawable/ic_menu_send"
                 android:title="Pebble" />
         </menu>
