@@ -26,4 +26,5 @@
     <!-->
     <string name="Timer_Activity_Name">Timer</string>
     <string name="title_activity_timer">TimerActivity</string>
+    <string name="Titre1_Load">Liste des Speed Run</string>
 </resources>
