@@ -1,22 +1,17 @@
 package dtuqac.runtimerapp;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SimpleCursorAdapter;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.InputType;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
-import dtuqac.runtimerapp.GestionFichier;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LoadActivity extends AppCompatActivity {
+
+    private String m_Text = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +24,22 @@ public class LoadActivity extends AppCompatActivity {
     }
 
     public void addNewSpeedRun(View _inputView){
-        GestionFichier fileWorker = new GestionFichier(getApplicationContext());
+        GestionFichier fileWorker = new GestionFichier(this);
 
-        if(fileWorker.FichierExiste("2.txt"))
+        List<String> fichiersExistants = new ArrayList<String>();
+        fichiersExistants = fileWorker.ObtenirListeFichiers();
+
+
+        PopupMessage popup = new PopupMessage(this);
+
+        popup.AskString("Nom de la nouvelle SpeedRun?");
+
+        //Toast.makeText(this,"Non", Toast.LENGTH_SHORT).show();
+/*
+
+
+
+        if(fileWorker.FichierExiste("1.txt"))
         {
             Toast.makeText(this,"Oui", Toast.LENGTH_SHORT).show();
         }
@@ -41,10 +49,10 @@ public class LoadActivity extends AppCompatActivity {
         }
 
 
-        if (fileWorker.EcrireFichier("1.txt","Ceci est un test")){
-            String tmp = fileWorker.LireFichier("1.txt");
+        if (fileWorker.EcrireFichier("2.txt","Ceci est un test")){
+            String tmp = fileWorker.LireFichier("2.txt");
             Toast.makeText(this,tmp, Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 
 }
