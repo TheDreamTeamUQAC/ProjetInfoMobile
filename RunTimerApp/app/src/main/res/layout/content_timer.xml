@@ -18,7 +18,9 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -26,11 +28,10 @@
             android:layout_height="wrap_content">
 
             <Button
-                android:text="Temp"
+                android:text="je sais pas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/temp"
-                android:onClick="StartTimer"
                 android:layout_weight="1" />
 
             <Button
@@ -101,7 +102,8 @@
             android:layout_weight="1">
 
             <Button
-                android:text="Start / Split"
+                android:text="Start"
+                android:onClick="StartTimer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/start_button"

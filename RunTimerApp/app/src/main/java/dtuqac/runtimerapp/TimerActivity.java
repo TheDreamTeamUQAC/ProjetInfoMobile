@@ -5,8 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.os.SystemClock;
 import java.util.concurrent.TimeUnit;
 
@@ -16,10 +16,11 @@ public class TimerActivity extends AppCompatActivity {
     private long StartTime = 0;
     private long CurrentTime = 0;
     private long RealElapsedTime = 0;
-    private  boolean running;
+    private boolean running;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timer);
 
@@ -28,22 +29,47 @@ public class TimerActivity extends AppCompatActivity {
 
     public void StartTimer(View view)
     {
-        running = true;
-        StartTime = SystemClock.elapsedRealtime();
+        if (!running)
+        {
+            running = true;
+            StartTime = SystemClock.elapsedRealtime();
+
+            final Button StartButton = (Button)findViewById(R.id.start_button);
+            StartButton.setText("Split");
+        }
     }
 
     public void PauseTimer(View view)
     {
-        running = false;
+        if (running)
+        {
+            running = false;
+        }
+        else if (!running && StartTime != 0)
+        {
+            long NewCurrentTime = SystemClock.elapsedRealtime();
+            long PausedTime = NewCurrentTime - CurrentTime;
+
+            StartTime = StartTime + PausedTime;
+            running = true;
+        }
     }
 
     public void ResetTimer(View view)
     {
         running = false;
         StartTime = 0;
+
+        final Button StartButton = (Button)findViewById(R.id.start_button);
+        StartButton.setText("Start");
+        final TextView MainTimeView = (TextView)findViewById(R.id.main_timer_label);
+        final TextView SmallTimeView = (TextView)findViewById(R.id.small_timer_label);
+        MainTimeView.setText("0");
+        SmallTimeView.setText(".00");
     }
 
-    private void runTimer() {
+    private void runTimer()
+    {
         final TextView MainTimeView = (TextView)findViewById(R.id.main_timer_label);
         final TextView SmallTimeView = (TextView)findViewById(R.id.small_timer_label);
         //java text view associated with the xml one
@@ -56,7 +82,6 @@ public class TimerActivity extends AppCompatActivity {
                 {
                     CurrentTime = SystemClock.elapsedRealtime();
                     RealElapsedTime = CurrentTime - StartTime;
-
 
                     long Mils = RealElapsedTime;
                     long Secondes = TimeUnit.MILLISECONDS.toSeconds(RealElapsedTime);
@@ -75,17 +100,6 @@ public class TimerActivity extends AppCompatActivity {
                         MainTimer = String.format("%d:%02d:%02d", Heures, Minutes % 60, Secondes % 60);
                     }
 
-                    //String TempTest = String.format("%02d:%02d:%02d", Heures, Minutes % 60, Secondes % 60);
-
-                   // long Dixieme = temp % 100;
-                   // long Secondes = (temp % 100) / 100;
-                   // long Minutes = ((temp % 100) / 100) % 60;
-
-
-                    //String SmallTime = String.format("%02d", Dixieme);
-                    //SmallTimeView.setText(SmallTime);
-
-                    //String MainTime = String.format("%02d:%02d", Minutes, Secondes);
                     SmallTimeView.setText(SmallTimer);
                     MainTimeView.setText(MainTimer);
                 }
@@ -94,6 +108,5 @@ public class TimerActivity extends AppCompatActivity {
             }
         });
     }
-
 
 }
