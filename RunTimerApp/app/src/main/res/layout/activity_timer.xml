@@ -5,85 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="dtuqac.runtimerapp.Timer">
+    tools:context="dtuqac.runtimerapp.TimerActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:text="Start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/start_button"
-                android:onClick="StartTimer"
-                android:layout_weight="1" />
-
-            <Button
-                android:text="Pause"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/pause_button"
-                android:onClick="PauseTimer"
-                android:layout_weight="1" />
-
-            <Button
-                android:text="Reset"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/reset_button"
-                android:onClick="ResetTimer"
-                android:layout_weight="1" />
-        </LinearLayout>
-
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="400dp">
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <TextView
-                    android:text="TextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView2" />
-            </TableRow>
-
-        </TableLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:text="TextView"
-                android:paddingTop="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/main_timer_text"
-                android:layout_weight="1"
-                android:textSize="50sp"
-                android:textAlignment="viewEnd" />
-
-            <TextView
-                android:text="TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/small_timer_text"
-                android:layout_weight="0.32"
-                android:textSize="20sp"
-                android:textAlignment="viewEnd" />
-        </LinearLayout>
-
-    </LinearLayout>
+    <include layout="@layout/content_timer" />
 
 </android.support.design.widget.CoordinatorLayout>

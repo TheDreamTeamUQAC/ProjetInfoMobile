@@ -18,4 +18,12 @@
     <!-->
     <string name="Load_Activity_Name">Add/Load Splits</string>
 
+
+    <!-->
+    ************************************************************
+    Strings pour l'activité Timer
+    ************************************************************
+    <!-->
+    <string name="Timer_Activity_Name">Timer</string>
+    <string name="title_activity_timer">TimerActivity</string>
 </resources>
