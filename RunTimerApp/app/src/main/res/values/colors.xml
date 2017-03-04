@@ -4,4 +4,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#303F9F</color>
+
+    <color name="colorMainText">#000000</color>
+    <color name="light_grey">#efefef</color>
+    <color name="delete_mode">#d46565</color>
 </resources>

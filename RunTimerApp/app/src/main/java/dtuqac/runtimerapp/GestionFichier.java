@@ -1,11 +1,6 @@
 package dtuqac.runtimerapp;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
-import android.text.InputType;
-import android.widget.EditText;
-
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,53 +20,14 @@ public class GestionFichier {
     GestionFichier(Context ctx){
         fileContext = ctx;
     }
+    private String extensionFichier = ".xml";
 
-    private String AjouterExtensionFichier(String _nomFichier){
-        return _nomFichier + ".xml";
+    private String AjouterExtensionFichier(String _nomFichier) {
+        return _nomFichier + extensionFichier;
     }
-
-    //Popup texte
-    public void AjouterFichier(String _nomFenetre){
-        AlertDialog.Builder builder = new AlertDialog.Builder(fileContext);
-        builder.setTitle(_nomFenetre);
-
-        // Set up the input
-        final EditText input = new EditText(fileContext);
-        // Specify the type of input expected
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
-        builder.setView(input);
-
-        // Set up the buttons
-        builder.setPositiveButton("Confirmer", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                GestionFichier fileWorker = new GestionFichier((Context) dialog);
-                if (!fileWorker.FichierExiste(AjouterExtensionFichier(input.getText().toString()))){
-                    //Écrire un fichier vide
-                    fileWorker.EcrireFichier(AjouterExtensionFichier(input.getText().toString()),"");
-                }
-                else {
-                    //Supprimer le fichier existant
-                    fileWorker.SupprimerFichier(AjouterExtensionFichier(input.getText().toString()));
-                }
-
-            }
-        });
-        builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        builder.show();
+    private String EnleverExtensionFichier(String _nomFichier){
+        return _nomFichier.replace(extensionFichier,"");
     }
-
-
-
-
-
-
 
     public String LireFichier(String _nomFichier){
         _nomFichier = AjouterExtensionFichier(_nomFichier);
@@ -141,7 +97,7 @@ public class GestionFichier {
         for (int i = 0; i < files.length; i++)
         {
             if(!files[i].getName().equals("instant-run")){
-                result.add(files[i].getName());
+                result.add(EnleverExtensionFichier(files[i].getName()));
             }
         }
         return result;
