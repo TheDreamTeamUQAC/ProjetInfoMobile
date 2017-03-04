@@ -41,7 +41,7 @@ public class PopupMessage {
                 }
                 else {
                     //Supprimer le fichier existant
-                    fileWorker.SupprimerFichier(input.getText().toString());
+                    ConfirmerSuppressionPopup("Le fichier \"" +input.getText().toString() + "\" existe déjà. Le recréer?", input.getText().toString(),true);
                 }
                 ((LoadActivity)popupActivity).ChargerFichiersListView();
             }
@@ -60,6 +60,10 @@ public class PopupMessage {
     }
 
     public void ConfirmerSuppressionPopup(String _nomFenetre, final String _nomFichier){
+        ConfirmerSuppressionPopup(_nomFenetre,_nomFichier,false);
+    }
+
+    public void ConfirmerSuppressionPopup(String _nomFenetre, final String _nomFichier, final Boolean _recreer){
         AlertDialog.Builder builder = new AlertDialog.Builder(popupActivity);
         builder.setTitle(_nomFenetre);
         builder.setIcon(android.R.drawable.ic_dialog_alert);
@@ -70,6 +74,10 @@ public class PopupMessage {
             public void onClick(DialogInterface dialog, int which) {
                 GestionFichier fileWorker = new GestionFichier(popupActivity);
                 fileWorker.SupprimerFichier(_nomFichier);
+                if(_recreer)
+                {
+                    fileWorker.EcrireFichier(_nomFichier,"");
+                }
                 ((LoadActivity)popupActivity).ChargerFichiersListView();
             }
         });

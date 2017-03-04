@@ -89,6 +89,9 @@ public class LoadActivity extends AppCompatActivity {
 
     public void addNewSpeedRun(View _inputView){
         popupMaker.AjouterFichierPopup("Nom de la nouvelle SpeedRun?");
+
+        ModeSuppression = true;
+        switchDelete(false);
     }
 
     @Override
@@ -96,28 +99,36 @@ public class LoadActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.miDelete:
-                activateDelete();
+                switchDelete();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    public void activateDelete(){
+    public void switchDelete()
+    {
+        switchDelete(true);
+    }
+    public void switchDelete(Boolean _afficher){
         ListView lv = (ListView) findViewById(R.id.Liste_Fichiers);
+        String mode;
         if(ModeSuppression)
         {
             lv.setBackground((getDrawable(R.drawable.list_view_shape)));
-
-            Toast.makeText(getBaseContext(),"Mode suppression désactivé!",Toast.LENGTH_SHORT).show();
+            mode = "désactivé";
         }
         else
         {
             lv.setBackground((getDrawable(R.drawable.list_view_shape_delete)));
-
-            Toast.makeText(getBaseContext(),"Mode suppression activé!",Toast.LENGTH_SHORT).show();
+            mode = "activé";
         }
 
+        //Envoyer un toast si demandé
+        if(_afficher)
+        {
+            Toast.makeText(getBaseContext(),"Mode suppression " + mode + "!",Toast.LENGTH_SHORT).show();
+        }
         //Changer le switch
         ModeSuppression = !ModeSuppression;
     }
