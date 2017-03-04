@@ -3,6 +3,7 @@ package dtuqac.runtimerapp;
 import android.os.Handler;
 import android.os.SystemClock;
 import java.util.concurrent.TimeUnit;
+import android.util.Log;
 
 /**
  * Created by Francois on 2017-03-01.
@@ -10,6 +11,8 @@ import java.util.concurrent.TimeUnit;
 
 public final class TimerClass
 {
+    //TODO: SplitsFile, CurrentComparison, CurrentSplit, etc.
+
     private long StartTime = 0;
     private long CurrentTime = 0;
     private long RealElapsedTime = 0;
@@ -20,17 +23,27 @@ public final class TimerClass
     private long Minutes = 0;
     private long Heures = 0;
 
+    public long GetMiliseconds(){ return Miliseconds; }
+    public long GetSecondes(){ return Secondes; }
+    public long GetMinutes(){ return Minutes; }
+    public long GetHeures(){ return Heures; }
+    public boolean IsRunning(){ return Running; }
+
     public void StartTimer()
     {
         Running = true;
-        RunTimer();
+        StartTime = SystemClock.elapsedRealtime();
     }
 
     public void PauseTimer()
     {
-        if (Running)
+        if (Running) //On Pause
         {
             Running = false;
+        }
+        else
+        {
+            UnpauseTimer();
         }
     }
 
@@ -50,20 +63,25 @@ public final class TimerClass
 
     public void ResetTimer()
     {
-        StartTime = 0;
         Running = false;
+        StartTime = 0;
+        Miliseconds = 0;
+        Secondes = 0;
+        Minutes = 0;
+        Heures = 0;
     }
 
-    private void RunTimer()
+    public void ReportTime()
     {
-        final Handler handler = new Handler();
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                //TODO: Mettre le code du runTimer()
-            }
-        });
+        if (Running)
+        {
+            CurrentTime = SystemClock.elapsedRealtime();
+            RealElapsedTime = CurrentTime - StartTime;
+
+            Miliseconds = RealElapsedTime;
+            Secondes = TimeUnit.MILLISECONDS.toSeconds(RealElapsedTime);
+            Minutes = TimeUnit.SECONDS.toMinutes((Secondes));
+            Heures = TimeUnit.MINUTES.toHours(Minutes);
+        }
     }
-
-
 }
