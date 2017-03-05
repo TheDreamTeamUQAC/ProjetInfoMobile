@@ -8,4 +8,5 @@
     <color name="colorMainText">#000000</color>
     <color name="light_grey">#efefef</color>
     <color name="delete_mode">#d46565</color>
+    <color name="Warning">#e43c3c</color>
 </resources>

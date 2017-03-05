@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class LoadActivity extends AppCompatActivity {
 
     private GestionFichier fileWorker;
     private PopupMessage popupMaker;
+
     private Boolean ModeSuppression;
 
     @Override
@@ -58,7 +60,7 @@ public class LoadActivity extends AppCompatActivity {
                 }
                 else {
                     //Ici on fait les évènements si on charge le fichier de SpeedRun
-
+                    //TODO Linker avec les autres activity
                 }
             }
         });
@@ -76,15 +78,19 @@ public class LoadActivity extends AppCompatActivity {
         List<String> fichiersExistants = new ArrayList<String>();
         fichiersExistants = fileWorker.ObtenirListeFichiers();
 
+        TextView txt = (TextView)findViewById(R.id.txtListViewVide);
+
+        if(fichiersExistants.size() == 0) {txt.setVisibility(View.VISIBLE);}
+        else {txt.setVisibility(View.INVISIBLE);}
+
         ListView lv = (ListView) findViewById(R.id.Liste_Fichiers);
 
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,
-                fichiersExistants );
+                fichiersExistants);
 
         lv.setAdapter(arrayAdapter);
-
     }
 
     public void addNewSpeedRun(View _inputView){

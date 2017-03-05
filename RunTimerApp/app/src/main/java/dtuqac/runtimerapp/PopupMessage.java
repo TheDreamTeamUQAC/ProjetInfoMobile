@@ -37,7 +37,7 @@ public class PopupMessage {
                 GestionFichier fileWorker = new GestionFichier(popupActivity);
                 if (!fileWorker.FichierExiste(input.getText().toString())){
                     //Écrire un fichier vide
-                    fileWorker.EcrireFichier(input.getText().toString(),"");
+                    fileWorker.EcrireFichier(input.getText().toString());
                 }
                 else {
                     //Supprimer le fichier existant
@@ -76,7 +76,7 @@ public class PopupMessage {
                 fileWorker.SupprimerFichier(_nomFichier);
                 if(_recreer)
                 {
-                    fileWorker.EcrireFichier(_nomFichier,"");
+                    fileWorker.EcrireFichier(_nomFichier);
                 }
                 ((LoadActivity)popupActivity).ChargerFichiersListView();
             }

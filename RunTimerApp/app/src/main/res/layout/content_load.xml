@@ -32,5 +32,16 @@
         android:layout_height="wrap_content"
         android:dividerHeight="2sp"
         android:background="@drawable/list_view_shape"></ListView>
+
+        <TextView
+            android:id="@+id/txtListViewVide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:textColor="@color/Warning"
+            android:text="@string/Aucune_SpeedRun"
+            android:textAlignment="center"
+            android:visibility="invisible"
+            android:paddingTop="165sp"/>
     </TableLayout>
 </RelativeLayout>
