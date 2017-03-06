@@ -45,7 +45,7 @@ public class LoadActivity extends AppCompatActivity {
         ModeSuppression = false;
     }
 
-    private void AjouterListenetListView() {
+    private void AjouterListenetListView()  {
 
         ListView lv = (ListView) findViewById(R.id.Liste_Fichiers);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -61,6 +61,7 @@ public class LoadActivity extends AppCompatActivity {
                 else {
                     //Ici on fait les évènements si on charge le fichier de SpeedRun
                     //TODO Linker avec les autres activity
+                    fileWorker.TraiterXML(selected);
                 }
             }
         });

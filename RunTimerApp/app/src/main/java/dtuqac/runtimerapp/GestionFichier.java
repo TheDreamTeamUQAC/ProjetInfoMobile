@@ -1,8 +1,12 @@
 package dtuqac.runtimerapp;
 
 import android.content.Context;
+import android.content.res.XmlResourceParser;
 import android.util.Xml;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.File;
@@ -10,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -254,5 +259,83 @@ public class GestionFichier {
         }
 
     }
+
+    // Parses the contents of an entry. If it encounters a title, summary, or link tag, hands them off
+    // to their respective "read" methods for processing. Otherwise, skips the tag.
+    public XmlStructure TraiterXML(String _nomFichier) {
+        try
+        {
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+            XmlPullParser parser = factory.newPullParser();
+
+
+            parser.setInput(new StringReader(LireFichier(_nomFichier)));
+
+            String title = null;
+            String summary = null;
+            String link = null;
+
+            int eventType = parser.getEventType();
+            while (eventType != XmlPullParser.END_DOCUMENT) {
+
+                String name;
+                switch (eventType) {
+                    case XmlPullParser.START_DOCUMENT:
+                        break;
+                    case XmlPullParser.START_TAG:
+                        name = parser.getName();
+                        if (name.equals("GameName")) {
+                            title = readGameName(parser);
+                        } else if (name.equals("CategoryName")) {
+                            summary = readCategoryName(parser);
+                        }
+                        else if (name.equals("Attempt")){
+                            List<String> lstAttributes = new ArrayList<>();
+                            //Aller chercher tous les essais
+                            for (int i = 0;i<parser.getAttributeCount();i++)
+                            {
+                                lstAttributes.add(parser.getAttributeName(i));
+                            }
+                        }
+                        break;
+                    case XmlPullParser.END_TAG:
+                        name = parser.getName();
+                        break;
+                }
+                eventType = parser.next();
+            }
+        }
+        catch (Exception e) {
+        }
+
+            return null;
+    }
+
+    private String readCategoryName(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, "", "CategoryName");
+        String CategoryName = readText(parser);
+        parser.require(XmlPullParser.END_TAG, "", "CategoryName");
+        return CategoryName;
+    }
+
+    // Processes title tags in the feed.
+    private String readGameName(XmlPullParser parser) throws IOException, XmlPullParserException {
+        parser.require(XmlPullParser.START_TAG, "", "GameName");
+        String GameName = readText(parser);
+        parser.require(XmlPullParser.END_TAG, "", "GameName");
+        return GameName;
+    }
+
+    // For the tags title and summary, extracts their text values.
+    private String readText(XmlPullParser parser) throws IOException, XmlPullParserException {
+        String result = "";
+        if (parser.next() == XmlPullParser.TEXT) {
+            result = parser.getText();
+            parser.nextTag();
+        }
+        return result;
+    }
+
 
 }
