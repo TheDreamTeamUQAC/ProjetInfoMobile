@@ -262,7 +262,7 @@ public class GestionFichier {
 
     // Parses the contents of an entry. If it encounters a title, summary, or link tag, hands them off
     // to their respective "read" methods for processing. Otherwise, skips the tag.
-    public XmlStructure TraiterXML(String _nomFichier) {
+    public void TraiterXML(String _nomFichier) {
         try
         {
             XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
@@ -309,7 +309,7 @@ public class GestionFichier {
         catch (Exception e) {
         }
 
-            return null;
+            //return null;
     }
 
     private String readCategoryName(XmlPullParser parser) throws IOException, XmlPullParserException {
