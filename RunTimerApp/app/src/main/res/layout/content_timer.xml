@@ -25,12 +25,14 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
             <Button
-                android:text="je sais pas"
+                android:text="TempLoad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="LoadSplits"
                 android:id="@+id/temp"
                 android:layout_weight="1" />
 
@@ -51,28 +53,22 @@
                 android:layout_weight="1" />
         </LinearLayout>
 
-        <TableLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="385dp"
+            android:orientation="horizontal">
 
-            <TableRow
+            <ListView
+                android:id="@+id/Liste_Splits"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <TextView
-                    android:text="vvvvvvv splits goes here vvvvvvvv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView2" />
-
-            </TableRow>
-
-        </TableLayout>
+                android:layout_height="match_parent" />
+        </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
             <TextView
                 android:text="0"

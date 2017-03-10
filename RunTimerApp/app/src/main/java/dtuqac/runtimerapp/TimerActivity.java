@@ -1,20 +1,18 @@
 package dtuqac.runtimerapp;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.os.SystemClock;
 
-import java.util.Timer;
-import java.util.concurrent.TimeUnit;
-
-import dtuqac.runtimerapp.TimerClass;
-
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
 public class TimerActivity extends AppCompatActivity {
@@ -28,6 +26,33 @@ public class TimerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_timer);
 
         MonTimer = new TimerClass();
+    }
+
+
+    public void LoadSplits(View view)
+    {
+        ListView lv = (ListView) findViewById(R.id.Liste_Splits);
+
+        // Create the item mapping
+        String[] from = new String[] { "title", "description" };
+        int[] to = new int[] { R.id.title, R.id.description };
+
+        List<HashMap<String, Object>> fillMaps = new ArrayList<HashMap<String, Object>>();
+
+        HashMap<String, Object> map = new HashMap<String, Object>();
+        map.put("title", "First title"); // This will be shown in R.id.title
+        map.put("description", "description 1"); // And this in R.id.description
+        fillMaps.add(map);
+
+        map = new HashMap<String, Object>();
+        map.put("title", "Second title");
+        map.put("description", "description 2");
+        fillMaps.add(map);
+
+        SimpleAdapter adapter = new SimpleAdapter(this, fillMaps, R.layout.split_list_item, from, to);
+        lv.setAdapter(adapter);
+
+        //lv.setAdapter(fillMaps);
     }
 
     public void StartTimer(View view)

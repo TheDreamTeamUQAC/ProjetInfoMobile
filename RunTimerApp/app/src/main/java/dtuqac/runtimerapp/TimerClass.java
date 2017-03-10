@@ -1,9 +1,7 @@
 package dtuqac.runtimerapp;
 
-import android.os.Handler;
 import android.os.SystemClock;
 import java.util.concurrent.TimeUnit;
-import android.util.Log;
 
 /**
  * Created by Francois on 2017-03-01.
