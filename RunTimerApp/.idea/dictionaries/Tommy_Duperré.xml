@@ -1,3 +1,13 @@
 <component name="ProjectDictionaryState">
-  <dictionary name="Tommy Duperré" />
+  <dictionary name="Tommy Duperré">
+    <words>
+      <w>CATEGORYNAME</w>
+      <w>GAMENAME</w>
+      <w>SPEEDRUN</w>
+      <w>SPEEDRUNID</w>
+      <w>SPLITDEFINITION</w>
+      <w>USESEMULATOR</w>
+      <w>speedrun</w>
+    </words>
+  </dictionary>
 </component>

@@ -7,6 +7,8 @@ import android.text.InputType;
 import android.view.WindowManager;
 import android.widget.EditText;
 
+import java.util.Date;
+
 /**
  * Created by Tommy Duperré on 2017-03-02.
  */
@@ -19,7 +21,7 @@ public class PopupMessage {
     }
 
     //Popup texte
-    public void AjouterFichierPopup(String _nomFenetre){
+    public void AjouterSpeedRunPopup(String _nomFenetre){
         AlertDialog.Builder builder = new AlertDialog.Builder(popupActivity);
         builder.setTitle(_nomFenetre);
 
@@ -34,16 +36,24 @@ public class PopupMessage {
         builder.setPositiveButton("Confirmer", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                GestionFichier fileWorker = new GestionFichier(popupActivity);
-                if (!fileWorker.FichierExiste(input.getText().toString())){
+                SGBD db = new SGBD(popupActivity);
+                if (!db.speedRunExiste(input.getText().toString())){
                     //Écrire un fichier vide
-                    fileWorker.EcrireFichier(input.getText().toString());
+                    SpeedRunEntity tmp = new SpeedRunEntity(
+                            0,
+                            input.getText().toString(),
+                            "Test",
+                            false,
+                            new Date()
+                    );
+
+                    db.addSpeedRun(tmp);
                 }
                 else {
                     //Supprimer le fichier existant
-                    ConfirmerSuppressionPopup("Le fichier \"" +input.getText().toString() + "\" existe déjà. Le recréer?", input.getText().toString(),true);
+                    //ConfirmerSuppressionPopup("La speedrun \"" +input.getText().toString() + "\" existe déjà. Le recréer?", input.getText().toString(),true);
                 }
-                ((LoadActivity)popupActivity).ChargerFichiersListView();
+                ((LoadActivity)popupActivity).ChargerEntreesListView();
             }
         });
         builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
@@ -59,11 +69,11 @@ public class PopupMessage {
 
     }
 
-    public void ConfirmerSuppressionPopup(String _nomFenetre, final String _nomFichier){
-        ConfirmerSuppressionPopup(_nomFenetre,_nomFichier,false);
+    public void ConfirmerSuppressionPopup(String _nomFenetre, final int _idSpeedRun){
+        ConfirmerSuppressionPopup(_nomFenetre,_idSpeedRun,false);
     }
 
-    public void ConfirmerSuppressionPopup(String _nomFenetre, final String _nomFichier, final Boolean _recreer){
+    public void ConfirmerSuppressionPopup(String _nomFenetre, final int _idSpeedRun, final Boolean _recreer){
         AlertDialog.Builder builder = new AlertDialog.Builder(popupActivity);
         builder.setTitle(_nomFenetre);
         builder.setIcon(android.R.drawable.ic_dialog_alert);
@@ -72,13 +82,13 @@ public class PopupMessage {
         builder.setPositiveButton("Confirmer", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                GestionFichier fileWorker = new GestionFichier(popupActivity);
-                fileWorker.SupprimerFichier(_nomFichier);
+                SGBD db = new SGBD(popupActivity);
+                db.deleteSpeedRun(_idSpeedRun);
                 if(_recreer)
                 {
-                    fileWorker.EcrireFichier(_nomFichier);
+                    //fileWorker.EcrireFichier(_nomFichier);
                 }
-                ((LoadActivity)popupActivity).ChargerFichiersListView();
+                ((LoadActivity)popupActivity).ChargerEntreesListView();
             }
         });
         builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {

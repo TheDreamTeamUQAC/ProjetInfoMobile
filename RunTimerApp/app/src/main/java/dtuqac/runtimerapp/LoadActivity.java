@@ -17,9 +17,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class LoadActivity extends AppCompatActivity {
 
     private GestionFichier fileWorker;
+    private SGBD db;
     private PopupMessage popupMaker;
 
     private Boolean ModeSuppression;
@@ -34,11 +36,12 @@ public class LoadActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Initialiser le gestionnaire de fichier
-         fileWorker = new GestionFichier(LoadActivity.this);
+        fileWorker = new GestionFichier(LoadActivity.this);
         popupMaker = new PopupMessage(LoadActivity.this);
+        db = new SGBD(LoadActivity.this);
 
         //Charger les fichiers dans la listview
-        ChargerFichiersListView();
+        ChargerEntreesListView();
         //Ajouter l'évènement onClick dans la listview
         AjouterListenetListView();
 
@@ -56,7 +59,7 @@ public class LoadActivity extends AppCompatActivity {
 
                 if(ModeSuppression) {
                     //Confirmer la suppresion du fichier de SpeedRun
-                    popupMaker.ConfirmerSuppressionPopup("Supprimer \"" + selected +"\"?", selected);
+                    popupMaker.ConfirmerSuppressionPopup("Supprimer \"" + selected +"\"?", position);
                 }
                 else {
                     //Ici on fait les évènements si on charge le fichier de SpeedRun
@@ -75,27 +78,32 @@ public class LoadActivity extends AppCompatActivity {
         return true;
     }
 
-    public void ChargerFichiersListView() {
-        List<String> fichiersExistants = new ArrayList<String>();
-        fichiersExistants = fileWorker.ObtenirListeFichiers();
+    public void ChargerEntreesListView() {
+        List<SpeedRunEntity> speedRunExistantes = new ArrayList<>();
+        speedRunExistantes = db.getSpeedRunList();
 
         TextView txt = (TextView)findViewById(R.id.txtListViewVide);
 
-        if(fichiersExistants.size() == 0) {txt.setVisibility(View.VISIBLE);}
+        if(speedRunExistantes.size() == 0) {txt.setVisibility(View.VISIBLE);}
         else {txt.setVisibility(View.INVISIBLE);}
 
         ListView lv = (ListView) findViewById(R.id.Liste_Fichiers);
 
+        List<String> listeNomsSpeedRun = new ArrayList<>();
+        for(SpeedRunEntity s:speedRunExistantes){
+            listeNomsSpeedRun.add(s.getGameName());
+        }
+
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,
-                fichiersExistants);
+                listeNomsSpeedRun);
 
         lv.setAdapter(arrayAdapter);
     }
 
     public void addNewSpeedRun(View _inputView){
-        popupMaker.AjouterFichierPopup("Nom de la nouvelle SpeedRun?");
+        popupMaker.AjouterSpeedRunPopup("Nom de la nouvelle SpeedRun?");
 
         ModeSuppression = true;
         switchDelete(false);

@@ -11,11 +11,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="dtuqac.runtimerapp.LoadActivity"
-    tools:showIn="@layout/activity_load">
+    tools:showIn="@layout/app_bar_load">
 
-    <TableLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,8 +24,10 @@
         android:textColor="@color/colorMainText"
         android:text="@string/Titre1_Load"/>
 
-        <!-->Mettre un espace entre ;e textview et le listview<!-->
-        <TextView />
+        <!-->Mettre un espace entre le textview et le listview<!-->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
 
     <ListView
         android:id="@+id/Liste_Fichiers"
@@ -35,7 +38,7 @@
 
         <TextView
             android:id="@+id/txtListViewVide"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="15sp"
             android:textColor="@color/Warning"
@@ -43,5 +46,5 @@
             android:textAlignment="center"
             android:visibility="invisible"
             android:paddingTop="165sp"/>
-    </TableLayout>
+    </LinearLayout>
 </RelativeLayout>

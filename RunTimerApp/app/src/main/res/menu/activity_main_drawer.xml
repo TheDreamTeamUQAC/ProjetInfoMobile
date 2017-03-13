@@ -5,19 +5,15 @@
         <item
             android:id="@+id/nav_timer"
             android:icon="@drawable/ic_alarm_black_24dp"
-            android:title="Timer" />
+            android:title="@string/Menu_Timer" />
         <item
             android:id="@+id/nav_edit_splits"
             android:icon="@drawable/ic_alarm_add_black_24dp"
-            android:title="Éditer les Segments" />
-        <item
-            android:id="@+id/nav_save_splits"
-            android:icon="@drawable/ic_update_black_24dp"
-            android:title="Save Splits" />
+            android:title="@string/Menu_Edit" />
         <item
             android:id="@+id/nav_load_splits"
             android:icon="@drawable/ic_history_black_24dp"
-            android:title="Gérer Speed Run" />
+            android:title="@string/Menu_Add" />
     </group>
 
     <item android:title="Other">
@@ -25,11 +21,11 @@
             <item
                 android:id="@+id/nav_statistics"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Stats" />
+                android:title="@string/Menu_Stats" />
             <item
                 android:id="@+id/nav_pebble"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Pebble" />
+                android:title="@string/Menu_Pebble" />
         </menu>
     </item>
 

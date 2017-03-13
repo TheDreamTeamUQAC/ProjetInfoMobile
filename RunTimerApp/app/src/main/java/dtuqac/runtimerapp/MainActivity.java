@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -83,26 +84,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        return SelectAction(id);
+    }
 
-
-        if (id == R.id.nav_timer) {
+    private boolean SelectAction(int id){
+        if (id == R.id.nav_timer || id == R.id.btnTimer) {
             Intent intent = new Intent(MainActivity.this, TimerActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_edit_splits) {
-            setContentView(R.layout.app_bar_main);
-        } else if (id == R.id.nav_save_splits) {
-
-        } else if (id == R.id.nav_load_splits) {
+        } else if (id == R.id.nav_edit_splits || id == R.id.btnEdit) {
+            //setContentView(R.layout.app_bar_main);
+        } else if (id == R.id.nav_load_splits || id == R.id.btnAdd) {
             Intent intent = new Intent(MainActivity.this, LoadActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_statistics) {
+        } else if (id == R.id.nav_statistics || id == R.id.btnStats) {
 
         } else if (id == R.id.nav_pebble) {
 
         }
 
-            //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-            //drawer.closeDrawer(GravityCompat.START);
-            return true;
+        return true;
+    }
+
+    public void onBtnClick(View _inputView){
+        int id = _inputView.getId();
+        SelectAction(id);
     }
 }
