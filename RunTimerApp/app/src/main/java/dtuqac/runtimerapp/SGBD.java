@@ -119,8 +119,6 @@ public class SGBD extends SQLiteOpenHelper {
 
     /*********************************************************************/
 
-    private HashMap hp;
-
     private Context SGBDContext;
 
     public SGBD(Context context) {
@@ -159,30 +157,13 @@ public class SGBD extends SQLiteOpenHelper {
         SGBDContext.deleteDatabase(DATABASE_NAME);
     }
 
-    public boolean insertContact (String name, String phone, String email, String street,String place) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("name", name);
-        contentValues.put("phone", phone);
-        contentValues.put("email", email);
-        contentValues.put("street", street);
-        contentValues.put("place", place);
-        db.insert("contacts", null, contentValues);
-        return true;
-    }
-
-    public Cursor getData(int id) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from contacts where id="+id+"", null );
-        return res;
-    }
-
+    //TODO NUMBER OF ROWS EXAMPLE
     public int numberOfRows(){
         SQLiteDatabase db = this.getReadableDatabase();
         int numRows = (int) DatabaseUtils.queryNumEntries(db, SPEEDRUN_TABLE_NAME);
         return numRows;
     }
-
+    //TODO UPDATE EXAMPLE
     public boolean updateContact (Integer id, String name, String phone, String email, String street,String place) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -195,6 +176,7 @@ public class SGBD extends SQLiteOpenHelper {
         return true;
     }
 
+    //region SpeedRun
     public Integer deleteSpeedRun (Integer id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(SPEEDRUN_TABLE_NAME,
@@ -204,16 +186,15 @@ public class SGBD extends SQLiteOpenHelper {
 
     public boolean speedRunExiste(String _nomSpeedRun){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from " + SPEEDRUN_TABLE_NAME +
+        Cursor res =  db.rawQuery( "select id from " + SPEEDRUN_TABLE_NAME +
                                             " where " + SPEEDRUN_COLONNE_GAMENAME + "=\""+_nomSpeedRun +"\"", null );
-
-        if(res.getCount() > 0){
+        int count = res.getCount();
+        if(count > 0){
             return true;
         }
         else{
             return false;
         }
-
     }
 
     public boolean addSpeedRun(SpeedRunEntity speedrun){
@@ -227,45 +208,56 @@ public class SGBD extends SQLiteOpenHelper {
         return true;
     }
 
+    public int getSpeedRunId(String _nomSpeedRun){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select id from " + SPEEDRUN_TABLE_NAME +
+                " where " + SPEEDRUN_COLONNE_GAMENAME + "=\""+_nomSpeedRun +"\"", null );
+
+        int count = res.getCount();
+
+        if(count > 0){
+            res.moveToNext();
+            return res.getInt(res.getColumnIndex(SPEEDRUN_COLONNE_ID));
+        }
+        else{
+            return -1;
+        }
+    }
+
     public ArrayList<SpeedRunEntity> getSpeedRunList() {
         ArrayList<SpeedRunEntity> array_list = new ArrayList<>();
 
-        //speedRunExiste("MOUHAHAHA");
-
-        //hp = new HashMap();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor res;
-
-        try {
-            res =  db.rawQuery("select * from " + SPEEDRUN_TABLE_NAME,null);
-        }
-        catch (SQLException ex)
-        {
-            throw ex;
-        }
-
+        Cursor res =  db.rawQuery("select * from " + SPEEDRUN_TABLE_NAME,null);
 
         res.moveToFirst();
+        DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
 
-        DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.CANADA_FRENCH);
+        int count = res.getCount();
+        if(count >0)
+        {
 
-        while(res.isAfterLast() == false){
-            try {
+            while(res.isAfterLast() == false) {
+                try {
+
                 SpeedRunEntity tmp = new SpeedRunEntity(
                         res.getInt(res.getColumnIndex(SPEEDRUN_COLONNE_ID)),
                         res.getString(res.getColumnIndex(SPEEDRUN_COLONNE_GAMENAME)),
                         res.getString(res.getColumnIndex(SPEEDRUN_COLONNE_CATEGORYNAME)),
-                        ((res.getInt(res.getColumnIndex(SPEEDRUN_COLONNE_USESEMULATOR))==1)?true:false),
+                        ((Integer.parseInt(res.getString(res.getColumnIndex(SPEEDRUN_COLONNE_USESEMULATOR))) == 1) ? true : false),
                         format.parse(res.getString(res.getColumnIndex(SPEEDRUN_COLONNE_OFFSET)))
                 );
-
                 array_list.add(tmp);
                 res.moveToNext();
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
+        }
         return array_list;
     }
+    //endregion
+
+
 }

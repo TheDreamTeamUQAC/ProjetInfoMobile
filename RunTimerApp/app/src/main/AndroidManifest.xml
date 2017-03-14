@@ -39,6 +39,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="dtuqac.runtimerapp.MainActivity" />
         </activity>
+        <activity
+            android:name=".SpeedRunForm"
+            android:label="@string/title_activity_speed_run_form"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

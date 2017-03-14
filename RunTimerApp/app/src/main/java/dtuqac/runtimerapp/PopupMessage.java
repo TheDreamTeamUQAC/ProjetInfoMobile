@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.Date;
 
@@ -38,7 +39,7 @@ public class PopupMessage {
             public void onClick(DialogInterface dialog, int which) {
                 SGBD db = new SGBD(popupActivity);
                 if (!db.speedRunExiste(input.getText().toString())){
-                    //Écrire un fichier vide
+                    //TODO Écrire une speedrun avec les information
                     SpeedRunEntity tmp = new SpeedRunEntity(
                             0,
                             input.getText().toString(),
@@ -50,8 +51,8 @@ public class PopupMessage {
                     db.addSpeedRun(tmp);
                 }
                 else {
-                    //Supprimer le fichier existant
-                    //ConfirmerSuppressionPopup("La speedrun \"" +input.getText().toString() + "\" existe déjà. Le recréer?", input.getText().toString(),true);
+                    //Avertir que l'entrée bd existe déjà
+                    Toast.makeText(popupActivity,"La speedrun \"" + input.getText().toString() + "\" existe déjà!",Toast.LENGTH_LONG).show();
                 }
                 ((LoadActivity)popupActivity).ChargerEntreesListView();
             }

@@ -1,6 +1,7 @@
 package dtuqac.runtimerapp;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,9 @@ import java.util.List;
 
 
 public class LoadActivity extends AppCompatActivity {
+
+    static final int SPEED_RUN_FORM = 1;
+
 
     private GestionFichier fileWorker;
     private SGBD db;
@@ -59,7 +63,13 @@ public class LoadActivity extends AppCompatActivity {
 
                 if(ModeSuppression) {
                     //Confirmer la suppresion du fichier de SpeedRun
-                    popupMaker.ConfirmerSuppressionPopup("Supprimer \"" + selected +"\"?", position);
+                    int speedRunId = db.getSpeedRunId(selected);
+                    if(speedRunId != -1)
+                    {
+                    popupMaker.ConfirmerSuppressionPopup("Supprimer \"" + selected +"\"?",speedRunId);
+                    }else {
+                        Toast.makeText(getBaseContext(),"Erreur lors de la supPression!",Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else {
                     //Ici on fait les évènements si on charge le fichier de SpeedRun
@@ -103,10 +113,22 @@ public class LoadActivity extends AppCompatActivity {
     }
 
     public void addNewSpeedRun(View _inputView){
-        popupMaker.AjouterSpeedRunPopup("Nom de la nouvelle SpeedRun?");
+        Intent intent = new Intent(LoadActivity.this, SpeedRunForm.class);
+        startActivityForResult(intent, SPEED_RUN_FORM);
 
         ModeSuppression = true;
         switchDelete(false);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent data) {
+        if (requestCode == SPEED_RUN_FORM) {
+            if (resultCode == RESULT_OK) {
+                SpeedRunEntity tst = (SpeedRunEntity)data.getExtras().getSerializable("speedrun");
+                Toast.makeText(getBaseContext(),"Incroyable!",Toast.LENGTH_SHORT).show();
+                // use 'myValue' return value here
+            }
+        }
     }
 
     @Override
