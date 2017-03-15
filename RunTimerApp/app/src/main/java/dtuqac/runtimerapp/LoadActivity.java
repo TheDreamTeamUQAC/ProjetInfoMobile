@@ -67,8 +67,7 @@ public class LoadActivity extends AppCompatActivity {
                 int speedRunId = db.getSpeedRunId(selected);
 
                 if(ModeSuppression) {
-                    //Confirmer la suppresion du fichier de SpeedRun
-
+                    //Confirmer la suppression de l'entrée de SpeedRun
                     if(speedRunId != -1)
                     {
                     popupMaker.ConfirmerSuppressionPopup("Supprimer \"" + selected +"\"?",speedRunId);
@@ -77,9 +76,12 @@ public class LoadActivity extends AppCompatActivity {
                     }
                 }
                 else {
-                    //Ici on fait les évènements si on charge le fichier de SpeedRun
-                    //TODO Linker avec les autres activity
+                    //Ici on fait les actions si on la SpeedRun
                     ActiveSpeedrun.getInstance().SetCurrentSpeedrun(db.getSpeedRunById(speedRunId));
+                    //Renvoyer l'utilisateur à l'édition des splits de la speedrun choisie
+                    Intent EditIntent = new Intent(LoadActivity.this, EditSplits.class);
+                    startActivity(EditIntent);
+                    finish();
                 }
             }
         });
