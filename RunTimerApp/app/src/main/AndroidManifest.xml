@@ -39,6 +39,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="dtuqac.runtimerapp.MainActivity" />
         </activity>
+        <activity
+            android:name=".EditSplits"
+            android:label="@string/title_activity_edit_splits"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

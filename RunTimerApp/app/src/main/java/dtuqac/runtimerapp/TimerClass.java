@@ -2,6 +2,7 @@ package dtuqac.runtimerapp;
 
 import android.os.SystemClock;
 import java.util.concurrent.TimeUnit;
+import dtuqac.runtimerapp.ActiveSpeedrun;
 
 /**
  * Created by Francois on 2017-03-01.
