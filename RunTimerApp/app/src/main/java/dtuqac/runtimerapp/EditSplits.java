@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 
 import dtuqac.runtimerapp.ActiveSpeedrun;
 import dtuqac.runtimerapp.SpeedRunEntity;
@@ -27,11 +28,16 @@ public class EditSplits extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+
+        LoadtSplits();
     }
 
 
     private void LoadtSplits()
     {
-        //Stuff
+        String temp = ActiveSpeedrun.getInstance().GetActiveSpeedrun().getGameName();
+        final TextView NameText = (TextView)findViewById(R.id.txtSpeedrunName);
+        NameText.setText(temp);
     }
 }

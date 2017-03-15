@@ -42,7 +42,16 @@
         <activity
             android:name=".SpeedRunForm"
             android:label="@string/title_activity_speed_run_form"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".EditSplits"
+            android:label="@string/title_activity_edit_splits"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="dtuqac.runtimerapp.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

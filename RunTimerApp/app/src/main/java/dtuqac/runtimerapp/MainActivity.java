@@ -92,7 +92,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, TimerActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_edit_splits || id == R.id.btnEdit) {
-            //setContentView(R.layout.app_bar_main);
+            Intent intent = new Intent(MainActivity.this, EditSplits.class);
+            startActivity(intent);
         } else if (id == R.id.nav_load_splits || id == R.id.btnAdd) {
             Intent intent = new Intent(MainActivity.this, LoadActivity.class);
             startActivity(intent);
