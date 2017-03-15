@@ -177,6 +177,7 @@ public class SGBD extends SQLiteOpenHelper {
     }
 
     //region SpeedRun
+
     public Integer deleteSpeedRun (Integer id) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(SPEEDRUN_TABLE_NAME,
@@ -224,6 +225,22 @@ public class SGBD extends SQLiteOpenHelper {
         }
     }
 
+    public SpeedRunEntity getSpeedRunById(int _id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select * from " + SPEEDRUN_TABLE_NAME +
+                " where " + SPEEDRUN_COLONNE_ID + "=\""+_id +"\"", null );
+
+        int count = res.getCount();
+
+        if(count > 0){
+            res.moveToNext();
+            return exctraireSpeedRunFromCursor(res);
+        }
+        else{
+            return null;
+        }
+    }
+
     public ArrayList<SpeedRunEntity> getSpeedRunList() {
         ArrayList<SpeedRunEntity> array_list = new ArrayList<>();
 
@@ -232,31 +249,36 @@ public class SGBD extends SQLiteOpenHelper {
         Cursor res =  db.rawQuery("select * from " + SPEEDRUN_TABLE_NAME,null);
 
         res.moveToFirst();
-        DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
 
         int count = res.getCount();
         if(count >0)
         {
-
             while(res.isAfterLast() == false) {
-                try {
-
-                SpeedRunEntity tmp = new SpeedRunEntity(
-                        res.getInt(res.getColumnIndex(SPEEDRUN_COLONNE_ID)),
-                        res.getString(res.getColumnIndex(SPEEDRUN_COLONNE_GAMENAME)),
-                        res.getString(res.getColumnIndex(SPEEDRUN_COLONNE_CATEGORYNAME)),
-                        ((Integer.parseInt(res.getString(res.getColumnIndex(SPEEDRUN_COLONNE_USESEMULATOR))) == 1) ? true : false),
-                        format.parse(res.getString(res.getColumnIndex(SPEEDRUN_COLONNE_OFFSET)))
-                );
+                SpeedRunEntity tmp = exctraireSpeedRunFromCursor(res);
                 array_list.add(tmp);
                 res.moveToNext();
-            } catch (ParseException e) {
-                e.printStackTrace();
             }
-        }
         }
         return array_list;
     }
+
+    private SpeedRunEntity exctraireSpeedRunFromCursor(Cursor csr) {
+        DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
+
+        try {
+            return new SpeedRunEntity(
+                    csr.getInt(csr.getColumnIndex(SPEEDRUN_COLONNE_ID)),
+                    csr.getString(csr.getColumnIndex(SPEEDRUN_COLONNE_GAMENAME)),
+                    csr.getString(csr.getColumnIndex(SPEEDRUN_COLONNE_CATEGORYNAME)),
+                    ((Integer.parseInt(csr.getString(csr.getColumnIndex(SPEEDRUN_COLONNE_USESEMULATOR))) == 1) ? true : false),
+                    format.parse(csr.getString(csr.getColumnIndex(SPEEDRUN_COLONNE_OFFSET)))
+            );
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     //endregion
 
 

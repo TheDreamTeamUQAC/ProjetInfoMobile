@@ -64,10 +64,11 @@ public class LoadActivity extends AppCompatActivity {
 
                 // selected item
                 String selected = parent.getItemAtPosition(position).toString();
+                int speedRunId = db.getSpeedRunId(selected);
 
                 if(ModeSuppression) {
                     //Confirmer la suppresion du fichier de SpeedRun
-                    int speedRunId = db.getSpeedRunId(selected);
+
                     if(speedRunId != -1)
                     {
                     popupMaker.ConfirmerSuppressionPopup("Supprimer \"" + selected +"\"?",speedRunId);
@@ -78,7 +79,7 @@ public class LoadActivity extends AppCompatActivity {
                 else {
                     //Ici on fait les évènements si on charge le fichier de SpeedRun
                     //TODO Linker avec les autres activity
-                    Toast.makeText(getBaseContext(),"Vous avez choisi \"" + selected + "\".",Toast.LENGTH_SHORT).show();
+                    ActiveSpeedrun.getInstance().SetCurrentSpeedrun(db.getSpeedRunById(speedRunId));
                 }
             }
         });
