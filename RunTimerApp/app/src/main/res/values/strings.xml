@@ -39,6 +39,7 @@
     <string name="Menu_Add">Gérer Speed Run</string>
     <string name="Menu_Stats">Statistiques</string>
     <string name="Menu_Pebble">Pebble</string>
+    <string name="title_activity_edit_splits">EditSplits</string>
 
     <!-->
     ************************************************************

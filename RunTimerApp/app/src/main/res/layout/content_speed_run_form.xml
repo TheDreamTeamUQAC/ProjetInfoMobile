@@ -19,27 +19,32 @@
         android:text="@string/SpeedRunForm1"
         android:textColor="@color/colorMainText"
         android:textSize="20sp"
-        android:layout_marginBottom="3sp"/>
+        android:layout_marginBottom="15sp" />
     <EditText
         android:id="@+id/txtNomSpeedRun"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:hint="@string/SpeedRunFormHint1"
-        android:layout_marginBottom="3sp"/>
+        android:layout_marginBottom="5sp"/>
     <EditText
         android:id="@+id/txtCategorie"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:hint="@string/SpeedRunFormHint2"
-
-        android:layout_marginBottom="3sp"/>
+        android:layout_marginBottom="5sp"/>
     <CheckBox
         android:id="@+id/chkEmulator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/SpeedRunForm2"
         android:textSize="17sp"
-        android:layout_marginBottom="3sp"/>
+        android:layout_marginBottom="3sp"
+        android:layout_marginLeft="5sp"/>
+
+    <!-->
+
+    Pas besoin pour le moment
+    TODO ajouter un picker pour l'offset (avec minutes et secondes)
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -60,7 +65,7 @@
             android:text="@string/SpeedRunForm3" />
 
     </LinearLayout>
-
+    <!-->
 </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

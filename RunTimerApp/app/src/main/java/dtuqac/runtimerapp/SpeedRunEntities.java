@@ -19,6 +19,7 @@ class SpeedRunEntity {
     private String GameName;
     private String CategoryName;
     private Boolean UsesEmulator;
+    private Date OffSet;
     private List<Attempt> AttemptHistory;
     private List<SplitDefinition> SpeedRunSplits;
 
@@ -43,8 +44,6 @@ class SpeedRunEntity {
     public void setOffSet(Date offSet) {
         OffSet = offSet;
     }
-
-    private Date OffSet;
 
     public int getId() {
         return Id;

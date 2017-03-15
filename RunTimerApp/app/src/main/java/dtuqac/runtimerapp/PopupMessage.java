@@ -21,55 +21,6 @@ public class PopupMessage {
         popupActivity = act;
     }
 
-    //Popup texte
-    public void AjouterSpeedRunPopup(String _nomFenetre){
-        AlertDialog.Builder builder = new AlertDialog.Builder(popupActivity);
-        builder.setTitle(_nomFenetre);
-
-        // Set up the input
-        final EditText input = new EditText(popupActivity);
-        // Specify the type of input expected
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
-        builder.setView(input);
-        builder.setIcon(android.R.drawable.ic_dialog_info);
-
-        // Set up the buttons
-        builder.setPositiveButton("Confirmer", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                SGBD db = new SGBD(popupActivity);
-                if (!db.speedRunExiste(input.getText().toString())){
-                    //TODO Écrire une speedrun avec les information
-                    SpeedRunEntity tmp = new SpeedRunEntity(
-                            0,
-                            input.getText().toString(),
-                            "Test",
-                            false,
-                            new Date()
-                    );
-
-                    db.addSpeedRun(tmp);
-                }
-                else {
-                    //Avertir que l'entrée bd existe déjà
-                    Toast.makeText(popupActivity,"La speedrun \"" + input.getText().toString() + "\" existe déjà!",Toast.LENGTH_LONG).show();
-                }
-                ((LoadActivity)popupActivity).ChargerEntreesListView();
-            }
-        });
-        builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
-        AlertDialog dialog = builder.create();
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-        dialog.show();
-
-    }
-
     public void ConfirmerSuppressionPopup(String _nomFenetre, final int _idSpeedRun){
         ConfirmerSuppressionPopup(_nomFenetre,_idSpeedRun,false);
     }

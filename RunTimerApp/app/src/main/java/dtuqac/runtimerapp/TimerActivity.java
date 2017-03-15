@@ -10,6 +10,9 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import dtuqac.runtimerapp.SpeedRunEntity;
+import dtuqac.runtimerapp.ActiveSpeedrun;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +36,13 @@ public class TimerActivity extends AppCompatActivity {
     {
         ListView lv = (ListView) findViewById(R.id.Liste_Splits);
 
+        List<SplitDefinition> SplitsList = ActiveSpeedrun.getInstance().GetActiveSpeedrun().getSpeedRunSplits();
+
+        for (SplitDefinition item : SplitsList)
+        {
+            String test = item.getSplitName();
+        }
+
         // Create the item mapping
         String[] from = new String[] { "title", "description" };
         int[] to = new int[] { R.id.title, R.id.description };
@@ -52,7 +62,7 @@ public class TimerActivity extends AppCompatActivity {
         SimpleAdapter adapter = new SimpleAdapter(this, fillMaps, R.layout.split_list_item, from, to);
         lv.setAdapter(adapter);
 
-        //lv.setAdapter(fillMaps);
+
     }
 
     public void StartTimer(View view)

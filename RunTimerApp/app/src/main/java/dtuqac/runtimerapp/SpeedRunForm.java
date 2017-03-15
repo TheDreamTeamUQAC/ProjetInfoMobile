@@ -1,23 +1,18 @@
 package dtuqac.runtimerapp;
 
-import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TimePicker;
+import android.widget.Toast;
 
-import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
 
-public class SpeedRunForm extends AppCompatActivity {
 
-    private Date Offset;
+public class SpeedRunForm extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,42 +20,35 @@ public class SpeedRunForm extends AppCompatActivity {
         setContentView(R.layout.activity_speed_run_form);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        Offset = new Date();
-        Offset.setTime(0);
     }
 
     public void validateEntry(View _view){
-        SpeedRunEntity tmp = new SpeedRunEntity(0,"TEST","TEST",true,new Date());
+        //Valider le nom de la speedrun
+        String nomSpeedRun = ((EditText)findViewById(R.id.txtNomSpeedRun)).getText().toString();
+
+        SGBD db = new SGBD(SpeedRunForm.this);
+        if (db.speedRunExiste(nomSpeedRun)){
+            //Avertir que l'entrée bd existe déjà
+            Toast.makeText(SpeedRunForm.this,"La speedrun \"" + nomSpeedRun + "\" existe déjà!\nEntrez un nom de speedrun différent.",Toast.LENGTH_LONG).show();
+            return;
+        }
 
         Intent resultIntent = new Intent();
-        //TODO mettre les attributs de la speed run un par un
-        resultIntent.putExtra("speedrun", (Serializable)tmp);
+
+        resultIntent.putExtra("bundle", toBundle());
         setResult(SpeedRunForm.RESULT_OK, resultIntent);
         finish();
     }
 
-    public void showTimePicker(View v){
-            // Get Current Time
-            final int mHour, mMinute;
+    public Bundle toBundle() {
+        Bundle b = new Bundle();
+        b.putString("gamename", ((EditText)findViewById(R.id.txtNomSpeedRun)).getText().toString());
+        b.putString("categoryname", ((EditText)findViewById(R.id.txtCategorie)).getText().toString());
+        b.putBoolean("usesemulator", ((CheckBox)findViewById(R.id.chkEmulator)).isChecked());
 
-            final Calendar c = Calendar.getInstance();
-            mHour = c.get(Calendar.HOUR_OF_DAY);
-            mMinute = c.get(Calendar.MINUTE);
-
-            // Launch Time Picker Dialog
-            TimePickerDialog timePickerDialog = new TimePickerDialog(this,
-                    new TimePickerDialog.OnTimeSetListener() {
-
-                        @Override
-                        public void onTimeSet(TimePicker view, int hourOfDay,
-                                              int minute) {
-
-                            ((EditText)findViewById(R.id.txtOffset)).setText(hourOfDay + ":" + minute);
-                            Offset.setHours(hourOfDay);
-                            Offset.setMinutes(minute);
-                        }
-                    }, mHour, mMinute, false);
-            timePickerDialog.show();
+        //TODO arranger l'offset si on ajoute un picker
+        //resultIntent.putExtra("offset", ((EditText)findViewById(R.id.txtOffset)).getText());
+        b.putString("offset", "00:00:00");
+        return b;
     }
 }

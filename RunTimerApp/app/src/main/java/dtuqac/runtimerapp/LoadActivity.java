@@ -15,8 +15,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 
 public class LoadActivity extends AppCompatActivity {
@@ -47,12 +51,12 @@ public class LoadActivity extends AppCompatActivity {
         //Charger les fichiers dans la listview
         ChargerEntreesListView();
         //Ajouter l'évènement onClick dans la listview
-        AjouterListenetListView();
+        AjouterListenerListView();
 
         ModeSuppression = false;
     }
 
-    private void AjouterListenetListView()  {
+    private void AjouterListenerListView()  {
 
         ListView lv = (ListView) findViewById(R.id.Liste_Fichiers);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -74,7 +78,7 @@ public class LoadActivity extends AppCompatActivity {
                 else {
                     //Ici on fait les évènements si on charge le fichier de SpeedRun
                     //TODO Linker avec les autres activity
-                    fileWorker.TraiterXML(selected);
+                    Toast.makeText(getBaseContext(),"Vous avez choisi \"" + selected + "\".",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -124,9 +128,24 @@ public class LoadActivity extends AppCompatActivity {
                                     Intent data) {
         if (requestCode == SPEED_RUN_FORM) {
             if (resultCode == RESULT_OK) {
-                SpeedRunEntity tst = (SpeedRunEntity)data.getExtras().getSerializable("speedrun");
-                Toast.makeText(getBaseContext(),"Incroyable!",Toast.LENGTH_SHORT).show();
-                // use 'myValue' return value here
+
+                DateFormat format = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
+                SpeedRunEntity newSpeedRun = null;
+                try {
+                    Bundle extras = data.getBundleExtra("bundle");
+                    newSpeedRun = new SpeedRunEntity(
+                            0,
+                            extras.getString("gamename"),
+                            extras.getString("categoryname"),
+                            extras.getBoolean("usesemulator"),
+                            format.parse(extras.getString("offset"))
+                    );
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                db.addSpeedRun(newSpeedRun);
+
+                ChargerEntreesListView();
             }
         }
     }
