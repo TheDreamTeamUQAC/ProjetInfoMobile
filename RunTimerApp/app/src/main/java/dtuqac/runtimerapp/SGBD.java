@@ -135,11 +135,19 @@ public class SGBD extends SQLiteOpenHelper {
             db.execSQL(SPLITDEFINITION_CREATE_SQL);
             db.execSQL(ATTEMPT_CREATE_SQL);
             db.execSQL(SPLIT_CREATE_SQL);
+
+            InsertTestValues(db);
         }
         catch (SQLException ex)
         {
             throw ex;
         }
+
+    }
+
+    @Override
+    public void onOpen(SQLiteDatabase db)
+    {
 
     }
 
@@ -286,6 +294,9 @@ public class SGBD extends SQLiteOpenHelper {
     }
 
     public SpeedRunEntity getSpeedRunById(int _id){
+
+        //TODO: Vérifier load incomplet
+
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res =  db.rawQuery( "select * from " + SPEEDRUN_TABLE_NAME +
                 " where " + SPEEDRUN_COLONNE_ID + "=\""+_id +"\"", null );
@@ -333,7 +344,253 @@ public class SGBD extends SQLiteOpenHelper {
     }
     //endregion
 
+    //region Tests
+    private void InsertTestValues(SQLiteDatabase db)
+    {
+        //SQLiteDatabase db = this.getWritableDatabase();
 
+        //insert la speedrun ***********************************************************************
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SPEEDRUN_COLONNE_GAMENAME, "The Legend of Zelda: Ocarina of Time");
+        contentValues.put(SPEEDRUN_COLONNE_CATEGORYNAME, "Any%");
+        contentValues.put(SPEEDRUN_COLONNE_USESEMULATOR, false);
+        contentValues.put(SPEEDRUN_COLONNE_OFFSET, 0);
+        db.insert(SPEEDRUN_TABLE_NAME, null, contentValues);
+
+        //insert les split definition *************************************************************
+        ContentValues contentValues1 = new ContentValues();
+        contentValues1.put(SPLITDEFINITION_COLONNE_ID, 1);
+        contentValues1.put(SPLITDEFINITION_COLONNE_NOM, "Escape");
+        contentValues1.put(SPLITDEFINITION_COLONNE_SPEEDRUNID, 1);
+        db.insert(SPLITDEFINITION_TABLE_NAME, null, contentValues1);
+
+        ContentValues contentValues2 = new ContentValues();
+        contentValues2.put(SPLITDEFINITION_COLONNE_ID, 2);
+        contentValues2.put(SPLITDEFINITION_COLONNE_NOM, "Kakariko");
+        contentValues2.put(SPLITDEFINITION_COLONNE_SPEEDRUNID, 1);
+        db.insert(SPLITDEFINITION_TABLE_NAME, null, contentValues2);
+
+        ContentValues contentValues3 = new ContentValues();
+        contentValues3.put(SPLITDEFINITION_COLONNE_ID, 3);
+        contentValues3.put(SPLITDEFINITION_COLONNE_NOM, "Bottle");
+        contentValues3.put(SPLITDEFINITION_COLONNE_SPEEDRUNID, 1);
+        db.insert(SPLITDEFINITION_TABLE_NAME, null, contentValues3);
+
+        ContentValues contentValues4 = new ContentValues();
+        contentValues4.put(SPLITDEFINITION_COLONNE_ID, 4);
+        contentValues4.put(SPLITDEFINITION_COLONNE_NOM, "Deku Tree");
+        contentValues4.put(SPLITDEFINITION_COLONNE_SPEEDRUNID, 1);
+        db.insert(SPLITDEFINITION_TABLE_NAME, null, contentValues4);
+
+        ContentValues contentValues5 = new ContentValues();
+        contentValues5.put(SPLITDEFINITION_COLONNE_ID, 5);
+        contentValues5.put(SPLITDEFINITION_COLONNE_NOM, "Gohma");
+        contentValues5.put(SPLITDEFINITION_COLONNE_SPEEDRUNID, 1);
+        db.insert(SPLITDEFINITION_TABLE_NAME, null, contentValues5);
+
+        ContentValues contentValues6 = new ContentValues();
+        contentValues6.put(SPLITDEFINITION_COLONNE_ID, 6);
+        contentValues6.put(SPLITDEFINITION_COLONNE_NOM, "Ganondoor");
+        contentValues6.put(SPLITDEFINITION_COLONNE_SPEEDRUNID, 1);
+        db.insert(SPLITDEFINITION_TABLE_NAME, null, contentValues6);
+
+        ContentValues contentValues7 = new ContentValues();
+        contentValues7.put(SPLITDEFINITION_COLONNE_ID, 7);
+        contentValues7.put(SPLITDEFINITION_COLONNE_NOM, "Tower Collapse");
+        contentValues7.put(SPLITDEFINITION_COLONNE_SPEEDRUNID, 1);
+        db.insert(SPLITDEFINITION_TABLE_NAME, null, contentValues7);
+
+        ContentValues contentValues8 = new ContentValues();
+        contentValues8.put(SPLITDEFINITION_COLONNE_ID, 8);
+        contentValues8.put(SPLITDEFINITION_COLONNE_NOM, "Done");
+        contentValues8.put(SPLITDEFINITION_COLONNE_SPEEDRUNID, 1);
+        db.insert(SPLITDEFINITION_TABLE_NAME, null, contentValues8);
+
+        //insert Attempts**************************************************************************
+        ContentValues contentValues9 = new ContentValues();
+        contentValues9.put(ATTEMPT_COLONNE_ID, 1);
+        contentValues9.put(ATTEMPT_COLONNE_ISBESTATTEMPT, false);
+        contentValues9.put(ATTEMPT_COLONNE_TIMESTARTED, 0);
+        contentValues9.put(ATTEMPT_COLONNE_TIMEENDED, new CustomTime(0,20,15,280).getStringWithoutZero());
+        contentValues9.put(ATTEMPT_COLONNE_SPEEDRUNID, 1);
+        db.insert(ATTEMPT_TABLE_NAME, null, contentValues9);
+
+        ContentValues contentValues10 = new ContentValues();
+        contentValues10.put(ATTEMPT_COLONNE_ID, 2);
+        contentValues10.put(ATTEMPT_COLONNE_ISBESTATTEMPT, false);
+        contentValues10.put(ATTEMPT_COLONNE_TIMESTARTED, 0);
+        contentValues10.put(ATTEMPT_COLONNE_TIMEENDED, new CustomTime(0,20,7,410).getStringWithoutZero());
+        contentValues10.put(ATTEMPT_COLONNE_SPEEDRUNID, 1);
+        db.insert(ATTEMPT_TABLE_NAME, null, contentValues10);
+
+        ContentValues contentValues11 = new ContentValues();
+        contentValues11.put(ATTEMPT_COLONNE_ID, 3);
+        contentValues11.put(ATTEMPT_COLONNE_ISBESTATTEMPT, false);
+        contentValues11.put(ATTEMPT_COLONNE_TIMESTARTED, 0);
+        contentValues11.put(ATTEMPT_COLONNE_TIMEENDED, new CustomTime(0,19,31,720).getStringWithoutZero());
+        contentValues11.put(ATTEMPT_COLONNE_SPEEDRUNID, 1);
+        db.insert(ATTEMPT_TABLE_NAME, null, contentValues11);
+
+        ContentValues contentValues12 = new ContentValues();
+        contentValues12.put(ATTEMPT_COLONNE_ID, 4);
+        contentValues12.put(ATTEMPT_COLONNE_ISBESTATTEMPT, false);
+        contentValues12.put(ATTEMPT_COLONNE_TIMESTARTED, 0);
+        contentValues12.put(ATTEMPT_COLONNE_TIMEENDED, new CustomTime(0,19,16,170).getStringWithoutZero());
+        contentValues12.put(ATTEMPT_COLONNE_SPEEDRUNID, 1);
+        db.insert(ATTEMPT_TABLE_NAME, null, contentValues12);
+
+        //insert Split pour Attempt 1 *************************************************************************************************
+        ContentValues contentValues13 = new ContentValues();
+        contentValues13.put(SPLIT_COLONNE_ID, 1);
+        contentValues13.put(SPLIT_COLONNE_IDATTEMPT, 1);
+        contentValues13.put(SPLIT_COLONNE_IDSPLITDEFINITION, 1); //Split Escape
+        contentValues13.put(SPLIT_COLONNE_ISBESTSEGMENT, false);
+        contentValues13.put(SPLIT_COLONNE_SEGMENTTIME, new CustomTime(0,5,14,610).getStringWithoutZero());
+        contentValues13.put(SPLIT_COLONNE_SPLITTIME, new CustomTime(0,5,14,610).getStringWithoutZero());
+        db.insert(SPLIT_TABLE_NAME, null, contentValues13);
+
+        ContentValues contentValues14 = new ContentValues();
+        contentValues14.put(SPLIT_COLONNE_ID, 2);
+        contentValues14.put(SPLIT_COLONNE_IDATTEMPT, 1);
+        contentValues14.put(SPLIT_COLONNE_IDSPLITDEFINITION, 2); //Split Kakariko
+        contentValues14.put(SPLIT_COLONNE_ISBESTSEGMENT, false);
+        contentValues14.put(SPLIT_COLONNE_SEGMENTTIME, new CustomTime(0,1,10,860).getStringWithoutZero());
+        contentValues14.put(SPLIT_COLONNE_SPLITTIME, new CustomTime(0,6,25,470).getStringWithoutZero());
+        db.insert(SPLIT_TABLE_NAME, null, contentValues14);
+
+        ContentValues contentValues15 = new ContentValues();
+        contentValues15.put(SPLIT_COLONNE_ID, 3);
+        contentValues15.put(SPLIT_COLONNE_IDATTEMPT, 1);
+        contentValues15.put(SPLIT_COLONNE_IDSPLITDEFINITION, 3); //Split Bottle
+        contentValues15.put(SPLIT_COLONNE_ISBESTSEGMENT, false);
+        contentValues15.put(SPLIT_COLONNE_SEGMENTTIME, new CustomTime(0,2,11,69).getStringWithoutZero());
+        contentValues15.put(SPLIT_COLONNE_SPLITTIME, new CustomTime(0,8,36,540).getStringWithoutZero());
+        db.insert(SPLIT_TABLE_NAME, null, contentValues15);
+
+        ContentValues contentValues16 = new ContentValues();
+        contentValues16.put(SPLIT_COLONNE_ID, 4);
+        contentValues16.put(SPLIT_COLONNE_IDATTEMPT, 1);
+        contentValues16.put(SPLIT_COLONNE_IDSPLITDEFINITION, 4); //Split Deku Tree
+        contentValues16.put(SPLIT_COLONNE_ISBESTSEGMENT, false);
+        contentValues16.put(SPLIT_COLONNE_SEGMENTTIME, new CustomTime(0,2,11,19).getStringWithoutZero());
+        contentValues16.put(SPLIT_COLONNE_SPLITTIME, new CustomTime(0,10,47,730).getStringWithoutZero());
+        db.insert(SPLIT_TABLE_NAME, null, contentValues16);
+
+        ContentValues contentValues17 = new ContentValues();
+        contentValues17.put(SPLIT_COLONNE_ID, 5);
+        contentValues17.put(SPLIT_COLONNE_IDATTEMPT, 1);
+        contentValues17.put(SPLIT_COLONNE_IDSPLITDEFINITION, 5); //Split Gohma
+        contentValues17.put(SPLIT_COLONNE_ISBESTSEGMENT, false);
+        contentValues17.put(SPLIT_COLONNE_SEGMENTTIME, new CustomTime(0,2,19,319).getStringWithoutZero());
+        contentValues17.put(SPLIT_COLONNE_SPLITTIME, new CustomTime(0,13,07,50).getStringWithoutZero());
+        db.insert(SPLIT_TABLE_NAME, null, contentValues17);
+
+        ContentValues contentValues18 = new ContentValues();
+        contentValues18.put(SPLIT_COLONNE_ID, 6);
+        contentValues18.put(SPLIT_COLONNE_IDATTEMPT, 1);
+        contentValues18.put(SPLIT_COLONNE_IDSPLITDEFINITION, 6); //Split Ganondoor
+        contentValues18.put(SPLIT_COLONNE_ISBESTSEGMENT, false);
+        contentValues18.put(SPLIT_COLONNE_SEGMENTTIME, new CustomTime(0,1,9,930).getStringWithoutZero());
+        contentValues18.put(SPLIT_COLONNE_SPLITTIME, new CustomTime(0,14,16,980).getStringWithoutZero());
+        db.insert(SPLIT_TABLE_NAME, null, contentValues18);
+
+        ContentValues contentValues19 = new ContentValues();
+        contentValues19.put(SPLIT_COLONNE_ID, 7);
+        contentValues19.put(SPLIT_COLONNE_IDATTEMPT, 1);
+        contentValues19.put(SPLIT_COLONNE_IDSPLITDEFINITION, 7); //Split Tower Collapse
+        contentValues19.put(SPLIT_COLONNE_ISBESTSEGMENT, false);
+        contentValues19.put(SPLIT_COLONNE_SEGMENTTIME, new CustomTime(0,2,17,319).getStringWithoutZero());
+        contentValues19.put(SPLIT_COLONNE_SPLITTIME, new CustomTime(0,16,34,300).getStringWithoutZero());
+        db.insert(SPLIT_TABLE_NAME, null, contentValues19);
+
+        ContentValues contentValues20 = new ContentValues();
+        contentValues20.put(SPLIT_COLONNE_ID, 8);
+        contentValues20.put(SPLIT_COLONNE_IDATTEMPT, 1);
+        contentValues20.put(SPLIT_COLONNE_IDSPLITDEFINITION, 8); //Split Done
+        contentValues20.put(SPLIT_COLONNE_ISBESTSEGMENT, false);
+        contentValues20.put(SPLIT_COLONNE_SEGMENTTIME, new CustomTime(0,3,40,980).getStringWithoutZero());
+        contentValues20.put(SPLIT_COLONNE_SPLITTIME, new CustomTime(0,20,15,280).getStringWithoutZero());
+        db.insert(SPLIT_TABLE_NAME, null, contentValues20);
+
+        //insert Split pour Attempt 2 *************************************************************************************************
+        ContentValues contentValues21 = new ContentValues();
+        contentValues21.put(SPLIT_COLONNE_ID, 9);
+        contentValues21.put(SPLIT_COLONNE_IDATTEMPT, 2);
+        contentValues21.put(SPLIT_COLONNE_IDSPLITDEFINITION, 1); //Split Escape
+        contentValues21.put(SPLIT_COLONNE_ISBESTSEGMENT, false);
+        contentValues21.put(SPLIT_COLONNE_SEGMENTTIME, new CustomTime(0,4,57,210).getStringWithoutZero());
+        contentValues21.put(SPLIT_COLONNE_SPLITTIME, new CustomTime(0,4,57,210).getStringWithoutZero());
+        db.insert(SPLIT_TABLE_NAME, null, contentValues21);
+
+        ContentValues contentValues22 = new ContentValues();
+        contentValues22.put(SPLIT_COLONNE_ID, 10);
+        contentValues22.put(SPLIT_COLONNE_IDATTEMPT, 2);
+        contentValues22.put(SPLIT_COLONNE_IDSPLITDEFINITION, 2); //Split Kakariko
+        contentValues22.put(SPLIT_COLONNE_ISBESTSEGMENT, false);
+        contentValues22.put(SPLIT_COLONNE_SEGMENTTIME, new CustomTime(0,1,04,770).getStringWithoutZero());
+        contentValues22.put(SPLIT_COLONNE_SPLITTIME, new CustomTime(0,6,01,979).getStringWithoutZero());
+        db.insert(SPLIT_TABLE_NAME, null, contentValues22);
+
+        ContentValues contentValues23 = new ContentValues();
+        contentValues23.put(SPLIT_COLONNE_ID, 11);
+        contentValues23.put(SPLIT_COLONNE_IDATTEMPT, 2);
+        contentValues23.put(SPLIT_COLONNE_IDSPLITDEFINITION, 3); //Split Bottle
+        contentValues23.put(SPLIT_COLONNE_ISBESTSEGMENT, false);
+        contentValues23.put(SPLIT_COLONNE_SEGMENTTIME, new CustomTime(0,2,22,980).getStringWithoutZero());
+        contentValues23.put(SPLIT_COLONNE_SPLITTIME, new CustomTime(0,8,24,959).getStringWithoutZero());
+        db.insert(SPLIT_TABLE_NAME, null, contentValues23);
+
+        ContentValues contentValues24 = new ContentValues();
+        contentValues24.put(SPLIT_COLONNE_ID, 12);
+        contentValues24.put(SPLIT_COLONNE_IDATTEMPT, 2);
+        contentValues24.put(SPLIT_COLONNE_IDSPLITDEFINITION, 4); //Split Deku Tree
+        contentValues24.put(SPLIT_COLONNE_ISBESTSEGMENT, false);
+        contentValues24.put(SPLIT_COLONNE_SEGMENTTIME, new CustomTime(0,2,12,910).getStringWithoutZero());
+        contentValues24.put(SPLIT_COLONNE_SPLITTIME, new CustomTime(0,10,37,869).getStringWithoutZero());
+        db.insert(SPLIT_TABLE_NAME, null, contentValues24);
+
+        ContentValues contentValues25 = new ContentValues();
+        contentValues25.put(SPLIT_COLONNE_ID, 13);
+        contentValues25.put(SPLIT_COLONNE_IDATTEMPT, 2);
+        contentValues25.put(SPLIT_COLONNE_IDSPLITDEFINITION, 5); //Split Gohma
+        contentValues25.put(SPLIT_COLONNE_ISBESTSEGMENT, false);
+        contentValues25.put(SPLIT_COLONNE_SEGMENTTIME, new CustomTime(0,2,8,890).getStringWithoutZero());
+        contentValues25.put(SPLIT_COLONNE_SPLITTIME, new CustomTime(0,12,46,759).getStringWithoutZero());
+        db.insert(SPLIT_TABLE_NAME, null, contentValues25);
+
+        ContentValues contentValues26 = new ContentValues();
+        contentValues26.put(SPLIT_COLONNE_ID, 14);
+        contentValues26.put(SPLIT_COLONNE_IDATTEMPT, 2);
+        contentValues26.put(SPLIT_COLONNE_IDSPLITDEFINITION, 6); //Split Ganondoor
+        contentValues26.put(SPLIT_COLONNE_ISBESTSEGMENT, false);
+        contentValues26.put(SPLIT_COLONNE_SEGMENTTIME, new CustomTime(0,1,0,940).getStringWithoutZero());
+        contentValues26.put(SPLIT_COLONNE_SPLITTIME, new CustomTime(0,13,47,699).getStringWithoutZero());
+        db.insert(SPLIT_TABLE_NAME, null, contentValues26);
+
+        ContentValues contentValues27 = new ContentValues();
+        contentValues27.put(SPLIT_COLONNE_ID, 15);
+        contentValues27.put(SPLIT_COLONNE_IDATTEMPT, 2);
+        contentValues27.put(SPLIT_COLONNE_IDSPLITDEFINITION, 7); //Split Tower Collapse
+        contentValues27.put(SPLIT_COLONNE_ISBESTSEGMENT, false);
+        contentValues27.put(SPLIT_COLONNE_SEGMENTTIME, new CustomTime(0,2,38,130).getStringWithoutZero());
+        contentValues27.put(SPLIT_COLONNE_SPLITTIME, new CustomTime(0,16,25,829).getStringWithoutZero());
+        db.insert(SPLIT_TABLE_NAME, null, contentValues27);
+
+        ContentValues contentValues28 = new ContentValues();
+        contentValues28.put(SPLIT_COLONNE_ID, 16);
+        contentValues28.put(SPLIT_COLONNE_IDATTEMPT, 2);
+        contentValues28.put(SPLIT_COLONNE_IDSPLITDEFINITION, 8); //Split Done
+        contentValues28.put(SPLIT_COLONNE_ISBESTSEGMENT, false);
+        contentValues28.put(SPLIT_COLONNE_SEGMENTTIME, new CustomTime(0,3,41,580).getStringWithoutZero());
+        contentValues28.put(SPLIT_COLONNE_SPLITTIME, new CustomTime(0,20,07,409).getStringWithoutZero());
+        db.insert(SPLIT_TABLE_NAME, null, contentValues28);
+    }
+    //endregion
+
+}
+
+
+<<<<<<< HEAD
     private SplitDefinition extraireSplitDefinitionFromCursor(Cursor csr) {
         return new SplitDefinition(
                 csr.getInt(csr.getColumnIndex(SPLITDEFINITION_COLONNE_ID)),
@@ -365,3 +622,5 @@ public class SGBD extends SQLiteOpenHelper {
 
 
 }
+=======
+>>>>>>> origin/master

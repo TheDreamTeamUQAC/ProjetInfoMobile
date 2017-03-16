@@ -62,7 +62,7 @@ public class EditSplit_Adapter extends BaseAdapter
         EditText NameText = (EditText) vi.findViewById(R.id.txtSplitName);
         EditText TimeText = (EditText) vi.findViewById(R.id.txtSplitTime);
         NameText.setText(DefData.get(position).getSplitName());
-        TimeText.setText(TimeData.get(position).getSplitTime().toString());
+        TimeText.setText(TimeData.get(position).getSplitTime().getStringWithoutZero());
 
         return vi;
     }

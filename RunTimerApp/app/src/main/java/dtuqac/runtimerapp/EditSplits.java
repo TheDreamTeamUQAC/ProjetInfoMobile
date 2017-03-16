@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,54 +30,36 @@ public class EditSplits extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
-
-        LoadtSplits();
+        //Teste si il y a une run active
+        if (ActiveSpeedrun.getInstance().IsInitialized())
+        {
+            LoadtSplits();
+        }
+        else
+        {
+            Toast.makeText(getBaseContext(),"Veuillez d'abord choisir une speedrun!",Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
 
     private void LoadtSplits()
     {
         //Set le nom de la run
-        String temp = ActiveSpeedrun.getInstance().GetActiveSpeedrun().getGameName();
+        String RunName = ActiveSpeedrun.getInstance().GetActiveSpeedrun().getGameName();
         final TextView NameText = (TextView)findViewById(R.id.txtSpeedrunName);
-        NameText.setText(temp);
+        NameText.setText(RunName);
 
 
         //TODO: Loader les splits pour vrai
         //Ajoute un split temporaire pour tester
+<<<<<<< HEAD
         SplitDefinition TempSplitTest = new SplitDefinition(1,1,"Hyrule Castle");
         ActiveSpeedrun.getInstance().GetActiveSpeedrun().addSplitDefinition(TempSplitTest);
 
+=======
+>>>>>>> origin/master
 
-        /*
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY,0);
-        cal.set(Calendar.MINUTE,0);
-        cal.set(Calendar.SECOND,0);
-        cal.set(Calendar.MILLISECOND,0);
-
-        Date start = cal.getTime();
-
-        Attempt TempAttempt = new Attempt(1,1,"2017-01-01 00:00:00.000","2017-01-01 00:10:00.000",true);
-
-           public Attempt(int id, int speedRunId, Date timeStarted, Date timeEnded, Boolean isBestAttempt) {
-        Id = id;
-        SpeedRunId = speedRunId;
-        TimeStarted = timeStarted;
-        TimeEnded = timeEnded;
-        IsBestAttempt = isBestAttempt;
-        Splits = new ArrayList<>();
-    }
-*/
 
         //Récupère la liste des splits time
         int PBID = ActiveSpeedrun.getInstance().GetPersonnalBestID();
@@ -112,9 +95,12 @@ public class EditSplits extends AppCompatActivity {
         lv.setAdapter(ListAdapter);
     }
 
-    private void AddSplit(View view)
+    public void AddSplit(View view)
     {
+        Toast.makeText(getBaseContext(),"Salut",Toast.LENGTH_SHORT).show();
 
+        //TODO: Add split
+        //ActiveSpeedrun.getInstance().
     }
 
 
