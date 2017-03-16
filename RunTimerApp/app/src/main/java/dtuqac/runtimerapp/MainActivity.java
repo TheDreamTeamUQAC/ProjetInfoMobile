@@ -2,6 +2,7 @@ package dtuqac.runtimerapp;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -17,8 +18,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.content.Intent;
 import android.widget.Button;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    private static final String WATCHAPP_FILENAME = "Speed_Run_Remote.pbw";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_statistics || id == R.id.btnStats) {
 
         } else if (id == R.id.nav_pebble) {
-
+            sideloadInstall(MainActivity.this,WATCHAPP_FILENAME);
         }
 
         return true;
@@ -110,4 +121,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = _inputView.getId();
         SelectAction(id);
     }
+
+    /**
+     * Alternative sideloading method
+     * Source: http://forums.getpebble.com/discussion/comment/103733/#Comment_103733
+     */
+    public static void sideloadInstall(Context ctx, String assetFilename) {
+        try {
+            // Read .pbw from assets/
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            File file = new File(ctx.getExternalFilesDir(null), assetFilename);
+            InputStream is = ctx.getResources().getAssets().open(assetFilename);
+            OutputStream os = new FileOutputStream(file);
+            byte[] pbw = new byte[is.available()];
+            is.read(pbw);
+            os.write(pbw);
+            is.close();
+            os.close();
+
+            // Install via Pebble Android app
+            intent.setDataAndType(Uri.fromFile(file), "application/pbw");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ctx.startActivity(intent);
+        } catch (IOException e) {
+            Toast.makeText(ctx, "App install failed: " + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
 }

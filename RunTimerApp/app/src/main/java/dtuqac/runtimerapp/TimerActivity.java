@@ -1,5 +1,6 @@
 package dtuqac.runtimerapp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import dtuqac.runtimerapp.SpeedRunEntity;
 import dtuqac.runtimerapp.ActiveSpeedrun;
@@ -16,11 +18,28 @@ import dtuqac.runtimerapp.ActiveSpeedrun;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
+//import com.getpebble.android.kit.PebbleKit;
+//import com.getpebble.android.kit.PebbleKit.PebbleDataReceiver;
+//import com.getpebble.android.kit.util.PebbleDictionary;
 
 public class TimerActivity extends AppCompatActivity {
 
     private TimerClass MonTimer;
+
+    private static final UUID WATCHAPP_UUID = UUID.fromString("6456a937-1e6d-40cf-a871-6545ea853727");
+
+    private static final int
+            KEY_BUTTON = 0,
+            MESSAGE_TIME = 43,
+            BUTTON_UP = 0,
+            BUTTON_SELECT = 1,
+            BUTTON_DOWN = 2;
+
+    private Handler handler = new Handler();
+   // private PebbleDataReceiver appMessageReciever;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -139,5 +158,86 @@ public class TimerActivity extends AppCompatActivity {
         });
 
     }
+/*
+    //region PebbleControl
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Define AppMessage behavior
+        if(appMessageReciever == null) {
+            appMessageReciever = new PebbleDataReceiver(WATCHAPP_UUID) {
+
+                @Override
+                public void receiveData(Context context, int transactionId, PebbleDictionary data) {
+                    // Always ACK
+                    PebbleKit.sendAckToPebble(context, transactionId);
+
+                    // What message was received?
+                    if(data.getInteger(KEY_BUTTON) != null) {
+                        // KEY_BUTTON was received, determine which button
+                        final int button = data.getInteger(KEY_BUTTON).intValue();
+
+                        // Update UI on correct thread
+                        handler.post(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                switch(button) {
+                                    case BUTTON_UP:
+                                        whichButtonView.setText("UP");
+                                        fctCommunes.ExecVibration(getApplicationContext(),500);
+                                        break;
+                                    case BUTTON_SELECT:
+                                        whichButtonView.setText("SELECT");
+                                        fctCommunes.ExecVibration(getApplicationContext(),500);
+                                        break;
+                                    case BUTTON_DOWN:
+                                        whichButtonView.setText("DOWN");
+                                        fctCommunes.ExecVibration(getApplicationContext(),500);
+                                        break;
+                                    default:
+                                        Toast.makeText(getApplicationContext(), "Unknown button: " + button, Toast.LENGTH_SHORT).show();
+                                        break;
+                                }
+                            }
+
+                        });
+                    }
+                }
+            };
+
+            // Add AppMessage capabilities
+            PebbleKit.registerReceivedDataHandler(this, appMessageReciever);
+        }
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+
+        //Open app on pebble
+        if(PebbleKit.isWatchConnected(getApplicationContext())) {
+            PebbleKit.startAppOnPebble(getApplicationContext(), WATCHAPP_UUID);
+        }
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        //Close app on pebble
+        PebbleKit.closeAppOnPebble(getApplicationContext(),WATCHAPP_UUID);
+
+        // Unregister AppMessage reception
+        if(appMessageReciever != null) {
+            unregisterReceiver(appMessageReciever);
+            appMessageReciever = null;
+        }
+    }
+
+    //endregion
+*/
 }
