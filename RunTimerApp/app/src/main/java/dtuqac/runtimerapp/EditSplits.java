@@ -53,7 +53,7 @@ public class EditSplits extends AppCompatActivity {
 
         //TODO: Loader les splits pour vrai
         //Ajoute un split temporaire pour tester
-        SplitDefinition TempSplitTest = new SplitDefinition(1,1,"Hyrule Castle",false);
+        SplitDefinition TempSplitTest = new SplitDefinition(1,1,"Hyrule Castle");
         ActiveSpeedrun.getInstance().GetActiveSpeedrun().addSplitDefinition(TempSplitTest);
 
 

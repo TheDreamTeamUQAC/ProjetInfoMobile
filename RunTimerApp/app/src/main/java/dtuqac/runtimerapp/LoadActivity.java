@@ -77,7 +77,7 @@ public class LoadActivity extends AppCompatActivity {
                 }
                 else {
                     //Ici on fait les actions si on la SpeedRun
-                    ActiveSpeedrun.getInstance().SetCurrentSpeedrun(db.getSpeedRunById(speedRunId));
+                    ActiveSpeedrun.getInstance().SetCurrentSpeedrun(db.getSpeedRunEntity(speedRunId));
                     //Renvoyer l'utilisateur à l'édition des splits de la speedrun choisie
                     Intent EditIntent = new Intent(LoadActivity.this, EditSplits.class);
                     startActivity(EditIntent);
@@ -120,8 +120,6 @@ public class LoadActivity extends AppCompatActivity {
     }
 
     public void addNewSpeedRun(View _inputView){
-        CustomTime t = new CustomTime("01:02:13:14");
-
         Intent intent = new Intent(LoadActivity.this, SpeedRunForm.class);
         startActivityForResult(intent, SPEED_RUN_FORM);
 

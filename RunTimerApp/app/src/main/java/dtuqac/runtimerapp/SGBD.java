@@ -176,6 +176,66 @@ public class SGBD extends SQLiteOpenHelper {
         return true;
     }
 
+    //TODO Tester cette fonction
+    public SpeedRunEntity getSpeedRunEntity(int _nomSpeedRunId){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor resSpeedRun =  db.rawQuery( "select * from " + SPEEDRUN_TABLE_NAME +
+                " where " + SPEEDRUN_COLONNE_ID + "=\""+_nomSpeedRunId +"\"", null );
+
+        int count = resSpeedRun.getCount();
+
+        if(count > 0){
+            resSpeedRun.moveToNext();
+            SpeedRunEntity speedRunRes = extraireSpeedRunFromCursor(resSpeedRun);
+
+            //Vérifier les split definition liés
+            Cursor resSplitDef =  db.rawQuery( "select * from " + SPLITDEFINITION_TABLE_NAME +
+                    " where " + SPLITDEFINITION_COLONNE_SPEEDRUNID + "=\""+_nomSpeedRunId +"\"", null );
+
+            count = resSplitDef.getCount();
+            if(count >0) {
+                while (resSplitDef.isAfterLast() == false) {
+                    speedRunRes.addSplitDefinition(extraireSplitDefinitionFromCursor(resSplitDef));
+                    resSplitDef.moveToNext();
+                }
+
+
+                //Vérifier les attempts liés
+                Cursor resAttempt = db.rawQuery("select * from " + ATTEMPT_TABLE_NAME +
+                        " where " + ATTEMPT_COLONNE_SPEEDRUNID + "=\"" + _nomSpeedRunId + "\"", null);
+
+                count = resAttempt.getCount();
+                if (count > 0) {
+                    while (resAttempt.isAfterLast() == false) {
+                        Attempt att = extraireAttemptFromCursor(resAttempt);
+
+
+                        //Vérifier pour les splits dans l'attempt trouvé
+                        Cursor resSplit = db.rawQuery("select * from " + SPLIT_TABLE_NAME +
+                                " where " + SPLIT_COLONNE_IDATTEMPT + "=\"" + att.getId() + "\"", null);
+
+                        count = resSplit.getCount();
+                        if (count > 0) {
+                            while (resSplit.isAfterLast() == false) {
+                                att.addSplit(extraireSplitFromCursor(resSplit));
+                                resSplitDef.moveToNext();
+                            }
+                        }
+
+                        speedRunRes.addAttempt(att);
+                        resSplitDef.moveToNext();
+                    }
+                }
+
+            }
+            return speedRunRes;
+        }
+        else{
+            return null;
+        }
+    }
+
+
     //region SpeedRun
 
     public Integer deleteSpeedRun (Integer id) {
@@ -272,6 +332,36 @@ public class SGBD extends SQLiteOpenHelper {
             );
     }
     //endregion
+
+
+    private SplitDefinition extraireSplitDefinitionFromCursor(Cursor csr) {
+        return new SplitDefinition(
+                csr.getInt(csr.getColumnIndex(SPLITDEFINITION_COLONNE_ID)),
+                csr.getInt(csr.getColumnIndex(SPLITDEFINITION_COLONNE_SPEEDRUNID)),
+                csr.getString(csr.getColumnIndex(SPLITDEFINITION_COLONNE_NOM))
+                );
+    }
+
+    private Attempt extraireAttemptFromCursor(Cursor csr) {
+        return new Attempt(
+                csr.getInt(csr.getColumnIndex(ATTEMPT_COLONNE_ID)),
+                csr.getInt(csr.getColumnIndex(ATTEMPT_COLONNE_SPEEDRUNID)),
+                new CustomTime(csr.getString(csr.getColumnIndex(ATTEMPT_COLONNE_TIMESTARTED))),
+                new CustomTime(csr.getString(csr.getColumnIndex(ATTEMPT_COLONNE_TIMEENDED))),
+                ((Integer.parseInt(csr.getString(csr.getColumnIndex(ATTEMPT_COLONNE_ISBESTATTEMPT))) == 1) ? true : false)
+                );
+    }
+
+    private Split extraireSplitFromCursor(Cursor csr) {
+        return new Split(
+                csr.getInt(csr.getColumnIndex(SPLIT_COLONNE_ID)),
+                csr.getInt(csr.getColumnIndex(SPLIT_COLONNE_IDATTEMPT)),
+                csr.getInt(csr.getColumnIndex(SPLIT_COLONNE_IDSPLITDEFINITION)),
+                new CustomTime(csr.getString(csr.getColumnIndex(SPLIT_COLONNE_SEGMENTTIME))),
+                new CustomTime(csr.getString(csr.getColumnIndex(SPLIT_COLONNE_SPLITTIME))),
+                ((Integer.parseInt(csr.getString(csr.getColumnIndex(SPLIT_COLONNE_ISBESTSEGMENT))) == 1) ? true : false)
+        );
+    }
 
 
 }

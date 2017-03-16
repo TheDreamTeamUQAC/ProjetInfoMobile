@@ -177,6 +177,7 @@ class Split{
     private int IdSplitDefinition;
     private CustomTime Duration;
     private CustomTime SplitTime;
+    private Boolean IsBestSegment;
 
     //region Getter and Setter
 
@@ -220,14 +221,23 @@ class Split{
         SplitTime = splitTime;
     }
 
+    public Boolean getIsBestSegment() {
+        return IsBestSegment;
+    }
+
+    public void setIsBestSegment(Boolean bestSegment) {
+        IsBestSegment = bestSegment;
+    }
+
     //endregion
 
-    public Split(int id, int idAttempt, int idSplitDefinition, CustomTime duration, CustomTime splitTime) {
+    public Split(int id, int idAttempt, int idSplitDefinition, CustomTime duration, CustomTime splitTime, Boolean isBestSegment) {
         Id = id;
         IdAttempt = idAttempt;
         IdSplitDefinition = idSplitDefinition;
         Duration = duration;
         SplitTime = splitTime;
+        IsBestSegment = isBestSegment;
     }
 }
 
@@ -239,7 +249,6 @@ class SplitDefinition{
     private int Id;
     private int SpeedRunId;
     private String SplitName;
-    private boolean IsBestSegment;
 
     //region Getter and Starter
 
@@ -267,20 +276,11 @@ class SplitDefinition{
         SplitName = splitName;
     }
 
-    public boolean isBestSegment() {
-        return IsBestSegment;
-    }
-
-    public void setBestSegment(boolean bestSegment) {
-        IsBestSegment = bestSegment;
-    }
-
     //endregion
 
-    public SplitDefinition(int id, int speedRunId, String splitName, boolean isBestSegment) {
+    public SplitDefinition(int id, int speedRunId, String splitName) {
         Id = id;
         SpeedRunId = speedRunId;
         SplitName = splitName;
-        IsBestSegment = isBestSegment;
     }
 }
