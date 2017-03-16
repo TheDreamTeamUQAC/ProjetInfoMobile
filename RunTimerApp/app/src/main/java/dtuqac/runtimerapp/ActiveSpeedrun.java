@@ -1,5 +1,7 @@
 package dtuqac.runtimerapp;
 
+import java.util.List;
+
 import dtuqac.runtimerapp.SpeedRunEntity;
 
 /**
@@ -29,5 +31,31 @@ class ActiveSpeedrun {
         return Run;
     }
 
+    //Retourne l'ID de l'attempt qui est le personnal best
+    public int GetPersonnalBestID()
+    {
+        for (Attempt a : Run.getAttemptHistory())
+        {
+            if (a.getBestAttempt())
+            {
+                return a.getId();
+            }
+        }
+        return 0;
+    }
 
+
+    public List<Split> GetSplitsByAttemptID(int _AttemptID)
+    {
+        List<Split> SplitsList;
+
+        for (Attempt a : Run.getAttemptHistory())
+        {
+            if (a.getId() == _AttemptID)
+            {
+                return a.getSplits();
+            }
+        }
+        return null;
+    }
 }
