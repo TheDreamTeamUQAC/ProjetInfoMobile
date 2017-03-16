@@ -31,6 +31,15 @@ class ActiveSpeedrun {
         return Run;
     }
 
+    public boolean IsInitialized()
+    {
+        if (Run != null)
+        {
+            return true;
+        }
+        return false;
+    }
+
     //Retourne l'ID de l'attempt qui est le personnal best
     public int GetPersonnalBestID()
     {
@@ -57,5 +66,10 @@ class ActiveSpeedrun {
             }
         }
         return null;
+    }
+
+    public void AddSplitDefinition(String _SplitName, CustomTime _SplitTime)
+    {
+       // Run.addSplitDefinition();
     }
 }
