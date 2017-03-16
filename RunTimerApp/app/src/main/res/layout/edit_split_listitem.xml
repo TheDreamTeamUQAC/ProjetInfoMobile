@@ -20,4 +20,5 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:text="SplitTime" />
+
 </LinearLayout>
