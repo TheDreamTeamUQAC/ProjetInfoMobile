@@ -61,7 +61,7 @@ public class SpeedRunForm extends AppCompatActivity {
 
         //TODO arranger l'offset si on ajoute un picker
         //resultIntent.putExtra("offset", ((EditText)findViewById(R.id.txtOffset)).getText());
-        b.putString("offset", "00:00:00");
+        b.putString("offset", "00:00:00:00");
         return b;
     }
 }

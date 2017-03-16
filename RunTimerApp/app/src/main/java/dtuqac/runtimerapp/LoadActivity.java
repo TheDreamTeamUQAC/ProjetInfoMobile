@@ -120,6 +120,8 @@ public class LoadActivity extends AppCompatActivity {
     }
 
     public void addNewSpeedRun(View _inputView){
+        CustomTime t = new CustomTime("01:02:13:14");
+
         Intent intent = new Intent(LoadActivity.this, SpeedRunForm.class);
         startActivityForResult(intent, SPEED_RUN_FORM);
 
@@ -134,18 +136,14 @@ public class LoadActivity extends AppCompatActivity {
 
                 DateFormat format = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
                 SpeedRunEntity newSpeedRun = null;
-                try {
-                    Bundle extras = data.getBundleExtra("bundle");
-                    newSpeedRun = new SpeedRunEntity(
+                Bundle extras = data.getBundleExtra("bundle");
+                newSpeedRun = new SpeedRunEntity(
                             0,
                             extras.getString("gamename"),
                             extras.getString("categoryname"),
                             extras.getBoolean("usesemulator"),
-                            format.parse(extras.getString("offset"))
-                    );
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+                            new CustomTime(extras.getString("offset"))
+                );
                 db.addSpeedRun(newSpeedRun);
 
                 ChargerEntreesListView();

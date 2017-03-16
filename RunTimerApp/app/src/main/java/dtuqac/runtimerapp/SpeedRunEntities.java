@@ -1,8 +1,6 @@
 package dtuqac.runtimerapp;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -19,7 +17,7 @@ class SpeedRunEntity {
     private String GameName;
     private String CategoryName;
     private Boolean UsesEmulator;
-    private Date OffSet;
+    private CustomTime OffSet;
     private List<Attempt> AttemptHistory;
     private List<SplitDefinition> SpeedRunSplits;
 
@@ -41,7 +39,7 @@ class SpeedRunEntity {
         UsesEmulator = usesEmulator;
     }
 
-    public void setOffSet(Date offSet) {
+    public void setOffSet(CustomTime offSet) {
         OffSet = offSet;
     }
 
@@ -61,7 +59,7 @@ class SpeedRunEntity {
         return UsesEmulator;
     }
 
-    public Date getOffSet() {
+    public CustomTime getOffSet() {
         return OffSet;
     }
 
@@ -74,7 +72,7 @@ class SpeedRunEntity {
     }
     //endregion
 
-    public SpeedRunEntity(int id, String gameName, String categoryName, Boolean usesEmulator, Date offSet) {
+    public SpeedRunEntity(int id, String gameName, String categoryName, Boolean usesEmulator, CustomTime offSet) {
         Id = id;
         GameName = gameName;
         CategoryName = categoryName;
@@ -100,8 +98,8 @@ class SpeedRunEntity {
 class Attempt{
     private int Id;
     private int SpeedRunId;
-    private Date TimeStarted;
-    private Date TimeEnded;
+    private CustomTime TimeStarted;
+    private CustomTime TimeEnded;
     private Boolean IsBestAttempt;
     private List<Split> Splits;
 
@@ -115,11 +113,11 @@ class Attempt{
         SpeedRunId = speedRunId;
     }
 
-    public void setTimeStarted(Date timeStarted) {
+    public void setTimeStarted(CustomTime timeStarted) {
         TimeStarted = timeStarted;
     }
 
-    public void setTimeEnded(Date timeEnded) {
+    public void setTimeEnded(CustomTime timeEnded) {
         TimeEnded = timeEnded;
     }
 
@@ -136,11 +134,11 @@ class Attempt{
         return SpeedRunId;
     }
 
-    public Date getTimeStarted() {
+    public CustomTime getTimeStarted() {
         return TimeStarted;
     }
 
-    public Date getTimeEnded() {
+    public CustomTime getTimeEnded() {
         return TimeEnded;
     }
 
@@ -154,7 +152,7 @@ class Attempt{
 
     //endregion
 
-    public Attempt(int id, int speedRunId, Date timeStarted, Date timeEnded, Boolean isBestAttempt) {
+    public Attempt(int id, int speedRunId, CustomTime timeStarted, CustomTime timeEnded, Boolean isBestAttempt) {
         Id = id;
         SpeedRunId = speedRunId;
         TimeStarted = timeStarted;
@@ -177,8 +175,8 @@ class Split{
     private int Id;
     private int IdAttempt;
     private int IdSplitDefinition;
-    private Date Duration;
-    private Date SplitTime;
+    private CustomTime Duration;
+    private CustomTime SplitTime;
 
     //region Getter and Setter
 
@@ -206,25 +204,25 @@ class Split{
         IdSplitDefinition = idSplitDefinition;
     }
 
-    public Date getDuration() {
+    public CustomTime getDuration() {
         return Duration;
     }
 
-    public void setDuration(Date duration) {
+    public void setDuration(CustomTime duration) {
         Duration = duration;
     }
 
-    public Date getSplitTime() {
+    public CustomTime getSplitTime() {
         return SplitTime;
     }
 
-    public void setSplitTime(Date splitTime) {
+    public void setSplitTime(CustomTime splitTime) {
         SplitTime = splitTime;
     }
 
     //endregion
 
-    public Split(int id, int idAttempt, int idSplitDefinition, Date duration, Date splitTime) {
+    public Split(int id, int idAttempt, int idSplitDefinition, CustomTime duration, CustomTime splitTime) {
         Id = id;
         IdAttempt = idAttempt;
         IdSplitDefinition = idSplitDefinition;

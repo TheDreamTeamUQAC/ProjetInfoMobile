@@ -1,0 +1,114 @@
+package dtuqac.runtimerapp;
+
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * Created by Tommy Duperré on 2017-03-15.
+ */
+
+public class CustomTime {
+    //region Getter and Setter
+
+    public int getHeures() {
+        return Heures;
+    }
+
+    public void setHeures(int heures) {
+        Heures = heures;
+    }
+
+    public int getMinutes() {
+        return Minutes;
+    }
+
+    public void setMinutes(int minutes) {
+        Minutes = minutes;
+    }
+
+    public int getSecondes() {
+        return Secondes;
+    }
+
+    public void setSecondes(int secondes) {
+        Secondes = secondes;
+    }
+
+    public int getMillisecondes() {
+        return Millisecondes;
+    }
+
+    public void setMillisecondes(int millisecondes) {
+        Millisecondes = millisecondes;
+    }
+
+    //endregion
+
+    private int Heures;
+    private int Minutes;
+    private int Secondes;
+    private int Millisecondes;
+
+    CustomTime(){}
+
+    public CustomTime(int heures, int minutes, int secondes, int millisecondes) {
+        Heures = heures;
+        Minutes = minutes;
+        Secondes = secondes;
+        Millisecondes = millisecondes;
+    }
+    public CustomTime(String _input){
+        if(!setString(_input)){
+            //Incapable de traiter la string
+            Heures=0;Minutes=0;Secondes=0;Millisecondes=0;
+        }
+    }
+    public CustomTime(CustomTime _t){
+        recopier(_t);
+    }
+
+    public void recopier(CustomTime _t){
+        this.Heures = _t.getHeures();
+        this.Minutes = _t.getMinutes();
+        this.Secondes = _t.getSecondes();
+        this.Millisecondes = _t.getMillisecondes();
+    }
+
+    public String getStringWithoutZero(){
+        String SmallTimer = String.format("%02d", Millisecondes);
+        String MainTimer = String.format("%d", Secondes) + String.format("%02d", Millisecondes);
+
+        if (Minutes > 0)
+        {
+            MainTimer = String.format("%d:%02d", Minutes, Secondes) + ":"+ SmallTimer;
+        }
+        if (Heures > 0)
+        {
+            MainTimer = String.format("%d:%02d:%02d", Heures, Minutes, Secondes) + ":" + SmallTimer;
+        }
+
+        return MainTimer;
+    }
+
+    public String getString(){
+        return String.format("%02d:%02d:%02d:%02d", Heures,Minutes,Secondes,Millisecondes);
+    }
+
+    //Format "00:00:00:00"
+    public Boolean setString(String _input){
+        List<String> temps = Arrays.asList(_input.split(":"));
+
+        if(temps.size() == 4)
+        {
+            Heures = Integer.parseInt(temps.get(0));
+            Minutes = Integer.parseInt(temps.get(1));
+            Secondes = Integer.parseInt(temps.get(2));
+            Millisecondes = Integer.parseInt(temps.get(3));
+
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+}

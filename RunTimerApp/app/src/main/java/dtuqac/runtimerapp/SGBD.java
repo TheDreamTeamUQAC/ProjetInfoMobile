@@ -204,7 +204,7 @@ public class SGBD extends SQLiteOpenHelper {
         contentValues.put(SPEEDRUN_COLONNE_GAMENAME, speedrun.getGameName());
         contentValues.put(SPEEDRUN_COLONNE_CATEGORYNAME, speedrun.getCategoryName());
         contentValues.put(SPEEDRUN_COLONNE_USESEMULATOR, speedrun.getUsesEmulator());
-        contentValues.put(SPEEDRUN_COLONNE_OFFSET, String.valueOf(speedrun.getOffSet()));
+        contentValues.put(SPEEDRUN_COLONNE_OFFSET, speedrun.getOffSet().getString());
         db.insert(SPEEDRUN_TABLE_NAME, null, contentValues);
         return true;
     }
@@ -234,7 +234,7 @@ public class SGBD extends SQLiteOpenHelper {
 
         if(count > 0){
             res.moveToNext();
-            return exctraireSpeedRunFromCursor(res);
+            return extraireSpeedRunFromCursor(res);
         }
         else{
             return null;
@@ -254,7 +254,7 @@ public class SGBD extends SQLiteOpenHelper {
         if(count >0)
         {
             while(res.isAfterLast() == false) {
-                SpeedRunEntity tmp = exctraireSpeedRunFromCursor(res);
+                SpeedRunEntity tmp = extraireSpeedRunFromCursor(res);
                 array_list.add(tmp);
                 res.moveToNext();
             }
@@ -262,23 +262,15 @@ public class SGBD extends SQLiteOpenHelper {
         return array_list;
     }
 
-    private SpeedRunEntity exctraireSpeedRunFromCursor(Cursor csr) {
-        DateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
-
-        try {
+    private SpeedRunEntity extraireSpeedRunFromCursor(Cursor csr) {
             return new SpeedRunEntity(
                     csr.getInt(csr.getColumnIndex(SPEEDRUN_COLONNE_ID)),
                     csr.getString(csr.getColumnIndex(SPEEDRUN_COLONNE_GAMENAME)),
                     csr.getString(csr.getColumnIndex(SPEEDRUN_COLONNE_CATEGORYNAME)),
                     ((Integer.parseInt(csr.getString(csr.getColumnIndex(SPEEDRUN_COLONNE_USESEMULATOR))) == 1) ? true : false),
-                    format.parse(csr.getString(csr.getColumnIndex(SPEEDRUN_COLONNE_OFFSET)))
+                    new CustomTime(csr.getString(csr.getColumnIndex(SPEEDRUN_COLONNE_OFFSET)))
             );
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
-
     //endregion
 
 
