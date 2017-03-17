@@ -184,7 +184,7 @@ public class SGBD extends SQLiteOpenHelper {
         return true;
     }
 
-    //TODO Tester cette fonction
+    //TODO Tester cette fonction //Pas mal fait, j'ai réglé les bugs de cursor
     public SpeedRunEntity getSpeedRunEntity(int _nomSpeedRunId){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor resSpeedRun =  db.rawQuery( "select * from " + SPEEDRUN_TABLE_NAME +
@@ -202,11 +202,11 @@ public class SGBD extends SQLiteOpenHelper {
 
             count = resSplitDef.getCount();
             if(count >0) {
+                resSplitDef.moveToFirst();
                 while (resSplitDef.isAfterLast() == false) {
                     speedRunRes.addSplitDefinition(extraireSplitDefinitionFromCursor(resSplitDef));
                     resSplitDef.moveToNext();
                 }
-
 
                 //Vérifier les attempts liés
                 Cursor resAttempt = db.rawQuery("select * from " + ATTEMPT_TABLE_NAME +
@@ -214,9 +214,9 @@ public class SGBD extends SQLiteOpenHelper {
 
                 count = resAttempt.getCount();
                 if (count > 0) {
+                    resAttempt.moveToFirst();
                     while (resAttempt.isAfterLast() == false) {
                         Attempt att = extraireAttemptFromCursor(resAttempt);
-
 
                         //Vérifier pour les splits dans l'attempt trouvé
                         Cursor resSplit = db.rawQuery("select * from " + SPLIT_TABLE_NAME +
@@ -224,14 +224,15 @@ public class SGBD extends SQLiteOpenHelper {
 
                         count = resSplit.getCount();
                         if (count > 0) {
+                            resSplit.moveToFirst();
                             while (resSplit.isAfterLast() == false) {
                                 att.addSplit(extraireSplitFromCursor(resSplit));
-                                resSplitDef.moveToNext();
+                                resSplit.moveToNext();
                             }
                         }
 
                         speedRunRes.addAttempt(att);
-                        resSplitDef.moveToNext();
+                        resAttempt.moveToNext();
                     }
                 }
 
@@ -294,9 +295,6 @@ public class SGBD extends SQLiteOpenHelper {
     }
 
     public SpeedRunEntity getSpeedRunById(int _id){
-
-        //TODO: Vérifier load incomplet
-
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res =  db.rawQuery( "select * from " + SPEEDRUN_TABLE_NAME +
                 " where " + SPEEDRUN_COLONNE_ID + "=\""+_id +"\"", null );
@@ -342,6 +340,37 @@ public class SGBD extends SQLiteOpenHelper {
                     new CustomTime(csr.getString(csr.getColumnIndex(SPEEDRUN_COLONNE_OFFSET)))
             );
     }
+
+
+    private SplitDefinition extraireSplitDefinitionFromCursor(Cursor csr) {
+        return new SplitDefinition(
+                csr.getInt(csr.getColumnIndex(SPLITDEFINITION_COLONNE_ID)),
+                csr.getInt(csr.getColumnIndex(SPLITDEFINITION_COLONNE_SPEEDRUNID)),
+                csr.getString(csr.getColumnIndex(SPLITDEFINITION_COLONNE_NOM))
+        );
+    }
+
+    private Attempt extraireAttemptFromCursor(Cursor csr) {
+        return new Attempt(
+                csr.getInt(csr.getColumnIndex(ATTEMPT_COLONNE_ID)),
+                csr.getInt(csr.getColumnIndex(ATTEMPT_COLONNE_SPEEDRUNID)),
+                new CustomTime(csr.getString(csr.getColumnIndex(ATTEMPT_COLONNE_TIMESTARTED))),
+                new CustomTime(csr.getString(csr.getColumnIndex(ATTEMPT_COLONNE_TIMEENDED))),
+                ((Integer.parseInt(csr.getString(csr.getColumnIndex(ATTEMPT_COLONNE_ISBESTATTEMPT))) == 1) ? true : false)
+        );
+    }
+
+    private Split extraireSplitFromCursor(Cursor csr) {
+        return new Split(
+                csr.getInt(csr.getColumnIndex(SPLIT_COLONNE_ID)),
+                csr.getInt(csr.getColumnIndex(SPLIT_COLONNE_IDATTEMPT)),
+                csr.getInt(csr.getColumnIndex(SPLIT_COLONNE_IDSPLITDEFINITION)),
+                new CustomTime(csr.getString(csr.getColumnIndex(SPLIT_COLONNE_SEGMENTTIME))),
+                new CustomTime(csr.getString(csr.getColumnIndex(SPLIT_COLONNE_SPLITTIME))),
+                ((Integer.parseInt(csr.getString(csr.getColumnIndex(SPLIT_COLONNE_ISBESTSEGMENT))) == 1) ? true : false)
+        );
+    }
+
     //endregion
 
     //region Tests
@@ -587,40 +616,6 @@ public class SGBD extends SQLiteOpenHelper {
     }
     //endregion
 
-}
-
-
-<<<<<<< HEAD
-    private SplitDefinition extraireSplitDefinitionFromCursor(Cursor csr) {
-        return new SplitDefinition(
-                csr.getInt(csr.getColumnIndex(SPLITDEFINITION_COLONNE_ID)),
-                csr.getInt(csr.getColumnIndex(SPLITDEFINITION_COLONNE_SPEEDRUNID)),
-                csr.getString(csr.getColumnIndex(SPLITDEFINITION_COLONNE_NOM))
-                );
-    }
-
-    private Attempt extraireAttemptFromCursor(Cursor csr) {
-        return new Attempt(
-                csr.getInt(csr.getColumnIndex(ATTEMPT_COLONNE_ID)),
-                csr.getInt(csr.getColumnIndex(ATTEMPT_COLONNE_SPEEDRUNID)),
-                new CustomTime(csr.getString(csr.getColumnIndex(ATTEMPT_COLONNE_TIMESTARTED))),
-                new CustomTime(csr.getString(csr.getColumnIndex(ATTEMPT_COLONNE_TIMEENDED))),
-                ((Integer.parseInt(csr.getString(csr.getColumnIndex(ATTEMPT_COLONNE_ISBESTATTEMPT))) == 1) ? true : false)
-                );
-    }
-
-    private Split extraireSplitFromCursor(Cursor csr) {
-        return new Split(
-                csr.getInt(csr.getColumnIndex(SPLIT_COLONNE_ID)),
-                csr.getInt(csr.getColumnIndex(SPLIT_COLONNE_IDATTEMPT)),
-                csr.getInt(csr.getColumnIndex(SPLIT_COLONNE_IDSPLITDEFINITION)),
-                new CustomTime(csr.getString(csr.getColumnIndex(SPLIT_COLONNE_SEGMENTTIME))),
-                new CustomTime(csr.getString(csr.getColumnIndex(SPLIT_COLONNE_SPLITTIME))),
-                ((Integer.parseInt(csr.getString(csr.getColumnIndex(SPLIT_COLONNE_ISBESTSEGMENT))) == 1) ? true : false)
-        );
-    }
-
 
 }
-=======
->>>>>>> origin/master
+

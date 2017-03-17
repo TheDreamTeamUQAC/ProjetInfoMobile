@@ -51,16 +51,14 @@ public class EditSplits extends AppCompatActivity {
         NameText.setText(RunName);
 
 
-        //TODO: Loader les splits pour vrai
         //Ajoute un split temporaire pour tester
-<<<<<<< HEAD
+        /*
         SplitDefinition TempSplitTest = new SplitDefinition(1,1,"Hyrule Castle");
         ActiveSpeedrun.getInstance().GetActiveSpeedrun().addSplitDefinition(TempSplitTest);
-
-=======
->>>>>>> origin/master
+        */
 
 
+        //TODO: vérifier pourquoi le CustomTime retourné par la BD est toujours à 0
         //Récupère la liste des splits time
         int PBID = ActiveSpeedrun.getInstance().GetPersonnalBestID();
         List<Split> PBSplits = ActiveSpeedrun.getInstance().GetSplitsByAttemptID(PBID);
