@@ -50,15 +50,6 @@ public class EditSplits extends AppCompatActivity {
         final TextView NameText = (TextView)findViewById(R.id.txtSpeedrunName);
         NameText.setText(RunName);
 
-
-        //Ajoute un split temporaire pour tester
-        /*
-        SplitDefinition TempSplitTest = new SplitDefinition(1,1,"Hyrule Castle");
-        ActiveSpeedrun.getInstance().GetActiveSpeedrun().addSplitDefinition(TempSplitTest);
-        */
-
-
-        //TODO: vérifier pourquoi le CustomTime retourné par la BD est toujours à 0
         //Récupère la liste des splits time
         int PBID = ActiveSpeedrun.getInstance().GetPersonnalBestID();
         List<Split> PBSplits = ActiveSpeedrun.getInstance().GetSplitsByAttemptID(PBID);
@@ -66,27 +57,8 @@ public class EditSplits extends AppCompatActivity {
         //Récupère la liste des splits name
         List<SplitDefinition> SplitsList = ActiveSpeedrun.getInstance().GetActiveSpeedrun().getSpeedRunSplits();
 
-
-
-        /*
-        List<String> SplitNames = new ArrayList<>();
-        for (SplitDefinition s : SplitsList)
-        {
-            SplitNames.add(s.getSplitName());
-        }
-        */
-
         //Map la liste dans le listview
         EditSplit_Adapter ListAdapter = new EditSplit_Adapter(this, SplitsList, PBSplits);
-
-        //TODO: voir http://stackoverflow.com/questions/15832335/android-custom-row-item-for-listview
-
-        /*
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                this,
-                R.layout.edit_split_listitem,
-                SplitNames);
-        */
 
         ListView lv = (ListView) findViewById(R.id.list_ActiveSplits);
 

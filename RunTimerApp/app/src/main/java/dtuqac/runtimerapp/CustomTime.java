@@ -57,6 +57,7 @@ public class CustomTime {
         Secondes = secondes;
         Millisecondes = millisecondes;
     }
+
     public CustomTime(String _input){
         if(!setString(_input)){
             //Incapable de traiter la string
@@ -74,14 +75,15 @@ public class CustomTime {
         this.Millisecondes = _t.getMillisecondes();
     }
 
-    public String getStringWithoutZero(){
+    public String getStringWithoutZero() {
         String SmallTimer = String.format("%02d", Millisecondes);
-        String MainTimer = String.format("%d", Secondes) + String.format("%02d", Millisecondes);
+        String MainTimer = String.format("%d", Secondes) + ":" + String.format("%02d", Millisecondes);
 
         if (Minutes > 0)
         {
             MainTimer = String.format("%d:%02d", Minutes, Secondes) + ":"+ SmallTimer;
         }
+
         if (Heures > 0)
         {
             MainTimer = String.format("%d:%02d:%02d", Heures, Minutes, Secondes) + ":" + SmallTimer;
@@ -98,7 +100,34 @@ public class CustomTime {
     public Boolean setString(String _input){
         List<String> temps = Arrays.asList(_input.split(":"));
 
-        if(temps.size() == 4)
+        if (temps.size() == 1)
+        {
+            Heures = 0;
+            Minutes = 0;
+            Secondes = 0;
+            Millisecondes = Integer.parseInt(temps.get(0));
+
+            return true;
+        }
+        else if(temps.size() == 2)
+        {
+            Heures = 0;
+            Minutes = 0;
+            Secondes = Integer.parseInt(temps.get(0));
+            Millisecondes = Integer.parseInt(temps.get(1));
+
+            return true;
+        }
+        else if (temps.size() == 3)
+        {
+            Heures = 0;
+            Minutes = Integer.parseInt(temps.get(0));
+            Secondes = Integer.parseInt(temps.get(1));
+            Millisecondes = Integer.parseInt(temps.get(2));
+
+            return true;
+        }
+        else if(temps.size() == 4)
         {
             Heures = Integer.parseInt(temps.get(0));
             Minutes = Integer.parseInt(temps.get(1));
