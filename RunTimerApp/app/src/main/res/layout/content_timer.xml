@@ -29,10 +29,10 @@
             android:layout_weight="1">
 
             <Button
-                android:text="TempLoad"
+                android:text="Test"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:onClick="LoadSplits"
+                android:onClick=""
                 android:id="@+id/temp"
                 android:layout_weight="1" />
 

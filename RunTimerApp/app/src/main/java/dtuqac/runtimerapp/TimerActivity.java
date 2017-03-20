@@ -48,11 +48,33 @@ public class TimerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_timer);
 
         MonTimer = new TimerClass();
+
+        if (ActiveSpeedrun.getInstance().IsInitialized())
+        {
+            LoadSplits();
+        }
     }
 
-
-    public void LoadSplits(View view)
+    public void LoadSplits()
     {
+        //Récupère la liste des splits time
+        int PBID = ActiveSpeedrun.getInstance().GetPersonnalBestID();
+        List<Split> PBSplits = ActiveSpeedrun.getInstance().GetSplitsByAttemptID(PBID);
+
+        //Récupère la liste des splits name
+        List<SplitDefinition> SplitsList = ActiveSpeedrun.getInstance().GetActiveSpeedrun().getSpeedRunSplits();
+
+        //Map la liste dans le listview
+        TimerSplit_Adapter ListAdapter = new TimerSplit_Adapter(this, SplitsList, PBSplits);
+
+        ListView lv = (ListView) findViewById(R.id.Liste_Splits);
+
+        lv.setAdapter(ListAdapter);
+
+        int x = 0;
+        x++;
+
+        /*
         ListView lv = (ListView) findViewById(R.id.Liste_Splits);
 
         List<SplitDefinition> SplitsList = ActiveSpeedrun.getInstance().GetActiveSpeedrun().getSpeedRunSplits();
@@ -80,7 +102,7 @@ public class TimerActivity extends AppCompatActivity {
 
         SimpleAdapter adapter = new SimpleAdapter(this, fillMaps, R.layout.split_list_item, from, to);
         lv.setAdapter(adapter);
-
+*/
 
     }
 

@@ -10,8 +10,6 @@ import dtuqac.runtimerapp.ActiveSpeedrun;
 
 public final class TimerClass
 {
-    //TODO: SplitsFile, CurrentComparison, CurrentSplit, etc.
-
     private long StartTime = 0;
     private long CurrentTime = 0;
     private long RealElapsedTime = 0;

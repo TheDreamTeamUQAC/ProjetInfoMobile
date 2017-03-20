@@ -5,27 +5,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.List;
-import java.util.Objects;
-
-import dtuqac.runtimerapp.SpeedRunEntity;
-
-
 
 /**
- * Created by François on 2017-03-15.
+ * Created by François on 2017-03-20.
  */
 
-public class EditSplit_Adapter extends BaseAdapter
+public class TimerSplit_Adapter extends BaseAdapter
 {
     private Context context;
     private List<SplitDefinition> DefData;
     private List<Split> TimeData;
     private static LayoutInflater inflater = null;
 
-    public EditSplit_Adapter(Context context, List<SplitDefinition> DefData, List<Split> TimeData)
+    public TimerSplit_Adapter(Context context, List<SplitDefinition> DefData, List<Split> TimeData)
     {
         this.context = context;
         this.DefData = DefData;
@@ -57,10 +52,10 @@ public class EditSplit_Adapter extends BaseAdapter
         View vi = convertView;
         if (vi == null)
         {
-            vi = inflater.inflate(R.layout.edit_split_listitem,null);
+            vi = inflater.inflate(R.layout.timersplit_list_item,null);
         }
-        EditText NameText = (EditText) vi.findViewById(R.id.txtSplitName);
-        EditText TimeText = (EditText) vi.findViewById(R.id.txtSplitTime);
+        TextView NameText = (TextView) vi.findViewById(R.id.lblSplitName);
+        TextView TimeText = (TextView) vi.findViewById(R.id.lblSplitTime);
         NameText.setText(DefData.get(position).getSplitName());
         TimeText.setText(TimeData.get(position).getSplitTime().getStringWithoutZero());
 
