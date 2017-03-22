@@ -1,10 +1,13 @@
 package dtuqac.runtimerapp;
 
+import android.app.LauncherActivity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -27,6 +30,7 @@ import java.util.UUID;
 public class TimerActivity extends AppCompatActivity {
 
     private TimerClass MonTimer;
+    private int CurrentSplitIndex = 0;
 
     private static final UUID WATCHAPP_UUID = UUID.fromString("6456a937-1e6d-40cf-a871-6545ea853727");
 
@@ -53,6 +57,52 @@ public class TimerActivity extends AppCompatActivity {
         {
             LoadSplits();
         }
+
+        final ListView lv = (ListView) findViewById(R.id.Liste_Splits);
+        /*
+        AdapterView.OnItemSelectedListener selectedListener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getBaseContext(),"Salut",Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        };
+        lv.setOnItemSelectedListener(selectedListener);*/
+
+        AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getBaseContext(),"Click item : " + position ,Toast.LENGTH_SHORT).show();
+                //HighlightListItem(position);
+
+                for (int i=0; i<lv.getCount();i++)
+                {
+                    parent.getChildAt(i).setBackgroundResource(R.color.light_grey);
+                }
+
+                parent.getChildAt(position).setBackgroundColor(Color.BLUE);
+
+               // lv.setItemChecked(position,true);
+
+                //TODO: À retenir: L'objet retourné est un SplitDefinition
+                //Object temp = parent.getItemAtPosition(position);
+
+            }
+        };
+        lv.setOnItemClickListener(itemClickListener);
+    }
+
+    public void TestButtonClick(View view)
+    {
+
+        ListView lv = (ListView) findViewById(R.id.Liste_Splits);
+        lv.performItemClick(view,CurrentSplitIndex++,1);
+        //lv.setSelection(CurrentSplitIndex);
+
     }
 
     public void LoadSplits()
@@ -70,40 +120,14 @@ public class TimerActivity extends AppCompatActivity {
         ListView lv = (ListView) findViewById(R.id.Liste_Splits);
 
         lv.setAdapter(ListAdapter);
+    }
 
-        int x = 0;
-        x++;
-
-        /*
+    private void HighlightListItem(int position)
+    {
         ListView lv = (ListView) findViewById(R.id.Liste_Splits);
-
-        List<SplitDefinition> SplitsList = ActiveSpeedrun.getInstance().GetActiveSpeedrun().getSpeedRunSplits();
-
-        for (SplitDefinition item : SplitsList)
-        {
-            String test = item.getSplitName();
-        }
-
-        // Create the item mapping
-        String[] from = new String[] { "title", "description" };
-        int[] to = new int[] { R.id.title, R.id.description };
-
-        List<HashMap<String, Object>> fillMaps = new ArrayList<HashMap<String, Object>>();
-
-        HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put("title", "First title"); // This will be shown in R.id.title
-        map.put("description", "description 1"); // And this in R.id.description
-        fillMaps.add(map);
-
-        map = new HashMap<String, Object>();
-        map.put("title", "Second title");
-        map.put("description", "description 2");
-        fillMaps.add(map);
-
-        SimpleAdapter adapter = new SimpleAdapter(this, fillMaps, R.layout.split_list_item, from, to);
-        lv.setAdapter(adapter);
-*/
-
+        TimerSplit_Adapter timerSplit_adapter = (TimerSplit_Adapter)lv.getAdapter();
+        timerSplit_adapter.SetSelectecItem(position);
+        //lv.setAdapter(timerSplit_adapter);
     }
 
     public void StartTimer(View view)
@@ -120,6 +144,13 @@ public class TimerActivity extends AppCompatActivity {
                 PollTimer();
                 final Button StartButton = (Button)findViewById(R.id.start_button);
                 StartButton.setText("Split");
+
+                //Si il y a des splits, highlight le current split
+                if (ActiveSpeedrun.getInstance().IsInitialized())
+                {
+                    ListView lv = (ListView) findViewById(R.id.Liste_Splits);
+
+                }
             }
         }
         else
@@ -149,7 +180,6 @@ public class TimerActivity extends AppCompatActivity {
     {
         final TextView MainTimeView = (TextView)findViewById(R.id.main_timer_label);
         final TextView SmallTimeView = (TextView)findViewById(R.id.small_timer_label);
-        //java text view associated with the xml one
 
         final Handler handler = new Handler();
         handler.post(new Runnable() {

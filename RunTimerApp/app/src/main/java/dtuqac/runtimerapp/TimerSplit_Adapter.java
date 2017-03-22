@@ -1,11 +1,15 @@
 package dtuqac.runtimerapp;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -18,6 +22,7 @@ public class TimerSplit_Adapter extends BaseAdapter
     private Context context;
     private List<SplitDefinition> DefData;
     private List<Split> TimeData;
+    private int selectedItem = -1;
     private static LayoutInflater inflater = null;
 
     public TimerSplit_Adapter(Context context, List<SplitDefinition> DefData, List<Split> TimeData)
@@ -60,5 +65,22 @@ public class TimerSplit_Adapter extends BaseAdapter
         TimeText.setText(TimeData.get(position).getSplitTime().getStringWithoutZero());
 
         return vi;
+    }
+
+    private void HighlightItem(int position, View view)
+    {
+        if (position == selectedItem)
+        {
+            view.setBackgroundColor(Color.DKGRAY);
+        }
+        else
+        {
+            view.setBackground(Drawable.createFromPath("@drawable/list_selector_normal"));
+        }
+    }
+
+    public void SetSelectecItem(int selectedItem)
+    {
+        this.selectedItem = selectedItem;
     }
 }
