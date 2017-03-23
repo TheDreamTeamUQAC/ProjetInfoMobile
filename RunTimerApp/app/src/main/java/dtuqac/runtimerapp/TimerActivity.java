@@ -23,9 +23,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-//import com.getpebble.android.kit.PebbleKit;
-//import com.getpebble.android.kit.PebbleKit.PebbleDataReceiver;
-//import com.getpebble.android.kit.util.PebbleDictionary;
+import com.getpebble.android.kit.PebbleKit;
+import com.getpebble.android.kit.PebbleKit.PebbleDataReceiver;
+import com.getpebble.android.kit.util.PebbleDictionary;
 
 public class TimerActivity extends AppCompatActivity {
 
@@ -42,7 +42,7 @@ public class TimerActivity extends AppCompatActivity {
             BUTTON_DOWN = 2;
 
     private Handler handler = new Handler();
-   // private PebbleDataReceiver appMessageReciever;
+    private PebbleDataReceiver appMessageReciever;
 
 
     @Override
@@ -210,8 +210,6 @@ public class TimerActivity extends AppCompatActivity {
         });
 
     }
-/*
-    //region PebbleControl
 
     @Override
     protected void onResume() {
@@ -238,16 +236,19 @@ public class TimerActivity extends AppCompatActivity {
                             public void run() {
                                 switch(button) {
                                     case BUTTON_UP:
-                                        whichButtonView.setText("UP");
-                                        fctCommunes.ExecVibration(getApplicationContext(),500);
+                                        //whichButtonView.setText("UP");
+                                        //fctCommunes.ExecVibration(getApplicationContext(),500);
+                                        Toast.makeText(getBaseContext(),"UP",Toast.LENGTH_LONG).show();
                                         break;
                                     case BUTTON_SELECT:
-                                        whichButtonView.setText("SELECT");
-                                        fctCommunes.ExecVibration(getApplicationContext(),500);
+                                        //whichButtonView.setText("SELECT");
+                                        //fctCommunes.ExecVibration(getApplicationContext(),500);
+                                        Toast.makeText(getBaseContext(),"SELECT",Toast.LENGTH_LONG).show();
                                         break;
                                     case BUTTON_DOWN:
-                                        whichButtonView.setText("DOWN");
-                                        fctCommunes.ExecVibration(getApplicationContext(),500);
+                                        //whichButtonView.setText("DOWN");
+                                        //fctCommunes.ExecVibration(getApplicationContext(),500);
+                                        Toast.makeText(getBaseContext(),"DOWN",Toast.LENGTH_LONG).show();
                                         break;
                                     default:
                                         Toast.makeText(getApplicationContext(), "Unknown button: " + button, Toast.LENGTH_SHORT).show();
@@ -290,6 +291,4 @@ public class TimerActivity extends AppCompatActivity {
         }
     }
 
-    //endregion
-*/
 }
