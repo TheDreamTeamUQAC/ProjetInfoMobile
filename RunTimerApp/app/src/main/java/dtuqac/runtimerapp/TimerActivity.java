@@ -254,11 +254,13 @@ public class TimerActivity extends AppCompatActivity {
     }
 
     private void EnvoyerMessagePebble(String s) {
-        //Communiquer le temps à la pebble
-        PebbleDictionary comm = new PebbleDictionary();
+        if(PebbleKit.isWatchConnected(getBaseContext())) {
+            //Communiquer le temps à la pebble
+            PebbleDictionary comm = new PebbleDictionary();
 
-        comm.addString(MESSAGE_TIME, s);
-        PebbleKit.sendDataToPebble(getApplicationContext(), WATCHAPP_UUID, comm);
+            comm.addString(MESSAGE_TIME, s);
+            PebbleKit.sendDataToPebble(getApplicationContext(), WATCHAPP_UUID, comm);
+        }
     }
 
     @Override
@@ -329,11 +331,6 @@ public class TimerActivity extends AppCompatActivity {
         //Open app on pebble
         if(PebbleKit.isWatchConnected(getBaseContext())) {
             PebbleKit.startAppOnPebble(getBaseContext(), WATCHAPP_UUID);
-
-            EnvoyerMessagePebble("Instructions bouttons:\n" +
-                    "Haut: Reset\n"+
-                    "Milieu: Pause\n" +
-                    "Bas: Start/Split");
         }
 
     }
