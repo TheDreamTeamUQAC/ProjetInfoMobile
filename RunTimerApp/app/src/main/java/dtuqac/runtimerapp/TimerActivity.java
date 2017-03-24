@@ -203,10 +203,9 @@ public class TimerActivity extends AppCompatActivity {
         MainTimeView.setText("0");
         SmallTimeView.setText(".00");
 
-<<<<<<< HEAD
         //TODO envoyer le nom du premier split
         EnvoyerMessagePebble("Reset time");
-=======
+
         final ListView lv = (ListView) findViewById(R.id.Liste_Splits);
         //Reset le background de tous les éléments
         for (int i=0; i<lv.getCount();i++)
@@ -215,7 +214,6 @@ public class TimerActivity extends AppCompatActivity {
         }
 
         CurrentSplitIndex = 0;
->>>>>>> origin/master
     }
 
     private void PollTimer()
