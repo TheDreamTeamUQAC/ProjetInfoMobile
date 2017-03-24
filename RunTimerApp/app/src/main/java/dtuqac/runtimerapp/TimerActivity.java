@@ -31,6 +31,7 @@ public class TimerActivity extends AppCompatActivity {
 
     private TimerClass MonTimer;
     private int CurrentSplitIndex = 0;
+    private Attempt CurrentAttempt;
 
     private static final UUID WATCHAPP_UUID = UUID.fromString("6456a937-1e6d-40cf-a871-6545ea853727");
 
@@ -59,32 +60,27 @@ public class TimerActivity extends AppCompatActivity {
         }
 
         final ListView lv = (ListView) findViewById(R.id.Liste_Splits);
-        /*
-        AdapterView.OnItemSelectedListener selectedListener = new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getBaseContext(),"Salut",Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        };
-        lv.setOnItemSelectedListener(selectedListener);*/
 
         AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getBaseContext(),"Click item : " + position ,Toast.LENGTH_SHORT).show();
-                //HighlightListItem(position);
 
+                //Reset le background de tous les éléments
                 for (int i=0; i<lv.getCount();i++)
                 {
                     parent.getChildAt(i).setBackgroundResource(R.color.light_grey);
                 }
 
-                parent.getChildAt(position).setBackgroundColor(Color.BLUE);
+                if (position >= lv.getCount()) // Si on est au dernier split
+                {
+                    return;
+                }
+
+                if (position != -1) //Position est setté à -1 quand on reset
+                {
+                    parent.getChildAt(position).setBackgroundColor(Color.GRAY);
+                }
+
 
                // lv.setItemChecked(position,true);
 
@@ -98,11 +94,11 @@ public class TimerActivity extends AppCompatActivity {
 
     public void TestButtonClick(View view)
     {
-
+        /*
         ListView lv = (ListView) findViewById(R.id.Liste_Splits);
-        lv.performItemClick(view,CurrentSplitIndex++,1);
+        lv.performItemClick(view,-1,1);
         //lv.setSelection(CurrentSplitIndex);
-
+        */
     }
 
     public void LoadSplits()
@@ -120,14 +116,6 @@ public class TimerActivity extends AppCompatActivity {
         ListView lv = (ListView) findViewById(R.id.Liste_Splits);
 
         lv.setAdapter(ListAdapter);
-    }
-
-    private void HighlightListItem(int position)
-    {
-        ListView lv = (ListView) findViewById(R.id.Liste_Splits);
-        TimerSplit_Adapter timerSplit_adapter = (TimerSplit_Adapter)lv.getAdapter();
-        timerSplit_adapter.SetSelectecItem(position);
-        //lv.setAdapter(timerSplit_adapter);
     }
 
     public void StartTimer(View view)
@@ -149,14 +137,54 @@ public class TimerActivity extends AppCompatActivity {
                 if (ActiveSpeedrun.getInstance().IsInitialized())
                 {
                     ListView lv = (ListView) findViewById(R.id.Liste_Splits);
+                    lv.performItemClick(view,CurrentSplitIndex,1);
 
+
+                    //Get l'ID du dernier attempt
+                    List<Attempt> listA = ActiveSpeedrun.getInstance().GetActiveSpeedrun().getAttemptHistory();
+                    Attempt A = listA.get(listA.size()-1);
+                    int ID = A.getId();
+
+                    CurrentAttempt = new Attempt(++ID,A.getSpeedRunId(), new CustomTime(0,0,0,0), new CustomTime(0,0,0,0), false);
                 }
             }
         }
         else
         {
-            //TODO: MonTimer.Split();
+            final ListView lv = (ListView) findViewById(R.id.Liste_Splits);
+            if (CurrentSplitIndex <= lv.getCount())
+            {
+                CurrentSplitIndex++;
+                lv.performItemClick(view,CurrentSplitIndex,1);
+            }
+
+            Split();
         }
+    }
+
+    private void Split()
+    {
+        if (CurrentSplitIndex >= CurrentAttempt.getSplits().size())
+        {
+            Toast.makeText(getBaseContext(),"Fini" ,Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        //Report le Split Time dans l'attempt
+        CustomTime SegmentTime;
+        CustomTime SplitTime = new CustomTime((int)MonTimer.GetHeures(), (int)MonTimer.GetMinutes(), (int)MonTimer.GetSecondes(), (int)MonTimer.GetMiliseconds());
+        Split MonSplit = new Split(1,CurrentSplitIndex+1,CurrentAttempt.getId(),SplitTime,SplitTime,false);
+        CurrentAttempt.addSplit(MonSplit);
+
+        Toast.makeText(getBaseContext(),"Split au temps : " + SplitTime.getString() ,Toast.LENGTH_LONG).show();
+
+        //Set le Split Time sur l'item du list view
+        //Update le highlight du list view
+    }
+
+    private void FinishRun()
+    {
+
     }
 
     public void PauseTimer(View view)
@@ -175,8 +203,19 @@ public class TimerActivity extends AppCompatActivity {
         MainTimeView.setText("0");
         SmallTimeView.setText(".00");
 
+<<<<<<< HEAD
         //TODO envoyer le nom du premier split
         EnvoyerMessagePebble("Reset time");
+=======
+        final ListView lv = (ListView) findViewById(R.id.Liste_Splits);
+        //Reset le background de tous les éléments
+        for (int i=0; i<lv.getCount();i++)
+        {
+            lv.getChildAt(i).setBackgroundResource(R.color.light_grey);
+        }
+
+        CurrentSplitIndex = 0;
+>>>>>>> origin/master
     }
 
     private void PollTimer()
