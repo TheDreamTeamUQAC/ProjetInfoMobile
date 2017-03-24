@@ -174,6 +174,9 @@ public class TimerActivity extends AppCompatActivity {
         final TextView SmallTimeView = (TextView)findViewById(R.id.small_timer_label);
         MainTimeView.setText("0");
         SmallTimeView.setText(".00");
+
+        //TODO envoyer le nom du premier split
+        EnvoyerMessagePebble("Reset time");
     }
 
     private void PollTimer()
@@ -204,11 +207,21 @@ public class TimerActivity extends AppCompatActivity {
 
                     SmallTimeView.setText(SmallTimer);
                     MainTimeView.setText(MainTimer);
+
+                    EnvoyerMessagePebble("Etape 1 \n" + MainTimer + SmallTimer);
                 }
                 handler.postDelayed(this, 10);
             }
         });
 
+    }
+
+    private void EnvoyerMessagePebble(String s) {
+        //Communiquer le temps à la pebble
+        PebbleDictionary comm = new PebbleDictionary();
+
+        comm.addString(MESSAGE_TIME, s);
+        PebbleKit.sendDataToPebble(getApplicationContext(), WATCHAPP_UUID, comm);
     }
 
     @Override
@@ -236,22 +249,28 @@ public class TimerActivity extends AppCompatActivity {
                             public void run() {
                                 switch(button) {
                                     case BUTTON_UP:
+                                        //TODO Rien...
                                         //whichButtonView.setText("UP");
                                         //fctCommunes.ExecVibration(getApplicationContext(),500);
+                                        ResetTimer(null);
                                         Toast.makeText(getBaseContext(),"UP",Toast.LENGTH_LONG).show();
                                         break;
                                     case BUTTON_SELECT:
+                                        //TODO Start/Pause
                                         //whichButtonView.setText("SELECT");
                                         //fctCommunes.ExecVibration(getApplicationContext(),500);
+                                        PauseTimer(null);
                                         Toast.makeText(getBaseContext(),"SELECT",Toast.LENGTH_LONG).show();
                                         break;
                                     case BUTTON_DOWN:
+                                        //TODO Split
                                         //whichButtonView.setText("DOWN");
                                         //fctCommunes.ExecVibration(getApplicationContext(),500);
+                                        StartTimer(null);
                                         Toast.makeText(getBaseContext(),"DOWN",Toast.LENGTH_LONG).show();
                                         break;
                                     default:
-                                        Toast.makeText(getApplicationContext(), "Unknown button: " + button, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getBaseContext(), "Unknown button: " + button, Toast.LENGTH_SHORT).show();
                                         break;
                                 }
                             }
@@ -271,8 +290,13 @@ public class TimerActivity extends AppCompatActivity {
         super.onPostResume();
 
         //Open app on pebble
-        if(PebbleKit.isWatchConnected(getApplicationContext())) {
-            PebbleKit.startAppOnPebble(getApplicationContext(), WATCHAPP_UUID);
+        if(PebbleKit.isWatchConnected(getBaseContext())) {
+            PebbleKit.startAppOnPebble(getBaseContext(), WATCHAPP_UUID);
+
+            EnvoyerMessagePebble("Instructions bouttons:\n" +
+                    "Haut: Reset\n"+
+                    "Milieu: Pause\n" +
+                    "Bas: Start/Split");
         }
 
     }
@@ -282,7 +306,7 @@ public class TimerActivity extends AppCompatActivity {
         super.onPause();
 
         //Close app on pebble
-        PebbleKit.closeAppOnPebble(getApplicationContext(),WATCHAPP_UUID);
+        PebbleKit.closeAppOnPebble(getBaseContext(),WATCHAPP_UUID);
 
         // Unregister AppMessage reception
         if(appMessageReciever != null) {
