@@ -72,4 +72,10 @@ class ActiveSpeedrun {
     {
        // Run.addSplitDefinition();
     }
+
+
+    public void CreateNewAttempt()
+    {
+
+    }
 }
