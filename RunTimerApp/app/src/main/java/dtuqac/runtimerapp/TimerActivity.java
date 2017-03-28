@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ import dtuqac.runtimerapp.ActiveSpeedrun;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -73,6 +75,7 @@ public class TimerActivity extends AppCompatActivity {
 
                 if (position >= lv.getCount()) // Si on est au dernier split
                 {
+                    FinishRun();
                     return;
                 }
 
@@ -81,10 +84,7 @@ public class TimerActivity extends AppCompatActivity {
                     parent.getChildAt(position).setBackgroundColor(Color.GRAY);
                 }
 
-
-               // lv.setItemChecked(position,true);
-
-                //TODO: À retenir: L'objet retourné est un SplitDefinition
+                //À retenir: L'objet retourné est un SplitDefinition
                 //Object temp = parent.getItemAtPosition(position);
 
             }
@@ -94,11 +94,7 @@ public class TimerActivity extends AppCompatActivity {
 
     public void TestButtonClick(View view)
     {
-        /*
-        ListView lv = (ListView) findViewById(R.id.Liste_Splits);
-        lv.performItemClick(view,-1,1);
-        //lv.setSelection(CurrentSplitIndex);
-        */
+        //Test
     }
 
     public void LoadSplits()
@@ -114,7 +110,6 @@ public class TimerActivity extends AppCompatActivity {
         TimerSplit_Adapter ListAdapter = new TimerSplit_Adapter(this, SplitsList, PBSplits);
 
         ListView lv = (ListView) findViewById(R.id.Liste_Splits);
-
         lv.setAdapter(ListAdapter);
     }
 
@@ -139,7 +134,6 @@ public class TimerActivity extends AppCompatActivity {
                     ListView lv = (ListView) findViewById(R.id.Liste_Splits);
                     lv.performItemClick(view,CurrentSplitIndex,1);
 
-
                     //Get l'ID du dernier attempt
                     List<Attempt> listA = ActiveSpeedrun.getInstance().GetActiveSpeedrun().getAttemptHistory();
                     Attempt A = listA.get(listA.size()-1);
@@ -151,40 +145,48 @@ public class TimerActivity extends AppCompatActivity {
         }
         else
         {
+            Split();
+
             final ListView lv = (ListView) findViewById(R.id.Liste_Splits);
-            if (CurrentSplitIndex <= lv.getCount())
+            if (CurrentSplitIndex <= lv.getCount()) //Clique sur le prochain split pour l'highlight
             {
                 CurrentSplitIndex++;
                 lv.performItemClick(view,CurrentSplitIndex,1);
             }
-
-            Split();
         }
     }
 
     private void Split()
     {
-        if (CurrentSplitIndex >= CurrentAttempt.getSplits().size())
-        {
-            Toast.makeText(getBaseContext(),"Fini" ,Toast.LENGTH_LONG).show();
-            return;
-        }
-
         //Report le Split Time dans l'attempt
-        CustomTime SegmentTime;
+        CustomTime SegmentTime; //TODO: Gestion des segments (IsBestSegment, Sauver le segment time, etc)
         CustomTime SplitTime = new CustomTime((int)MonTimer.GetHeures(), (int)MonTimer.GetMinutes(), (int)MonTimer.GetSecondes(), (int)MonTimer.GetMiliseconds());
         Split MonSplit = new Split(1,CurrentSplitIndex+1,CurrentAttempt.getId(),SplitTime,SplitTime,false);
         CurrentAttempt.addSplit(MonSplit);
 
-        Toast.makeText(getBaseContext(),"Split au temps : " + SplitTime.getString() ,Toast.LENGTH_LONG).show();
-
         //Set le Split Time sur l'item du list view
-        //Update le highlight du list view
+        List<Split> SplitsListe = new LinkedList<Split>();
+        SplitsListe.addAll(CurrentAttempt.getSplits());
+
+        //Récupère la liste des splits time
+        int PBID = ActiveSpeedrun.getInstance().GetPersonnalBestID();
+        List<Split> PBSplits = ActiveSpeedrun.getInstance().GetSplitsByAttemptID(PBID);
+
+        for (int i = CurrentSplitIndex + 1; i < PBSplits.size() ;i++)
+        {
+            SplitsListe.add(PBSplits.get(i));
+        }
+
+        ListView lv = (ListView) findViewById(R.id.Liste_Splits);
+        //Refresh la liste
+        ((TimerSplit_Adapter) lv.getAdapter()).refreshSplits(SplitsListe);
     }
 
     private void FinishRun()
     {
-
+        //TODO: comparer avec le personnal best
+        MonTimer.StopTimer();
+        Toast.makeText(getBaseContext(),"Fini" ,Toast.LENGTH_LONG).show();
     }
 
     public void PauseTimer(View view)

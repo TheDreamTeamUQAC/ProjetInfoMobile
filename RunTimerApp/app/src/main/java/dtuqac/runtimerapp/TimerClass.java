@@ -14,6 +14,7 @@ public final class TimerClass
     private long CurrentTime = 0;
     private long RealElapsedTime = 0;
     private boolean Running;
+    private boolean IsStopped = false;
 
     private long Miliseconds = 0;
     private long Secondes = 0;
@@ -32,6 +33,12 @@ public final class TimerClass
         StartTime = SystemClock.elapsedRealtime();
     }
 
+    public void StopTimer()
+    {
+        IsStopped = true;
+        Running = false;
+    }
+
     public void PauseTimer()
     {
         if (Running) //On Pause
@@ -46,7 +53,7 @@ public final class TimerClass
 
     public void UnpauseTimer()
     {
-        if (!Running && StartTime != 0)
+        if (!Running && StartTime != 0 && !(IsStopped))
         {
             //Recupere le temps qu'on a passe en pause
             long NewCurrentTime = SystemClock.elapsedRealtime();
@@ -61,6 +68,7 @@ public final class TimerClass
     public void ResetTimer()
     {
         Running = false;
+        IsStopped = false;
         StartTime = 0;
         Miliseconds = 0;
         Secondes = 0;

@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.Time;
 import java.util.List;
 
 /**
@@ -82,5 +83,12 @@ public class TimerSplit_Adapter extends BaseAdapter
     public void SetSelectecItem(int selectedItem)
     {
         this.selectedItem = selectedItem;
+    }
+
+    public void refreshSplits(List<Split> TimeData)
+    {
+        this.TimeData.clear();
+        this.TimeData.addAll(TimeData);
+        notifyDataSetChanged();
     }
 }
