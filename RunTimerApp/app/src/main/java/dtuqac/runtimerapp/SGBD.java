@@ -1,5 +1,9 @@
 package dtuqac.runtimerapp;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -136,13 +140,40 @@ public class SGBD extends SQLiteOpenHelper {
             db.execSQL(ATTEMPT_CREATE_SQL);
             db.execSQL(SPLIT_CREATE_SQL);
 
-            InsertTestValues(db);
+            try
+            {
+                ReadSQLFile(db);
+            }
+            catch (IOException e)
+            {
+                //Well... shit ¯\_(ツ)_/¯
+            }
+
+            //InsertTestValues(db);
         }
         catch (SQLException ex)
         {
             throw ex;
         }
 
+    }
+
+    private void ReadSQLFile(SQLiteDatabase db) throws IOException
+    {
+        int result = 0;
+
+        InputStream insertStream = SGBDContext.getResources().openRawResource(R.raw.inserts);
+        BufferedReader insertReader = new BufferedReader(new InputStreamReader((insertStream)));
+        while (insertReader.ready())
+        {
+            String query = insertReader.readLine();
+            if (query.charAt(0) == 'I')
+            {
+                db.execSQL(query);
+                result++;
+            }
+        }
+        insertReader.close();
     }
 
     @Override

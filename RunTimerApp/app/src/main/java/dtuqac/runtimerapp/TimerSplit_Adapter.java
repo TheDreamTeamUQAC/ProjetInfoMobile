@@ -90,5 +90,5 @@ public class TimerSplit_Adapter extends BaseAdapter
         this.TimeData.clear();
         this.TimeData.addAll(TimeData);
         notifyDataSetChanged();
-    }
+}
 }
