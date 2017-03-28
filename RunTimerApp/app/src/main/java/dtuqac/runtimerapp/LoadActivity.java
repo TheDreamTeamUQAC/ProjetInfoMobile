@@ -1,9 +1,7 @@
 package dtuqac.runtimerapp;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -15,20 +13,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 
 public class LoadActivity extends AppCompatActivity {
 
     static final int SPEED_RUN_FORM = 1;
 
-
-    private GestionFichier fileWorker;
     private SGBD db;
     private PopupMessage popupMaker;
 
@@ -44,7 +36,6 @@ public class LoadActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Initialiser le gestionnaire de fichier
-        fileWorker = new GestionFichier(LoadActivity.this);
         popupMaker = new PopupMessage(LoadActivity.this);
         db = new SGBD(LoadActivity.this);
 
@@ -72,14 +63,14 @@ public class LoadActivity extends AppCompatActivity {
                     {
                     popupMaker.ConfirmerSuppressionPopup("Supprimer \"" + selected +"\"?",speedRunId);
                     }else {
-                        Toast.makeText(getBaseContext(),"Erreur lors de la supPression!",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getBaseContext(),"Erreur lors de la suppression!",Toast.LENGTH_SHORT).show();
                     }
                 }
                 else {
                     //Ici on fait les actions si on la SpeedRun
                     ActiveSpeedrun.getInstance().SetCurrentSpeedrun(db.getSpeedRunEntity(speedRunId));
                     //Renvoyer l'utilisateur à l'édition des splits de la speedrun choisie
-                    Intent EditIntent = new Intent(LoadActivity.this, EditSplits.class);
+                    Intent EditIntent = new Intent(LoadActivity.this, TimerActivity.class);
                     startActivity(EditIntent);
                     finish();
                 }
@@ -96,7 +87,7 @@ public class LoadActivity extends AppCompatActivity {
     }
 
     public void ChargerEntreesListView() {
-        List<SpeedRunEntity> speedRunExistantes = new ArrayList<>();
+        List<SpeedRunEntity> speedRunExistantes;
         speedRunExistantes = db.getSpeedRunList();
 
         TextView txt = (TextView)findViewById(R.id.txtListViewVide);
@@ -132,10 +123,8 @@ public class LoadActivity extends AppCompatActivity {
         if (requestCode == SPEED_RUN_FORM) {
             if (resultCode == RESULT_OK) {
 
-                DateFormat format = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
-                SpeedRunEntity newSpeedRun = null;
                 Bundle extras = data.getBundleExtra("bundle");
-                newSpeedRun = new SpeedRunEntity(
+                SpeedRunEntity newSpeedRun = new SpeedRunEntity(
                             0,
                             extras.getString("gamename"),
                             extras.getString("categoryname"),

@@ -272,7 +272,7 @@ public class SGBD extends SQLiteOpenHelper {
         }
         else{
             return null;
-        }
+}
     }
 
 

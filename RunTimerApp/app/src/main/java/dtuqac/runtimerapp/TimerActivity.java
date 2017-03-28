@@ -1,6 +1,5 @@
 package dtuqac.runtimerapp;
 
-import android.app.LauncherActivity;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,38 +7,34 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import dtuqac.runtimerapp.SpeedRunEntity;
-import dtuqac.runtimerapp.ActiveSpeedrun;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
 
 import com.getpebble.android.kit.PebbleKit;
 import com.getpebble.android.kit.PebbleKit.PebbleDataReceiver;
 import com.getpebble.android.kit.util.PebbleDictionary;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
 
 public class TimerActivity extends AppCompatActivity {
 
     private TimerClass MonTimer;
     private int CurrentSplitIndex = 0;
     private Attempt CurrentAttempt;
+    private String DernierTempsPebble;
+
+    private CustomTime LastSplitTime;
 
     private static final UUID WATCHAPP_UUID = UUID.fromString("6456a937-1e6d-40cf-a871-6545ea853727");
 
     private static final int
             KEY_BUTTON = 0,
             MESSAGE_TIME = 43,
+            MESSAGE_MENU = 44,
             BUTTON_UP = 0,
             BUTTON_SELECT = 1,
             BUTTON_DOWN = 2;
@@ -55,6 +50,8 @@ public class TimerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_timer);
 
         MonTimer = new TimerClass();
+        DernierTempsPebble = "";
+        LastSplitTime = new CustomTime(0,0,0,0);
 
         if (ActiveSpeedrun.getInstance().IsInitialized())
         {
@@ -160,6 +157,7 @@ public class TimerActivity extends AppCompatActivity {
                 lv.performItemClick(view,CurrentSplitIndex,1);
             }
         }
+        EnvoyerSplitPebble();
     }
 
     private void Split()
@@ -186,6 +184,10 @@ public class TimerActivity extends AppCompatActivity {
         ListView lv = (ListView) findViewById(R.id.Liste_Splits);
         //Refresh la liste
         ((TimerSplit_Adapter) lv.getAdapter()).refreshSplits(SplitsListe);
+
+        LastSplitTime = SplitTime;
+        EnvoyerMessagePebble();
+        EnvoyerSplitPebble();
     }
 
     private void FinishRun()
@@ -212,7 +214,6 @@ public class TimerActivity extends AppCompatActivity {
         SmallTimeView.setText(".00");
 
         //TODO envoyer le nom du premier split
-        EnvoyerMessagePebble("Reset time");
 
         final ListView lv = (ListView) findViewById(R.id.Liste_Splits);
         //Reset le background de tous les éléments
@@ -222,6 +223,8 @@ public class TimerActivity extends AppCompatActivity {
         }
 
         CurrentSplitIndex = 0;
+        LastSplitTime = new CustomTime(0,0,0,0);
+        EnvoyerMessagePebble();
     }
 
     private void PollTimer()
@@ -253,7 +256,10 @@ public class TimerActivity extends AppCompatActivity {
                     SmallTimeView.setText(SmallTimer);
                     MainTimeView.setText(MainTimer);
 
-                    EnvoyerMessagePebble("Etape 1 \n" + MainTimer + SmallTimer);
+                    if(!DernierTempsPebble.equals(MainTimer)){
+                        DernierTempsPebble = MainTimer;
+                        EnvoyerMessagePebble();
+                    }
                 }
                 handler.postDelayed(this, 10);
             }
@@ -261,12 +267,46 @@ public class TimerActivity extends AppCompatActivity {
 
     }
 
-    private void EnvoyerMessagePebble(String s) {
+    private void EnvoyerMessagePebble() {
         if(PebbleKit.isWatchConnected(getBaseContext())) {
+            int secondes = (int)MonTimer.GetSecondes()% 60 - LastSplitTime.getSecondes();
+            int minutes = (int)MonTimer.GetMinutes()% 60 - LastSplitTime.getMinutes();
+            int heures = (int)MonTimer.GetHeures() - LastSplitTime.getHeures();
+
+            if(secondes < 0){
+                minutes--;
+                secondes = 60 + secondes;
+            }
+            if(minutes<0)
+            {
+                heures--;
+                minutes = 60 - minutes;
+            }
+
+            String s = String.format("%02d:%02d:%02d", heures, minutes, secondes) + "\n" +
+                    String.format("%02d:%02d:%02d", MonTimer.GetHeures(), MonTimer.GetMinutes() % 60, MonTimer.GetSecondes() % 60);
+
             //Communiquer le temps à la pebble
             PebbleDictionary comm = new PebbleDictionary();
 
             comm.addString(MESSAGE_TIME, s);
+            PebbleKit.sendDataToPebble(getApplicationContext(), WATCHAPP_UUID, comm);
+        }
+    }
+
+    private void EnvoyerSplitPebble() {
+        if(PebbleKit.isWatchConnected(getBaseContext())) {
+            //On ajuste l'interface sur la pebble
+            String txtAEnvoyer = ((SplitDefinition)((ListView)findViewById(R.id.Liste_Splits)).getAdapter().getItem(CurrentSplitIndex)).getSplitName();
+
+            if(txtAEnvoyer.length() <= 14){
+                txtAEnvoyer = "\n" + txtAEnvoyer;
+            }
+
+            //Communiquer le temps à la pebble
+            PebbleDictionary comm = new PebbleDictionary();
+
+            comm.addString(MESSAGE_MENU, txtAEnvoyer);
             PebbleKit.sendDataToPebble(getApplicationContext(), WATCHAPP_UUID, comm);
         }
     }
@@ -297,24 +337,15 @@ public class TimerActivity extends AppCompatActivity {
                                 switch(button) {
                                     case BUTTON_UP:
                                         //TODO Rien...
-                                        //whichButtonView.setText("UP");
-                                        //fctCommunes.ExecVibration(getApplicationContext(),500);
                                         ResetTimer(null);
-                                        Toast.makeText(getBaseContext(),"UP",Toast.LENGTH_LONG).show();
                                         break;
                                     case BUTTON_SELECT:
                                         //TODO Start/Pause
-                                        //whichButtonView.setText("SELECT");
-                                        //fctCommunes.ExecVibration(getApplicationContext(),500);
                                         PauseTimer(null);
-                                        Toast.makeText(getBaseContext(),"SELECT",Toast.LENGTH_LONG).show();
                                         break;
                                     case BUTTON_DOWN:
                                         //TODO Split
-                                        //whichButtonView.setText("DOWN");
-                                        //fctCommunes.ExecVibration(getApplicationContext(),500);
                                         StartTimer(null);
-                                        Toast.makeText(getBaseContext(),"DOWN",Toast.LENGTH_LONG).show();
                                         break;
                                     default:
                                         Toast.makeText(getBaseContext(), "Unknown button: " + button, Toast.LENGTH_SHORT).show();
@@ -346,7 +377,11 @@ public class TimerActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+    }
 
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
         //Close app on pebble
         PebbleKit.closeAppOnPebble(getBaseContext(),WATCHAPP_UUID);
 
@@ -355,6 +390,8 @@ public class TimerActivity extends AppCompatActivity {
             unregisterReceiver(appMessageReciever);
             appMessageReciever = null;
         }
+
+        MonTimer.PauseTimer();
     }
 
 }

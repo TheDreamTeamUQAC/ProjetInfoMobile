@@ -32,19 +32,19 @@
             android:layout_weight="4">
 
             <Button
+                android:id="@+id/btnAdd"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:text="@string/Menu_Add"
+                android:onClick="onBtnClick"/>
+
+            <Button
                 android:id="@+id/btnTimer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
                 android:text="@string/Menu_Timer"
-                android:onClick="onBtnClick"/>
-
-            <Button
-                android:id="@+id/btnEdit"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="5"
-                android:text="@string/Menu_Edit"
                 android:onClick="onBtnClick"/>
 
         </LinearLayout>
@@ -56,11 +56,11 @@
             android:layout_weight="4">
 
             <Button
-                android:id="@+id/btnAdd"
+                android:id="@+id/btnEdit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="5"
-                android:text="@string/Menu_Add"
+                android:text="@string/Menu_Edit"
                 android:onClick="onBtnClick"/>
 
             <Button
