@@ -65,7 +65,7 @@ public class TimerActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 //Reset le background de tous les éléments
-                for (int i=0; i<lv.getLastVisiblePosition();i++)
+                for (int i=0; i<=lv.getLastVisiblePosition();i++)
                 {
                     parent.getChildAt(i).setBackgroundResource(R.color.light_grey);
                 }
@@ -156,6 +156,11 @@ public class TimerActivity extends AppCompatActivity {
                 CurrentSplitIndex++;
                 lv.performItemClick(view,CurrentSplitIndex,1);
             }
+
+            if(CurrentSplitIndex < lv.getCount()){
+                EnvoyerMessagePebble();
+            }
+
         }
         EnvoyerSplitPebble();
     }
@@ -186,8 +191,6 @@ public class TimerActivity extends AppCompatActivity {
         ((TimerSplit_Adapter) lv.getAdapter()).refreshSplits(SplitsListe);
 
         LastSplitTime = SplitTime;
-        EnvoyerMessagePebble();
-        EnvoyerSplitPebble();
     }
 
     private void FinishRun()
@@ -225,6 +228,7 @@ public class TimerActivity extends AppCompatActivity {
         CurrentSplitIndex = 0;
         LastSplitTime = new CustomTime(0,0,0,0);
         EnvoyerMessagePebble();
+        EnvoyerSplitPebble();
     }
 
     private void PollTimer()
@@ -283,8 +287,8 @@ public class TimerActivity extends AppCompatActivity {
                 minutes = 60 - minutes;
             }
 
-            String s = String.format("%02d:%02d:%02d", heures, minutes, secondes) + "\n" +
-                    String.format("%02d:%02d:%02d", MonTimer.GetHeures(), MonTimer.GetMinutes() % 60, MonTimer.GetSecondes() % 60);
+            String s = "Split: " + String.format("%02d:%02d:%02d", heures, minutes, secondes) + "\n" +
+                    "Total: "+String.format("%02d:%02d:%02d", MonTimer.GetHeures(), MonTimer.GetMinutes() % 60, MonTimer.GetSecondes() % 60);
 
             //Communiquer le temps à la pebble
             PebbleDictionary comm = new PebbleDictionary();
@@ -297,7 +301,14 @@ public class TimerActivity extends AppCompatActivity {
     private void EnvoyerSplitPebble() {
         if(PebbleKit.isWatchConnected(getBaseContext())) {
             //On ajuste l'interface sur la pebble
-            String txtAEnvoyer = ((SplitDefinition)((ListView)findViewById(R.id.Liste_Splits)).getAdapter().getItem(CurrentSplitIndex)).getSplitName();
+            String txtAEnvoyer = "";
+
+            try {
+                txtAEnvoyer = ((SplitDefinition) ((ListView) findViewById(R.id.Liste_Splits)).getAdapter().getItem(CurrentSplitIndex)).getSplitName();
+            }
+            catch (Exception e){
+                txtAEnvoyer = "Speed Run Terminée!";
+            }
 
             if(txtAEnvoyer.length() <= 14){
                 txtAEnvoyer = "\n" + txtAEnvoyer;
