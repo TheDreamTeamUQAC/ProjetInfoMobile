@@ -1,5 +1,7 @@
 package dtuqac.runtimerapp;
 
+import android.content.Context;
+
 import java.util.List;
 
 import dtuqac.runtimerapp.SpeedRunEntity;
@@ -95,5 +97,10 @@ class ActiveSpeedrun {
         }
 
         Run.addAttempt(_NewAttempt);
+    }
+
+    public void SaveInstance(Context _ctx){
+        SGBD db = new SGBD(_ctx);
+        db.SaveInstance(Run);
     }
 }

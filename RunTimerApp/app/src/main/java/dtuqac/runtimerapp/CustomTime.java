@@ -79,16 +79,26 @@ public class CustomTime {
 
     public String getStringWithoutZero() {
         String SmallTimer = String.format("%02d", Millisecondes);
-        String MainTimer = String.format("%d", Secondes) + ":" + String.format("%02d", Millisecondes);
+        String MainTimer = String.format("%d", Secondes) + ":" + SmallTimer;
 
         if (Minutes > 0)
         {
             MainTimer = String.format("%d:%02d", Minutes, Secondes) + ":"+ SmallTimer;
         }
 
+        if (Minutes >= 10)
+        {
+            MainTimer = String.format("%02d:%02d", Minutes, Secondes) + ":"+ SmallTimer;
+        }
+
         if (Heures > 0)
         {
             MainTimer = String.format("%d:%02d:%02d", Heures, Minutes, Secondes) + ":" + SmallTimer;
+        }
+
+        if (Heures >= 10)
+        {
+            MainTimer = String.format("%02d:%02d:%02d", Heures, Minutes, Secondes) + ":" + SmallTimer;
         }
 
         return MainTimer;

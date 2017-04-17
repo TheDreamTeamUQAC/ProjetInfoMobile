@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Locale;
+import java.util.logging.ConsoleHandler;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -149,7 +150,6 @@ public class SGBD extends SQLiteOpenHelper {
                 //Well... shit ¯\_(ツ)_/¯
             }
 
-            //InsertTestValues(db);
         }
         catch (SQLException ex)
         {
@@ -196,26 +196,15 @@ public class SGBD extends SQLiteOpenHelper {
         SGBDContext.deleteDatabase(DATABASE_NAME);
     }
 
+
     //TODO NUMBER OF ROWS EXAMPLE
     public int numberOfRows(){
         SQLiteDatabase db = this.getReadableDatabase();
         int numRows = (int) DatabaseUtils.queryNumEntries(db, SPEEDRUN_TABLE_NAME);
         return numRows;
     }
-    //TODO UPDATE EXAMPLE
-    public boolean updateContact (Integer id, String name, String phone, String email, String street,String place) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("name", name);
-        contentValues.put("phone", phone);
-        contentValues.put("email", email);
-        contentValues.put("street", street);
-        contentValues.put("place", place);
-        db.update("contacts", contentValues, "id = ? ", new String[] { Integer.toString(id) } );
-        return true;
-    }
 
-    //TODO Tester cette fonction //Pas mal fait, j'ai réglé les bugs de cursor
+
     public SpeedRunEntity getSpeedRunEntity(int _nomSpeedRunId){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor resSpeedRun =  db.rawQuery( "select * from " + SPEEDRUN_TABLE_NAME +
@@ -272,7 +261,15 @@ public class SGBD extends SQLiteOpenHelper {
         }
         else{
             return null;
-}
+        }
+    }
+
+    public void SaveInstance(SpeedRunEntity entity){
+        if(!speedRunExiste(entity.getGameName())){
+            return;
+        }
+
+        updateSpeedRun(entity);
     }
 
 
@@ -283,6 +280,62 @@ public class SGBD extends SQLiteOpenHelper {
         return db.delete(SPEEDRUN_TABLE_NAME,
                 SPEEDRUN_COLONNE_ID + " = ? ",
                 new String[] { Integer.toString(id) });
+    }
+
+    public boolean addSpeedRun(SpeedRunEntity speedrun){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SPEEDRUN_COLONNE_GAMENAME, speedrun.getGameName());
+        contentValues.put(SPEEDRUN_COLONNE_CATEGORYNAME, speedrun.getCategoryName());
+        contentValues.put(SPEEDRUN_COLONNE_USESEMULATOR, speedrun.getUsesEmulator());
+        contentValues.put(SPEEDRUN_COLONNE_OFFSET, speedrun.getOffSet().getString());
+        db.insert(SPEEDRUN_TABLE_NAME, null, contentValues);
+        return true;
+    }
+
+    public boolean updateSpeedRun (SpeedRunEntity speedRun) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SPEEDRUN_COLONNE_GAMENAME, speedRun.getGameName());
+        contentValues.put(SPEEDRUN_COLONNE_CATEGORYNAME, speedRun.getCategoryName());
+        contentValues.put(SPEEDRUN_COLONNE_OFFSET, speedRun.getOffSet().toString());
+        contentValues.put(SPEEDRUN_COLONNE_USESEMULATOR, speedRun.getUsesEmulator());
+        db.update(SPEEDRUN_TABLE_NAME, contentValues, "id = ? ", new String[] { Integer.toString(speedRun.getId()) } );
+
+        for (SplitDefinition splitDef: speedRun.getSpeedRunSplits()) {
+            if(getSplitDefinitionById(splitDef.getId())==null) {
+                addSplitDefinition(splitDef);
+            }
+            else{
+                updateSplitDefinition(splitDef);
+            }
+        }
+
+        for (Attempt att: speedRun.getAttemptHistory()) {
+            if(getAttemptById(att.getId())==null){
+                  addAttempt(att);
+            }
+            else
+            {
+                updateAttempt(att);
+            }
+        }
+
+        return true;
+    }
+
+    public int getNextSpeedRunId(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select max(id) as maximum from " + SPEEDRUN_TABLE_NAME, null );
+
+        int count = res.getCount();
+        res.moveToNext();
+        if(count > 0){
+            return res.getInt(res.getColumnIndex("maximum")) +1;
+        }
+        else{
+            return -1;
+        }
     }
 
     public boolean speedRunExiste(String _nomSpeedRun){
@@ -296,17 +349,6 @@ public class SGBD extends SQLiteOpenHelper {
         else{
             return false;
         }
-    }
-
-    public boolean addSpeedRun(SpeedRunEntity speedrun){
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(SPEEDRUN_COLONNE_GAMENAME, speedrun.getGameName());
-        contentValues.put(SPEEDRUN_COLONNE_CATEGORYNAME, speedrun.getCategoryName());
-        contentValues.put(SPEEDRUN_COLONNE_USESEMULATOR, speedrun.getUsesEmulator());
-        contentValues.put(SPEEDRUN_COLONNE_OFFSET, speedrun.getOffSet().getString());
-        db.insert(SPEEDRUN_TABLE_NAME, null, contentValues);
-        return true;
     }
 
     public int getSpeedRunId(String _nomSpeedRun){
@@ -372,13 +414,79 @@ public class SGBD extends SQLiteOpenHelper {
             );
     }
 
+    //endregion
 
-    private SplitDefinition extraireSplitDefinitionFromCursor(Cursor csr) {
-        return new SplitDefinition(
-                csr.getInt(csr.getColumnIndex(SPLITDEFINITION_COLONNE_ID)),
-                csr.getInt(csr.getColumnIndex(SPLITDEFINITION_COLONNE_SPEEDRUNID)),
-                csr.getString(csr.getColumnIndex(SPLITDEFINITION_COLONNE_NOM))
-        );
+    //region Attempt
+
+    public Integer deleteAttempt (Integer id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(ATTEMPT_TABLE_NAME,
+                ATTEMPT_COLONNE_ID + " = ? ",
+                new String[] { Integer.toString(id) });
+    }
+
+    public boolean addAttempt(Attempt att){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ATTEMPT_COLONNE_ISBESTATTEMPT, att.getBestAttempt());
+        contentValues.put(ATTEMPT_COLONNE_SPEEDRUNID, att.getSpeedRunId());
+        contentValues.put(ATTEMPT_COLONNE_TIMEENDED, att.getTimeEnded().getString());
+        contentValues.put(ATTEMPT_COLONNE_TIMESTARTED, att.getTimeStarted().getString());
+        db.insert(ATTEMPT_TABLE_NAME, null, contentValues);
+
+        //Ajouter les splits dans l'attempt
+        for (Split split: att.getSplits()) {
+            addSplit(split);
+        }
+
+        return true;
+    }
+
+    public boolean updateAttempt(Attempt att){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(ATTEMPT_COLONNE_ISBESTATTEMPT, att.getBestAttempt());
+        contentValues.put(ATTEMPT_COLONNE_SPEEDRUNID, att.getSpeedRunId());
+        contentValues.put(ATTEMPT_COLONNE_TIMEENDED, att.getTimeEnded().getString());
+        contentValues.put(ATTEMPT_COLONNE_TIMESTARTED, att.getTimeStarted().getString());
+        db.update(ATTEMPT_TABLE_NAME, contentValues, "id = ? ", new String[] { Integer.toString(att.getId()) } );
+
+        //Mettre à jour les splits dans l'attempt
+        for (Split split: att.getSplits()) {
+            updateSplit(split);
+        }
+
+        return true;
+    }
+
+    public int getNextAttemptId(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select max(id) from as maximum " + ATTEMPT_TABLE_NAME, null );
+
+        int count = res.getCount();
+        res.moveToNext();
+        if(count > 0){
+            return res.getInt(res.getColumnIndex("maximum"))+1;
+        }
+        else{
+            return -1;
+        }
+    }
+
+    public Attempt getAttemptById(int _id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select * from " + ATTEMPT_TABLE_NAME +
+                " where " + ATTEMPT_COLONNE_ID + "=\""+_id +"\"", null );
+
+        int count = res.getCount();
+
+        if(count > 0){
+            res.moveToNext();
+            return extraireAttemptFromCursor(res);
+        }
+        else{
+            return null;
+        }
     }
 
     private Attempt extraireAttemptFromCursor(Cursor csr) {
@@ -390,6 +498,76 @@ public class SGBD extends SQLiteOpenHelper {
                 ((Integer.parseInt(csr.getString(csr.getColumnIndex(ATTEMPT_COLONNE_ISBESTATTEMPT))) == 1) ? true : false)
         );
     }
+
+
+    //endregion
+
+
+
+    //region Split
+
+    private Integer deleteSplit (Integer id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(SPLIT_TABLE_NAME,
+                SPLIT_COLONNE_ID + " = ? ",
+                new String[] { Integer.toString(id) });
+    }
+
+    private boolean addSplit(Split split){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SPLIT_COLONNE_IDATTEMPT, split.getIdAttempt());
+        contentValues.put(SPLIT_COLONNE_IDSPLITDEFINITION, split.getIdSplitDefinition());
+        contentValues.put(SPLIT_COLONNE_ISBESTSEGMENT, split.getIsBestSegment());
+        contentValues.put(SPLIT_COLONNE_SEGMENTTIME, split.getDuration().getString());
+        contentValues.put(SPLIT_COLONNE_SPLITTIME, split.getSplitTime().getString());
+        db.insert(SPLIT_TABLE_NAME, null, contentValues);
+        return true;
+    }
+
+    private boolean updateSplit(Split split){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SPLIT_COLONNE_IDATTEMPT, split.getIdAttempt());
+        contentValues.put(SPLIT_COLONNE_IDSPLITDEFINITION, split.getIdSplitDefinition());
+        contentValues.put(SPLIT_COLONNE_ISBESTSEGMENT, split.getIsBestSegment());
+        contentValues.put(SPLIT_COLONNE_SEGMENTTIME, split.getDuration().getString());
+        contentValues.put(SPLIT_COLONNE_SPLITTIME, split.getSplitTime().getString());
+        db.update(SPLIT_TABLE_NAME, contentValues, "id = ? ", new String[] { Integer.toString(split.getId()) } );
+        return true;
+    }
+
+    public int getNextSplitId(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select max(id) as maximum from " + SPLIT_TABLE_NAME, null );
+
+        int count = res.getCount();
+        res.moveToNext();
+        if(count > 0){
+            return res.getInt(res.getColumnIndex("maximum"))+1;
+        }
+        else{
+            return -1;
+        }
+    }
+
+    public Split getSplitById(int _id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select * from " + SPLIT_TABLE_NAME +
+                " where " + SPLIT_COLONNE_ID + "=\""+_id +"\"", null );
+
+        int count = res.getCount();
+
+        if(count > 0){
+            res.moveToNext();
+            return extraireSplitFromCursor(res);
+        }
+        else{
+            return null;
+        }
+    }
+
+
 
     private Split extraireSplitFromCursor(Cursor csr) {
         return new Split(
@@ -403,6 +581,76 @@ public class SGBD extends SQLiteOpenHelper {
     }
 
     //endregion
+
+
+    //region SplitDefinition
+
+    public Integer deleteSplitDefinition (Integer id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(SPLITDEFINITION_TABLE_NAME,
+                SPLITDEFINITION_COLONNE_ID + " = ? ",
+                new String[] { Integer.toString(id) });
+    }
+
+    public boolean addSplitDefinition(SplitDefinition splitDef){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SPLITDEFINITION_COLONNE_NOM, splitDef.getSplitName());
+        contentValues.put(SPLITDEFINITION_COLONNE_SPEEDRUNID, splitDef.getSpeedRunId());
+        db.insert(SPLITDEFINITION_TABLE_NAME, null, contentValues);
+        return true;
+    }
+
+    public boolean updateSplitDefinition(SplitDefinition splitDef){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(SPLITDEFINITION_COLONNE_NOM, splitDef.getSplitName());
+        contentValues.put(SPLITDEFINITION_COLONNE_SPEEDRUNID, splitDef.getSpeedRunId());
+        db.update(SPLITDEFINITION_TABLE_NAME, contentValues, "id = ? ", new String[] { Integer.toString(splitDef.getId()) } );
+        return true;
+    }
+
+    public int getNextSplitDefinitionId(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select max(id) as maximum from " + SPLITDEFINITION_TABLE_NAME, null );
+
+        int count = res.getCount();
+        res.moveToNext();
+        if(count > 0){
+            return res.getInt(res.getColumnIndex("maximum"))+1;
+        }
+        else{
+            return -1;
+        }
+    }
+
+    public SplitDefinition getSplitDefinitionById(int _id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select * from " + SPLITDEFINITION_TABLE_NAME +
+                " where " + SPLITDEFINITION_COLONNE_ID + "=\""+_id +"\"", null );
+
+        int count = res.getCount();
+
+        if(count > 0){
+            res.moveToNext();
+            return extraireSplitDefinitionFromCursor(res);
+        }
+        else{
+            return null;
+        }
+    }
+
+    private SplitDefinition extraireSplitDefinitionFromCursor(Cursor csr) {
+        return new SplitDefinition(
+                csr.getInt(csr.getColumnIndex(SPLITDEFINITION_COLONNE_ID)),
+                csr.getInt(csr.getColumnIndex(SPLITDEFINITION_COLONNE_SPEEDRUNID)),
+                csr.getString(csr.getColumnIndex(SPLITDEFINITION_COLONNE_NOM))
+        );
+    }
+
+    //endregion
+
+
 
     //region Tests
     private void InsertTestValues(SQLiteDatabase db)
