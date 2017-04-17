@@ -70,7 +70,7 @@ public class TimerActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 //Reset le background de tous les éléments
-                for (int i=0; i<=lv.getLastVisiblePosition();i++)
+                for (int i=lv.getFirstVisiblePosition(); i<=lv.getLastVisiblePosition();i++)
                 {
                     parent.getChildAt(i).setBackgroundResource(R.color.light_grey);
                 }
@@ -156,7 +156,7 @@ public class TimerActivity extends AppCompatActivity {
 
             final ListView lv = (ListView) findViewById(R.id.Liste_Splits);
 
-            if (CurrentSplitIndex + 3 >= lv.getLastVisiblePosition())
+            if (CurrentSplitIndex + 3  >= lv.getLastVisiblePosition())
             {
                 lv.smoothScrollToPosition(CurrentSplitIndex + 3);
             }
