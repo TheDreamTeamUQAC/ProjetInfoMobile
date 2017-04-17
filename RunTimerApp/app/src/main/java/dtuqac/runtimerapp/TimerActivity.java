@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -48,6 +49,10 @@ public class TimerActivity extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timer);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         MonTimer = new TimerClass();
         DernierTempsPebble = "";
@@ -105,6 +110,11 @@ public class TimerActivity extends AppCompatActivity {
 
         //Map la liste dans le listview
         TimerSplit_Adapter ListAdapter = new TimerSplit_Adapter(this, SplitsList, PBSplits);
+
+        //Set le title
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(ActiveSpeedrun.getInstance().GetGameName() + " - " + ActiveSpeedrun.getInstance().GetCategoryName());
 
         ListView lv = (ListView) findViewById(R.id.Liste_Splits);
         lv.setAdapter(ListAdapter);
@@ -169,8 +179,8 @@ public class TimerActivity extends AppCompatActivity {
     {
         //Report le Split Time dans l'attempt
         CustomTime SegmentTime; //TODO: Gestion des segments (IsBestSegment, Sauver le segment time, etc)
-        CustomTime SplitTime = new CustomTime((int)MonTimer.GetHeures(), (int)MonTimer.GetMinutes(), (int)MonTimer.GetSecondes(), (int)MonTimer.GetMiliseconds());
-        Split MonSplit = new Split(1,CurrentSplitIndex+1,CurrentAttempt.getId(),SplitTime,SplitTime,false);
+        CustomTime SplitTime = new CustomTime((int)MonTimer.GetHeures(), (int)MonTimer.GetMinutes() % 60, (int)MonTimer.GetSecondes() % 60, (int)MonTimer.GetMiliseconds() % 100);
+        Split MonSplit = new Split(1,CurrentSplitIndex+1,CurrentAttempt.getId(),SplitTime,SplitTime,false); //TODO: fixer les ID des splits
         CurrentAttempt.addSplit(MonSplit);
 
         //Set le Split Time sur l'item du list view
@@ -197,6 +207,20 @@ public class TimerActivity extends AppCompatActivity {
     {
         //TODO: comparer avec le personnal best
         MonTimer.StopTimer();
+
+        //Check si l'attempt est un PB
+        int PBID = ActiveSpeedrun.getInstance().GetPersonnalBestID();
+        List<Split> PBSplits = ActiveSpeedrun.getInstance().GetSplitsByAttemptID(PBID);
+        CustomTime PBLastSplit = PBSplits.get(PBSplits.size() - 1).getSplitTime();
+
+        //TODO: set le timeended dans l'attempt
+        if (PBLastSplit.IsGreaterThan(CurrentAttempt.getTimeEnded()))
+        {
+            CurrentAttempt.setBestAttempt(true);
+        }
+
+        ActiveSpeedrun.getInstance().AddAttempt(CurrentAttempt);
+
         Toast.makeText(getBaseContext(),"Fini" ,Toast.LENGTH_LONG).show();
     }
 

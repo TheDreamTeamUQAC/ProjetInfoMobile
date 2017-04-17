@@ -3,6 +3,8 @@ package dtuqac.runtimerapp;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.xml.datatype.Duration;
+
 /**
  * Created by Tommy Duperré on 2017-03-15.
  */
@@ -94,6 +96,28 @@ public class CustomTime {
 
     public String getString(){
         return String.format("%02d:%02d:%02d:%02d", Heures,Minutes,Secondes,Millisecondes);
+    }
+
+    private long ToMiliseconds(CustomTime _Time)
+    {
+        long Duration = 0;
+
+        Duration += _Time.Millisecondes;
+        Duration += _Time.Secondes * 1000;
+        Duration += _Time.Minutes * 60000;
+        Duration += _Time.Heures * 3600000;
+
+        return Duration;
+    }
+
+    //Retourne TRUE si l'instance est une duree plus longue que celle passe en parametre
+    public boolean IsGreaterThan(CustomTime _TimeCompare)
+    {
+        if (ToMiliseconds(this) > ToMiliseconds(_TimeCompare))
+        {
+            return true;
+        }
+        return false;
     }
 
     //Format "00:00:00:00"

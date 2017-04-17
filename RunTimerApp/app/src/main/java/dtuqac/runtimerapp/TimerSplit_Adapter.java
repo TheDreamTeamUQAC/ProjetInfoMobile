@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.sql.Time;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -30,7 +31,12 @@ public class TimerSplit_Adapter extends BaseAdapter
     {
         this.context = context;
         this.DefData = DefData;
-        this.TimeData = TimeData;
+
+        this.TimeData = new LinkedList<Split>();
+        for (int i=0; i< TimeData.size(); i++)
+        {
+            this.TimeData.add(TimeData.get(i));
+        }
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -85,10 +91,10 @@ public class TimerSplit_Adapter extends BaseAdapter
         this.selectedItem = selectedItem;
     }
 
-    public void refreshSplits(List<Split> TimeData)
+    public void refreshSplits(List<Split> _TimeData)
     {
-        this.TimeData.clear();
-        this.TimeData.addAll(TimeData);
+        TimeData.clear();
+        TimeData.addAll(_TimeData);
         notifyDataSetChanged();
-}
+    }
 }

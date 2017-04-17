@@ -53,6 +53,15 @@ class ActiveSpeedrun {
         return 0;
     }
 
+    public String GetGameName()
+    {
+        return Run.getGameName();
+    }
+
+    public String GetCategoryName()
+    {
+        return Run.getCategoryName();
+    }
 
     public List<Split> GetSplitsByAttemptID(int _AttemptID)
     {
@@ -74,8 +83,17 @@ class ActiveSpeedrun {
     }
 
 
-    public void CreateNewAttempt()
+    public void AddAttempt(Attempt _NewAttempt)
     {
+        if (_NewAttempt.getBestAttempt())
+        {
+            //le new attempt est le personnal best, met les autre attempts a false
+            for (Attempt a : Run.getAttemptHistory())
+            {
+                a.setBestAttempt(false);
+            }
+        }
 
+        Run.addAttempt(_NewAttempt);
     }
 }
