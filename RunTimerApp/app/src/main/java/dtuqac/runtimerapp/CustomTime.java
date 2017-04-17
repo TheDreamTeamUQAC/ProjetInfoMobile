@@ -79,33 +79,33 @@ public class CustomTime {
 
     public String getStringWithoutZero() {
         String SmallTimer = String.format("%02d", Millisecondes);
-        String MainTimer = String.format("%d", Secondes) + ":" + SmallTimer;
+        String MainTimer = String.format("%d", Secondes) + "." + SmallTimer;
 
         if (Minutes > 0)
         {
-            MainTimer = String.format("%d:%02d", Minutes, Secondes) + ":"+ SmallTimer;
+            MainTimer = String.format("%d:%02d", Minutes, Secondes) + "."+ SmallTimer;
         }
 
         if (Minutes >= 10)
         {
-            MainTimer = String.format("%02d:%02d", Minutes, Secondes) + ":"+ SmallTimer;
+            MainTimer = String.format("%02d:%02d", Minutes, Secondes) + "."+ SmallTimer;
         }
 
         if (Heures > 0)
         {
-            MainTimer = String.format("%d:%02d:%02d", Heures, Minutes, Secondes) + ":" + SmallTimer;
+            MainTimer = String.format("%d:%02d:%02d", Heures, Minutes, Secondes) + "." + SmallTimer;
         }
 
         if (Heures >= 10)
         {
-            MainTimer = String.format("%02d:%02d:%02d", Heures, Minutes, Secondes) + ":" + SmallTimer;
+            MainTimer = String.format("%02d:%02d:%02d", Heures, Minutes, Secondes) + "." + SmallTimer;
         }
 
         return MainTimer;
     }
 
     public String getString(){
-        return String.format("%02d:%02d:%02d:%02d", Heures,Minutes,Secondes,Millisecondes);
+        return String.format("%02d:%02d:%02d.%02d", Heures,Minutes,Secondes,Millisecondes);
     }
 
     private long ToMiliseconds(CustomTime _Time)
@@ -130,43 +130,35 @@ public class CustomTime {
         return false;
     }
 
-    //Format "00:00:00:00"
+    //Format "00:00:00.00"
     public Boolean setString(String _input){
-        List<String> temps = Arrays.asList(_input.split(":"));
+        List<String> temps = Arrays.asList(Arrays.asList(_input.split(".")).get(0).split(":"));
+        Integer milis = Integer.parseInt(Arrays.asList(_input.split(".")).get(1));
 
         if (temps.size() == 1)
         {
             Heures = 0;
             Minutes = 0;
-            Secondes = 0;
-            Millisecondes = Integer.parseInt(temps.get(0));
+            Secondes = Integer.parseInt(temps.get(0));
+            Millisecondes = milis;
 
             return true;
         }
         else if(temps.size() == 2)
         {
             Heures = 0;
-            Minutes = 0;
-            Secondes = Integer.parseInt(temps.get(0));
-            Millisecondes = Integer.parseInt(temps.get(1));
+            Minutes = Integer.parseInt(temps.get(0));
+            Secondes = Integer.parseInt(temps.get(1));
+            Millisecondes = milis;
 
             return true;
         }
         else if (temps.size() == 3)
         {
-            Heures = 0;
-            Minutes = Integer.parseInt(temps.get(0));
-            Secondes = Integer.parseInt(temps.get(1));
-            Millisecondes = Integer.parseInt(temps.get(2));
-
-            return true;
-        }
-        else if(temps.size() == 4)
-        {
             Heures = Integer.parseInt(temps.get(0));
             Minutes = Integer.parseInt(temps.get(1));
             Secondes = Integer.parseInt(temps.get(2));
-            Millisecondes = Integer.parseInt(temps.get(3));
+            Millisecondes = milis;
 
             return true;
         }
