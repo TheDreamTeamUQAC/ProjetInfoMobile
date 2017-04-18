@@ -243,7 +243,7 @@ public class TimerActivity extends AppCompatActivity {
         MainTimeView.setText("0");
         SmallTimeView.setText(".00");
 
-        //TODO envoyer le nom du premier split
+        //TODO envoyer le nom du premier split // men rappel pu lol
 
         final ListView lv = (ListView) findViewById(R.id.Liste_Splits);
         //Reset le background de tous les éléments

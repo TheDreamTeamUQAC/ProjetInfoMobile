@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -27,8 +28,10 @@ public class EditSplits extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_splits);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //Teste si il y a une run active
         if (ActiveSpeedrun.getInstance().IsInitialized())
@@ -41,7 +44,6 @@ public class EditSplits extends AppCompatActivity {
             finish();
         }
     }
-
 
     private void LoadtSplits()
     {
@@ -67,10 +69,18 @@ public class EditSplits extends AppCompatActivity {
 
     public void AddSplit(View view)
     {
-        Toast.makeText(getBaseContext(),"Salut",Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getBaseContext(),"Salut",Toast.LENGTH_SHORT).show();
 
-        //TODO: Add split
-        //ActiveSpeedrun.getInstance().
+        //get l'ID du dernier split
+        List<SplitDefinition> DefList = ActiveSpeedrun.getInstance().GetSplitDefinition();
+        int LastID = DefList.get(DefList.size() - 1).getId();
+        //Cree un nouveau split avec un nom temporaire
+        SplitDefinition NewSplit = new SplitDefinition(LastID + 1, ActiveSpeedrun.getInstance().GetSpeedrunID(), "New Split");
+
+        ActiveSpeedrun.getInstance().AddSplitDefinition(NewSplit);
+
+        //refresh la list
+        LoadtSplits();
     }
 
 

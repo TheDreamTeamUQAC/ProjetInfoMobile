@@ -79,11 +79,29 @@ class ActiveSpeedrun {
         return null;
     }
 
-    public void AddSplitDefinition(String _SplitName, CustomTime _SplitTime)
+    public int GetSpeedrunID()
     {
-       // Run.addSplitDefinition();
+        return Run.getId();
     }
 
+    public List<SplitDefinition> GetSplitDefinition()
+    {
+        return Run.getSpeedRunSplits();
+    }
+
+    public void AddSplitDefinition(SplitDefinition NewSplitDef)
+    {
+        Run.addSplitDefinition(NewSplitDef);
+
+        //TODO: This is really bad
+        //Pour sauver du temps, on considere qu'on ajoute juste a la fin. Donc on ajoute un extra split bidon a tous les attempts
+        for (Attempt a : Run.getAttemptHistory())
+        {
+            Split LastSplit = a.getSplits().get(a.getSplits().size() - 1);
+            Split temp = new Split(LastSplit.getId() + 1, a.getId(), NewSplitDef.getId(), LastSplit.getDuration(), LastSplit.getSplitTime(), false);
+            a.addSplit(temp);
+        }
+    }
 
     public void AddAttempt(Attempt _NewAttempt)
     {
