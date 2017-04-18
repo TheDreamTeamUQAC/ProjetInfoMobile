@@ -96,7 +96,7 @@ public class TimerActivity extends AppCompatActivity {
 
     public void TestButtonClick(View view)
     {
-        //Test
+        ActiveSpeedrun.getInstance().SaveInstance(this);
     }
 
     public void LoadSplits()
@@ -180,7 +180,10 @@ public class TimerActivity extends AppCompatActivity {
         //Report le Split Time dans l'attempt
         CustomTime SegmentTime; //TODO: Gestion des segments (IsBestSegment, Sauver le segment time, etc)
         CustomTime SplitTime = new CustomTime((int)MonTimer.GetHeures(), (int)MonTimer.GetMinutes() % 60, (int)MonTimer.GetSecondes() % 60, (int)MonTimer.GetMiliseconds() % 100);
-        Split MonSplit = new Split(1,CurrentSplitIndex+1,CurrentAttempt.getId(),SplitTime,SplitTime,false); //TODO: fixer les ID des splits
+        Split MonSplit = new Split(CurrentSplitIndex,CurrentAttempt.getId(),CurrentAttempt.getId(),SplitTime,SplitTime,false); //TODO: fixer les ID des splits
+
+        //Split(int id, int idAttempt, int idSplitDefinition, CustomTime duration, CustomTime splitTime, Boolean isBestSegment)
+
         CurrentAttempt.addSplit(MonSplit);
 
         //Set le Split Time sur l'item du list view
@@ -205,7 +208,6 @@ public class TimerActivity extends AppCompatActivity {
 
     private void FinishRun()
     {
-        //TODO: comparer avec le personnal best
         MonTimer.StopTimer();
 
         //Check si l'attempt est un PB
@@ -213,11 +215,12 @@ public class TimerActivity extends AppCompatActivity {
         List<Split> PBSplits = ActiveSpeedrun.getInstance().GetSplitsByAttemptID(PBID);
         CustomTime PBLastSplit = PBSplits.get(PBSplits.size() - 1).getSplitTime();
 
-        //TODO: set le timeended dans l'attempt
         if (PBLastSplit.IsGreaterThan(CurrentAttempt.getTimeEnded()))
         {
             CurrentAttempt.setBestAttempt(true);
         }
+
+        CurrentAttempt.setTimeEnded(new CustomTime((int)MonTimer.GetHeures(), (int)MonTimer.GetMinutes() % 60, (int)MonTimer.GetSecondes() % 60, (int)MonTimer.GetMiliseconds() % 100));
 
         ActiveSpeedrun.getInstance().AddAttempt(CurrentAttempt);
 

@@ -298,8 +298,8 @@ public class SGBD extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(SPEEDRUN_COLONNE_GAMENAME, speedRun.getGameName());
         contentValues.put(SPEEDRUN_COLONNE_CATEGORYNAME, speedRun.getCategoryName());
-        contentValues.put(SPEEDRUN_COLONNE_OFFSET, speedRun.getOffSet().toString());
         contentValues.put(SPEEDRUN_COLONNE_USESEMULATOR, speedRun.getUsesEmulator());
+        contentValues.put(SPEEDRUN_COLONNE_OFFSET, speedRun.getOffSet().getString());
         db.update(SPEEDRUN_TABLE_NAME, contentValues, "id = ? ", new String[] { Integer.toString(speedRun.getId()) } );
 
         for (SplitDefinition splitDef: speedRun.getSpeedRunSplits()) {

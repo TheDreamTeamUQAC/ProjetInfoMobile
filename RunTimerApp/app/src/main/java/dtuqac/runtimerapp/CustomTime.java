@@ -2,6 +2,7 @@ package dtuqac.runtimerapp;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import javax.xml.datatype.Duration;
 
@@ -132,8 +133,16 @@ public class CustomTime {
 
     //Format "00:00:00.00"
     public Boolean setString(String _input){
-        List<String> temps = Arrays.asList(Arrays.asList(_input.split(".")).get(0).split(":"));
-        Integer milis = Integer.parseInt(Arrays.asList(_input.split(".")).get(1));
+
+        if (Objects.equals(_input, new String("0"))) //LOL beau langage
+        {
+            return false;
+        }
+
+        //String[] salut = _input.split(".");
+
+        List<String> temps = Arrays.asList(Arrays.asList(_input.split("\\.")).get(0).split(":"));
+        Integer milis = Integer.parseInt(Arrays.asList(_input.split("\\.")).get(1));
 
         if (temps.size() == 1)
         {
