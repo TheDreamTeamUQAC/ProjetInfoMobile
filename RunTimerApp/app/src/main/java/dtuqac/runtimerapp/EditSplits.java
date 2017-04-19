@@ -1,17 +1,22 @@
 package dtuqac.runtimerapp;
 
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,7 +27,9 @@ import java.util.List;
 import dtuqac.runtimerapp.ActiveSpeedrun;
 import dtuqac.runtimerapp.SpeedRunEntity;
 
-public class EditSplits extends AppCompatActivity {
+public class EditSplits extends AppCompatActivity implements AdapterView.OnItemClickListener, EditSplitDialogFragment.EditSplitDialogListener {
+
+    private int LastClickedItem = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +70,9 @@ public class EditSplits extends AppCompatActivity {
         EditSplit_Adapter ListAdapter = new EditSplit_Adapter(this, SplitsList, PBSplits);
 
         ListView lv = (ListView) findViewById(R.id.list_ActiveSplits);
-        lv.setItemsCanFocus(true);
 
         lv.setAdapter(ListAdapter);
+        lv.setOnItemClickListener(this);
     }
 
     public void AddSplit(View view)
@@ -84,5 +91,39 @@ public class EditSplits extends AppCompatActivity {
         LoadtSplits();
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+    {
+        LastClickedItem = position;
+
+        EditSplit_Adapter adapt = (EditSplit_Adapter)parent.getAdapter();
+        SplitDefinition splitdef = adapt.GetDefDataAt(position);
+        Split splittime = adapt.GetTimeDataAt(position);
+
+        FragmentManager fm = getFragmentManager();
+        Bundle bundle = new Bundle();
+        bundle.putString("splitdef",splitdef.getSplitName());
+        bundle.putString("splittime", splittime.getSplitTime().getStringWithoutZero());
+
+        DialogFragment dialog = new EditSplitDialogFragment();
+        dialog.setArguments(bundle);
+        dialog.show(fm,"tag");
+
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        // User touched the dialog's positive button
+        Bundle info = dialog.getArguments();
+        String test1 = info.getString("splitdef");
+        String test2 = info.getString("splittime");
+        Toast.makeText(getBaseContext(),"Nom entré : " + test1 + " Temps entré " + test2,Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        // User touched the dialog's negative button
+
+    }
 
 }

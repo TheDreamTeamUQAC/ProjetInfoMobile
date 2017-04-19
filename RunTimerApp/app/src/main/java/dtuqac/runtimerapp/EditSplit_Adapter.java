@@ -8,9 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.Time;
 import java.util.List;
 import java.util.Objects;
 import java.util.jar.Attributes;
@@ -47,7 +50,17 @@ public class EditSplit_Adapter extends BaseAdapter
     @Override
     public Object getItem(int position)
     {
-        return DefData.get(position);
+        return null;
+    }
+
+    public SplitDefinition GetDefDataAt(int pos)
+    {
+        return DefData.get(pos);
+    }
+
+    public Split GetTimeDataAt(int pos)
+    {
+        return TimeData.get(pos);
     }
 
     @Override
@@ -64,12 +77,14 @@ public class EditSplit_Adapter extends BaseAdapter
         {
             vi = inflater.inflate(R.layout.edit_split_listitem,null);
         }
-        EditText NameText = (EditText) vi.findViewById(R.id.txtSplitName);
-        EditText TimeText = (EditText) vi.findViewById(R.id.txtSplitTime);
+        TextView NameText = (TextView) vi.findViewById(R.id.txtSplitName);
+        TextView TimeText = (TextView) vi.findViewById(R.id.txtSplitTime);
         NameText.setText(DefData.get(position).getSplitName());
         TimeText.setText(TimeData.get(position).getSplitTime().getStringWithoutZero());
 
-        final int pos = position;
+
+/*
+
 
         NameText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -79,12 +94,31 @@ public class EditSplit_Adapter extends BaseAdapter
                     final EditText NameText = (EditText) v;
                     String temp = ((EditText) v).getText().toString();
                     DefData.get(pos).setSplitName(temp);
-                    int x = 0;
-                    x++;
-                     // TODO:notifyDataSetChanged();
+                    Toast.makeText(v.getContext(),"NoFocus " + pos,Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    Toast.makeText(v.getContext(),"Focus " + pos,Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+        TimeText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus)
+                {
+                    Toast.makeText(v.getContext(),"NoFocus " + pos,Toast.LENGTH_SHORT).show();
+                    //final EditText TimeText = (EditText) v;
+                    //String temp = ((EditText) v).getText().toString();
+                }
+                else
+                {
+                    Toast.makeText(v.getContext(),"Focus " + pos,Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });*/
 
         return vi;
     }

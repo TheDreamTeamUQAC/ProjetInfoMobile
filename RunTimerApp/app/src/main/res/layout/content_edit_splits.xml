@@ -19,13 +19,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TextView"
-                android:textSize="20sp" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textSize="24sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"/>
 
             <ListView
                 android:id="@+id/list_ActiveSplits"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:descendantFocusability="beforeDescendants"/>
+                />
         </LinearLayout>
 
 </RelativeLayout>
