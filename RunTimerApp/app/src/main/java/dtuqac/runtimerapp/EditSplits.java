@@ -63,6 +63,7 @@ public class EditSplits extends AppCompatActivity {
         EditSplit_Adapter ListAdapter = new EditSplit_Adapter(this, SplitsList, PBSplits);
 
         ListView lv = (ListView) findViewById(R.id.list_ActiveSplits);
+        lv.setItemsCanFocus(true);
 
         lv.setAdapter(ListAdapter);
     }

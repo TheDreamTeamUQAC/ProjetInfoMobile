@@ -1,14 +1,19 @@
 package dtuqac.runtimerapp;
 
 import android.content.Context;
+import android.support.v7.widget.VectorEnabledTintResources;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.jar.Attributes;
 
 import dtuqac.runtimerapp.SpeedRunEntity;
 
@@ -63,6 +68,23 @@ public class EditSplit_Adapter extends BaseAdapter
         EditText TimeText = (EditText) vi.findViewById(R.id.txtSplitTime);
         NameText.setText(DefData.get(position).getSplitName());
         TimeText.setText(TimeData.get(position).getSplitTime().getStringWithoutZero());
+
+        final int pos = position;
+
+        NameText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus)
+                {
+                    final EditText NameText = (EditText) v;
+                    String temp = ((EditText) v).getText().toString();
+                    DefData.get(pos).setSplitName(temp);
+                    int x = 0;
+                    x++;
+                     // TODO:notifyDataSetChanged();
+                }
+            }
+        });
 
         return vi;
     }
