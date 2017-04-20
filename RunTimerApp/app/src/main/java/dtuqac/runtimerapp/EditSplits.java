@@ -1,31 +1,19 @@
 package dtuqac.runtimerapp;
 
-import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
-import dtuqac.runtimerapp.ActiveSpeedrun;
-import dtuqac.runtimerapp.SpeedRunEntity;
 
 public class EditSplits extends AppCompatActivity implements AdapterView.OnItemClickListener, EditSplitDialogFragment.EditSplitDialogListener {
 
@@ -77,8 +65,6 @@ public class EditSplits extends AppCompatActivity implements AdapterView.OnItemC
 
     public void AddSplit(View view)
     {
-        //Toast.makeText(getBaseContext(),"Salut",Toast.LENGTH_SHORT).show();
-
         //get l'ID du dernier split
         List<SplitDefinition> DefList = ActiveSpeedrun.getInstance().GetSplitDefinition();
         int LastID = DefList.get(DefList.size() - 1).getId();
@@ -89,6 +75,7 @@ public class EditSplits extends AppCompatActivity implements AdapterView.OnItemC
 
         //refresh la list
         LoadtSplits();
+        ActiveSpeedrun.getInstance().SaveInstance(this);
     }
 
     @Override
@@ -108,16 +95,17 @@ public class EditSplits extends AppCompatActivity implements AdapterView.OnItemC
         DialogFragment dialog = new EditSplitDialogFragment();
         dialog.setArguments(bundle);
         dialog.show(fm,"tag");
-
     }
 
     @Override
     public void onDialogPositiveClick(DialogFragment dialog) {
         // User touched the dialog's positive button
         Bundle info = dialog.getArguments();
-        String test1 = info.getString("splitdef");
-        String test2 = info.getString("splittime");
-        Toast.makeText(getBaseContext(),"Nom entré : " + test1 + " Temps entré " + test2,Toast.LENGTH_SHORT).show();
+        String SplitName = info.getString("splitdef");
+        String SplitTime = info.getString("splittime");
+
+        ValiderEdit(SplitName, SplitTime);
+        ActiveSpeedrun.getInstance().SaveInstance(this);
     }
 
     @Override
@@ -126,4 +114,50 @@ public class EditSplits extends AppCompatActivity implements AdapterView.OnItemC
 
     }
 
+    public void ValiderEdit(String SplitName, String SplitTime)
+    {
+        CustomTime time = new CustomTime();
+        int pbID = ActiveSpeedrun.getInstance().GetPersonnalBestID();
+        List<Split> splitList = ActiveSpeedrun.getInstance().GetSplitsByAttemptID(pbID);
+
+        if (SplitName == "")
+        {
+            SplitName = "New Split";
+        }
+        if (Objects.equals(SplitTime, new String("")))
+        {
+            //Si le temps entré est vide ou est invalide, met le temps du split d'avant
+
+            if (LastClickedItem == 0) //Si le premier split, ya pas de split avant...
+            {
+                time.setSecondes(1);
+            }
+            else
+            {
+                try
+                {
+                    time = new CustomTime(SplitTime);
+                }
+                catch (Exception ex)
+                {
+                    time = splitList.get(LastClickedItem - 1).getSplitTime();
+                }
+            }
+        }
+        else
+        {
+            try
+            {
+                time = new CustomTime(SplitTime);
+            }
+            catch (Exception ex)
+            {
+                time = splitList.get(LastClickedItem - 1).getSplitTime();
+            }
+        }
+
+        ActiveSpeedrun.getInstance().UpdateSplitDefinition(LastClickedItem, SplitName);
+        ActiveSpeedrun.getInstance().UpdateSplitTime(LastClickedItem, time);
+        LoadtSplits();
+    }
 }

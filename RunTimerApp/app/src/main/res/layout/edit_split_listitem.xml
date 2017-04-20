@@ -10,6 +10,8 @@
         android:layout_weight="1"
         android:ems="10"
         android:text="SplitName"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         android:textAppearance="@android:style/TextAppearance.Material.Large" />
 
     <TextView
@@ -19,6 +21,8 @@
         android:layout_weight="1"
         android:ems="10"
         android:text="SplitTime"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         android:textAlignment="textEnd"
         android:textAppearance="@android:style/TextAppearance.Material.Large" />
 

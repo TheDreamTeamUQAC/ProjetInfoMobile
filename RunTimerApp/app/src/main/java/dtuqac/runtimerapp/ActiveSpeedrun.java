@@ -117,6 +117,22 @@ class ActiveSpeedrun {
         Run.addAttempt(_NewAttempt);
     }
 
+    public void UpdateSplitDefinition(int id, String NewName)
+    {
+        Run.getSpeedRunSplits().get(id).setSplitName(NewName);
+    }
+
+    public void UpdateSplitTime(int id, CustomTime NewTime)
+    {
+        for (Attempt a : Run.getAttemptHistory())
+        {
+            if (a.getBestAttempt())
+            {
+                a.getSplits().get(id).setSplitTime(NewTime);
+            }
+        }
+    }
+
     public void SaveInstance(Context _ctx){
         SGBD db = new SGBD(_ctx);
         db.SaveInstance(Run);
