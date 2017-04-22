@@ -108,4 +108,16 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/txtListViewVide"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:textColor="@color/Warning"
+        android:text="@string/Aucun_Split"
+        android:textAlignment="center"
+        android:visibility="invisible"
+        android:paddingTop="165sp"/>
+
 </RelativeLayout>
+

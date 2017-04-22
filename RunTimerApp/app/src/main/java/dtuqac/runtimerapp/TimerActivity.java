@@ -54,14 +54,26 @@ public class TimerActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //Set le title
+        //setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(ActiveSpeedrun.getInstance().GetGameName() + " - " + ActiveSpeedrun.getInstance().GetCategoryName());
+
         MonTimer = new TimerClass();
         DernierTempsPebble = "";
         LastSplitTime = new CustomTime(0,0,0,0);
 
-        if (ActiveSpeedrun.getInstance().IsInitialized())
+        TextView txt = (TextView)findViewById(R.id.txtListViewVide);
+        if (ActiveSpeedrun.getInstance().IsInitialized() && ActiveSpeedrun.getInstance().GetSplitDefinition().size() > 0)
         {
+            txt.setVisibility(View.INVISIBLE);
             LoadSplits();
         }
+        else{
+            //Montrer qu'il n'y a aucun split à charger
+            txt.setVisibility(View.VISIBLE);
+        }
+
+
 
         final ListView lv = (ListView) findViewById(R.id.Liste_Splits);
 
@@ -110,11 +122,6 @@ public class TimerActivity extends AppCompatActivity {
 
         //Map la liste dans le listview
         TimerSplit_Adapter ListAdapter = new TimerSplit_Adapter(this, SplitsList, PBSplits);
-
-        //Set le title
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(ActiveSpeedrun.getInstance().GetGameName() + " - " + ActiveSpeedrun.getInstance().GetCategoryName());
 
         ListView lv = (ListView) findViewById(R.id.Liste_Splits);
         lv.setAdapter(ListAdapter);

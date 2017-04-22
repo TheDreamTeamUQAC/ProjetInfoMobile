@@ -55,10 +55,11 @@
     <!-->
     <string name="title_activity_speed_run_form">Nouvelle SpeedRun</string>
     <string name="SpeedRunForm1">Information de la nouvelle SpeedRun: </string>
-    <string name="SpeedRunFormHint1">Nom (Ex: Ocarina of Time, Metroid Prime...)</string>
+    <string name="SpeedRunFormHint1">Nom (Ex: Ocarina of Time...)</string>
     <string name="SpeedRunFormHint2" formatted="false">Catégorie (Ex: Any%, 100%, Low%,...)</string>
     <string name="SpeedRunForm2">Utilisation d\'un émulateur?</string>
     <string name="SpeedRunForm3">Choisir l\'offset</string>
+    <string name="Aucun_Split">Aucun split dans cette SpeedRun.</string>
 
 
 </resources>

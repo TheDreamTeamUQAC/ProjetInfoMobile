@@ -111,31 +111,10 @@ public class LoadActivity extends AppCompatActivity {
     }
 
     public void addNewSpeedRun(View _inputView){
-        Intent intent = new Intent(LoadActivity.this, SpeedRunForm.class);
-        startActivityForResult(intent, SPEED_RUN_FORM);
+        popupMaker.AjouterSpeedRunPopup("Nouvelle SpeedRun");
 
         ModeSuppression = true;
         switchDelete(false);
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    Intent data) {
-        if (requestCode == SPEED_RUN_FORM) {
-            if (resultCode == RESULT_OK) {
-
-                Bundle extras = data.getBundleExtra("bundle");
-                SpeedRunEntity newSpeedRun = new SpeedRunEntity(
-                            0,
-                            extras.getString("gamename"),
-                            extras.getString("categoryname"),
-                            extras.getBoolean("usesemulator"),
-                            new CustomTime(extras.getString("offset"))
-                );
-                db.addSpeedRun(newSpeedRun);
-
-                ChargerEntreesListView();
-            }
-        }
     }
 
     @Override
