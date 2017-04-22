@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -21,12 +22,12 @@ public class StatsActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         setSupportActionBar(toolbar);
-
         //Set title
         if(ActiveSpeedrun.getInstance().IsInitialized()) {
             getSupportActionBar().setTitle(ActiveSpeedrun.getInstance().GetGameName() + " - " + ActiveSpeedrun.getInstance().GetCategoryName());
             MettreAJourStatsRun();
         }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
     }
 
@@ -109,5 +110,17 @@ public class StatsActivity extends AppCompatActivity {
         Intent TimerIntent = new Intent(StatsActivity.this, TimerActivity.class);
         startActivity(TimerIntent);
         finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; go home
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
