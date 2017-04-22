@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.ConsoleHandler;
 
@@ -216,46 +217,13 @@ public class SGBD extends SQLiteOpenHelper {
             resSpeedRun.moveToNext();
             SpeedRunEntity speedRunRes = extraireSpeedRunFromCursor(resSpeedRun);
 
-            //Vérifier les split definition liés
-            Cursor resSplitDef =  db.rawQuery( "select * from " + SPLITDEFINITION_TABLE_NAME +
-                    " where " + SPLITDEFINITION_COLONNE_SPEEDRUNID + "=\""+_nomSpeedRunId +"\"", null );
-
-            count = resSplitDef.getCount();
-            if(count >0) {
-                resSplitDef.moveToFirst();
-                while (resSplitDef.isAfterLast() == false) {
-                    speedRunRes.addSplitDefinition(extraireSplitDefinitionFromCursor(resSplitDef));
-                    resSplitDef.moveToNext();
-                }
-
-                //Vérifier les attempts liés
-                Cursor resAttempt = db.rawQuery("select * from " + ATTEMPT_TABLE_NAME +
-                        " where " + ATTEMPT_COLONNE_SPEEDRUNID + "=\"" + _nomSpeedRunId + "\"", null);
-
-                count = resAttempt.getCount();
-                if (count > 0) {
-                    resAttempt.moveToFirst();
-                    while (resAttempt.isAfterLast() == false) {
-                        Attempt att = extraireAttemptFromCursor(resAttempt);
-
-                        //Vérifier pour les splits dans l'attempt trouvé
-                        Cursor resSplit = db.rawQuery("select * from " + SPLIT_TABLE_NAME +
-                                " where " + SPLIT_COLONNE_IDATTEMPT + "=\"" + att.getId() + "\"", null);
-
-                        count = resSplit.getCount();
-                        if (count > 0) {
-                            resSplit.moveToFirst();
-                            while (resSplit.isAfterLast() == false) {
-                                att.addSplit(extraireSplitFromCursor(resSplit));
-                                resSplit.moveToNext();
-                            }
-                        }
-
-                        speedRunRes.addAttempt(att);
-                        resAttempt.moveToNext();
-                    }
-                }
-
+            //Ajouter les split definition
+            for (SplitDefinition splitDef:getSplitDefinitionList(speedRunRes.getId())) {
+                speedRunRes.addSplitDefinition(splitDef);
+            }
+            //Ajouter les attempts
+            for (Attempt att:getAttemptList(speedRunRes.getId())) {
+                speedRunRes.addAttempt(att);
             }
             return speedRunRes;
         }
@@ -428,7 +396,7 @@ public class SGBD extends SQLiteOpenHelper {
     public boolean addAttempt(Attempt att){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ATTEMPT_COLONNE_ISBESTATTEMPT, att.getBestAttempt());
+        contentValues.put(ATTEMPT_COLONNE_ISBESTATTEMPT, att.getIsBestAttempt());
         contentValues.put(ATTEMPT_COLONNE_SPEEDRUNID, att.getSpeedRunId());
         contentValues.put(ATTEMPT_COLONNE_TIMEENDED, att.getTimeEnded().getString());
         contentValues.put(ATTEMPT_COLONNE_TIMESTARTED, att.getTimeStarted().getString());
@@ -445,7 +413,7 @@ public class SGBD extends SQLiteOpenHelper {
     public boolean updateAttempt(Attempt att){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(ATTEMPT_COLONNE_ISBESTATTEMPT, att.getBestAttempt());
+        contentValues.put(ATTEMPT_COLONNE_ISBESTATTEMPT, att.getIsBestAttempt());
         contentValues.put(ATTEMPT_COLONNE_SPEEDRUNID, att.getSpeedRunId());
         contentValues.put(ATTEMPT_COLONNE_TIMEENDED, att.getTimeEnded().getString());
         contentValues.put(ATTEMPT_COLONNE_TIMESTARTED, att.getTimeStarted().getString());
@@ -650,6 +618,80 @@ public class SGBD extends SQLiteOpenHelper {
 
     //endregion
 
+
+    //region RequêtesListes
+
+    public ArrayList<Attempt> getAttemptList(int _speedRunId){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select * from " + ATTEMPT_TABLE_NAME +
+                                    " where " + ATTEMPT_COLONNE_SPEEDRUNID + "=" +Integer.toString(_speedRunId), null );
+
+        int count = res.getCount();
+        if(count == 0){
+            return new ArrayList<>();
+        }
+        else{
+            ArrayList<Attempt> returnList = new ArrayList();
+            res.moveToFirst();
+
+            while (res.isAfterLast() == false) {
+                Attempt att = extraireAttemptFromCursor(res);
+
+                for (Split split:getSplitList(att.getId())) {
+                    att.addSplit(split);
+                }
+
+                returnList.add(att);
+                res.moveToNext();
+            }
+
+            return returnList;
+        }
+    }
+
+    public ArrayList<Split> getSplitList(int _attemptId){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "select * from " + SPLIT_TABLE_NAME +
+                " where " + SPLIT_COLONNE_IDATTEMPT + "=" +Integer.toString(_attemptId), null );
+
+        int count = res.getCount();
+        if(count == 0){
+            return new ArrayList<>();
+        }
+        else{
+            ArrayList<Split> returnList = new ArrayList();
+            res.moveToFirst();
+            while (res.isAfterLast() == false) {
+                Split split = extraireSplitFromCursor(res);
+                returnList.add(split);
+                res.moveToNext();
+            }
+            return returnList;
+        }
+    }
+
+    public ArrayList<SplitDefinition> getSplitDefinitionList(int _speedRunId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        //Vérifier les split definition liés
+        Cursor resSplitDef =  db.rawQuery( "select * from " + SPLITDEFINITION_TABLE_NAME +
+                " where " + SPLITDEFINITION_COLONNE_SPEEDRUNID + "=\""+_speedRunId +"\"", null );
+
+        int count = resSplitDef.getCount();
+        if(count ==0) {
+            return new ArrayList<>();
+        }
+        else {
+            ArrayList<SplitDefinition> returnList = new ArrayList();
+            resSplitDef.moveToFirst();
+            while (resSplitDef.isAfterLast() == false) {
+                returnList.add(extraireSplitDefinitionFromCursor(resSplitDef));
+                resSplitDef.moveToNext();
+            }
+            return returnList;
+        }
+    }
+
+    //endregion
 
 
     //region Tests

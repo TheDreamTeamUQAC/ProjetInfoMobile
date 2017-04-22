@@ -67,6 +67,20 @@ public class CustomTime {
             Heures=0;Minutes=0;Secondes=0;Millisecondes=0;
         }
     }
+
+    public CustomTime(long _miliSeconds){
+        this.Heures = (int)(_miliSeconds / 3600000);
+        _miliSeconds = (int)(_miliSeconds % 3600000);
+
+        this.Minutes = (int)(_miliSeconds/60000);
+        _miliSeconds = (int)(_miliSeconds%60000);
+
+        this.Secondes = (int)(_miliSeconds/1000);
+        _miliSeconds = (int)(_miliSeconds%1000);
+
+        this.Millisecondes = (int)_miliSeconds;
+    }
+
     public CustomTime(CustomTime _t){
         recopier(_t);
     }
@@ -109,7 +123,7 @@ public class CustomTime {
         return String.format("%02d:%02d:%02d.%02d", Heures,Minutes,Secondes,Millisecondes);
     }
 
-    private long ToMiliseconds(CustomTime _Time)
+    public long ToMiliseconds(CustomTime _Time)
     {
         long Duration = 0;
 
@@ -174,5 +188,39 @@ public class CustomTime {
         else {
             return false;
         }
+    }
+
+    public CustomTime soustraire(CustomTime _tempsASoustraire){
+        long total = ToMiliseconds(this) - ToMiliseconds(_tempsASoustraire);
+
+        this.Heures = (int)(total / 3600000);
+        total = (int)(total % 3600000);
+
+        this.Minutes = (int)(total/60000);
+        total = (int)(total%60000);
+
+        this.Secondes = (int)(total/1000);
+        total = (int)(total%1000);
+
+        this.Millisecondes = (int)total;
+
+        return this;
+    }
+
+    public CustomTime additionner(CustomTime _tempsAAdditioner){
+        long total = ToMiliseconds(this) + ToMiliseconds(_tempsAAdditioner);
+
+        this.Heures = (int)(total / 3600000);
+        total = (int)(total % 3600000);
+
+        this.Minutes = (int)(total/60000);
+        total = (int)(total%60000);
+
+        this.Secondes = (int)(total/1000);
+        total = (int)(total%1000);
+
+        this.Millisecondes = (int)total;
+
+        return this;
     }
 }

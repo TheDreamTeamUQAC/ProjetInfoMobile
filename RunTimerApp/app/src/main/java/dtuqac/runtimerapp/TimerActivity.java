@@ -54,23 +54,28 @@ public class TimerActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //Set le title
-        //setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(ActiveSpeedrun.getInstance().GetGameName() + " - " + ActiveSpeedrun.getInstance().GetCategoryName());
-
         MonTimer = new TimerClass();
         DernierTempsPebble = "";
         LastSplitTime = new CustomTime(0,0,0,0);
 
         TextView txt = (TextView)findViewById(R.id.txtListViewVide);
-        if (ActiveSpeedrun.getInstance().IsInitialized() && ActiveSpeedrun.getInstance().GetSplitDefinition().size() > 0)
+        if (ActiveSpeedrun.getInstance().IsInitialized())
         {
-            txt.setVisibility(View.INVISIBLE);
-            LoadSplits();
+            //Set le title
+            getSupportActionBar().setTitle(ActiveSpeedrun.getInstance().GetGameName() + " - " + ActiveSpeedrun.getInstance().GetCategoryName());
+            if (ActiveSpeedrun.getInstance().GetSplitDefinition().size() > 0) {
+                txt.setVisibility(View.INVISIBLE);
+                LoadSplits();
+            }
+            else {
+                txt.setVisibility(View.VISIBLE);
+                txt.setText("Aucun split dans cette SpeedRun.");
+            }
         }
         else{
             //Montrer qu'il n'y a aucun split à charger
             txt.setVisibility(View.VISIBLE);
+            txt.setText("Aucune SpeedRun sélectionnée. Choisir une SpeedRun dans Gérer.");
         }
 
 

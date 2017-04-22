@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="dtuqac.runtimerapp.StatsActivity"
+    tools:showIn="@layout/activity_stats">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/txtHeaderC1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:padding="1sp"
+            android:textSize="25sp"
+            android:textColor="@color/colorMainText"
+            android:text="Statistiques SpeedRun"
+            android:layout_gravity="center_horizontal"/>
+
+        <View
+            android:layout_height="2sp"
+            android:background="@color/colorMainText"
+            android:layout_width="match_parent"/>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1"
+        >
+
+        <TableRow>
+            <TextView
+                android:id="@+id/txtC1L1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/table_margin"
+                android:padding="1sp"
+                android:textSize="@dimen/table_text_size"
+                android:textColor="@color/colorMainText"
+                android:text="Nombre d'essais:" />
+
+            <TextView
+                android:id="@+id/txtC2L1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/table_margin"
+                android:gravity="right"
+                android:textSize="@dimen/table_text_size"
+                android:padding="1sp"
+                android:textColor="@color/colorMainText" />
+        </TableRow>
+
+        <View
+            android:layout_height="2sp"
+            android:background="#FF909090" />
+
+        <TableRow>
+            <TextView
+                android:id="@+id/txtC1L2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/table_margin"
+                android:padding="1sp"
+                android:textSize="@dimen/table_text_size"
+                android:textColor="@color/colorMainText"
+                android:text="Nombre de segments:" />
+
+            <TextView
+                android:id="@+id/txtC2L2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/table_margin"
+                android:gravity="right"
+                android:textSize="@dimen/table_text_size"
+                android:padding="1sp"
+                android:textColor="@color/colorMainText" />
+        </TableRow>
+
+        <View
+            android:layout_height="2sp"
+            android:background="#FF909090" />
+
+        <TableRow>
+            <TextView
+                android:id="@+id/txtC1L3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/table_margin"
+                android:padding="1sp"
+                android:textSize="@dimen/table_text_size"
+                android:textColor="@color/colorMainText"
+                android:text="Temps meilleur essai:" />
+
+            <TextView
+                android:id="@+id/txtC2L3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/table_margin"
+                android:gravity="right"
+                android:textSize="@dimen/table_text_size"
+                android:padding="1sp"
+                android:textColor="@color/colorMainText" />
+        </TableRow>
+
+        <View
+            android:layout_height="2sp"
+            android:background="#FF909090" />
+
+        <TableRow>
+            <TextView
+                android:id="@+id/txtC1L4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/table_margin"
+                android:padding="1sp"
+                android:textSize="@dimen/table_text_size"
+                android:textColor="@color/colorMainText"
+                android:text="Plus court segment:" />
+
+            <TextView
+                android:id="@+id/txtC2L4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/table_margin"
+                android:gravity="right"
+                android:textSize="@dimen/table_text_size"
+                android:padding="1sp"
+                android:textColor="@color/colorMainText" />
+        </TableRow>
+
+        <View
+            android:layout_height="2sp"
+            android:background="#FF909090" />
+
+        <TableRow>
+            <TextView
+                android:id="@+id/txtC1L5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/table_margin"
+                android:padding="1sp"
+                android:textSize="@dimen/table_text_size"
+                android:textColor="@color/colorMainText"
+                android:text="Plus long segment:" />
+
+            <TextView
+                android:id="@+id/txtC2L5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/table_margin"
+                android:gravity="right"
+                android:textSize="@dimen/table_text_size"
+                android:padding="1sp"
+                android:textColor="@color/colorMainText" />
+        </TableRow>
+
+        <View
+            android:layout_height="2sp"
+            android:background="#FF909090" />
+
+        <TableRow>
+            <TextView
+                android:id="@+id/txtC1L6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/table_margin"
+                android:padding="1sp"
+                android:textSize="@dimen/table_text_size"
+                android:textColor="@color/colorMainText"
+                android:text="Durée moy segments:" />
+
+            <TextView
+                android:id="@+id/txtC2L6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/table_margin"
+                android:gravity="right"
+                android:textSize="@dimen/table_text_size"
+                android:padding="1sp"
+                android:textColor="@color/colorMainText" />
+        </TableRow>
+
+        <View
+            android:layout_height="2sp"
+            android:background="#FF909090" />
+
+
+    </TableLayout>
+
+    </LinearLayout>
+</android.support.v4.widget.NestedScrollView>

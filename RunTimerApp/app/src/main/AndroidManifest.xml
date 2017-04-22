@@ -40,19 +40,19 @@
                 android:value="dtuqac.runtimerapp.MainActivity" />
         </activity>
         <activity
-            android:name=".SpeedRunForm"
-            android:label="@string/title_activity_speed_run_form"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".EditSplits"
-            android:windowSoftInputMode="adjustPan"
             android:label="@string/title_activity_edit_splits"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="dtuqac.runtimerapp.MainActivity" />
         </activity>
+        <activity
+            android:name=".StatsActivity"
+            android:label="@string/title_activity_stats"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

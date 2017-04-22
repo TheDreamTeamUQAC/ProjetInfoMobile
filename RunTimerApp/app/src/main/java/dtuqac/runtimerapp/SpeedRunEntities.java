@@ -142,7 +142,7 @@ class Attempt{
         return TimeEnded;
     }
 
-    public Boolean getBestAttempt() {
+    public Boolean getIsBestAttempt() {
         return IsBestAttempt;
     }
 

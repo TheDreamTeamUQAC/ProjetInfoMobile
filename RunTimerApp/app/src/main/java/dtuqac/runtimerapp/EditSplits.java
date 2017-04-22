@@ -31,6 +31,7 @@ public class EditSplits extends AppCompatActivity implements AdapterView.OnItemC
         //Teste si il y a une run active
         if (ActiveSpeedrun.getInstance().IsInitialized())
         {
+            //TODO Arranger pour quand c'est une nouvelle SpeedRun --> Aucun split à loader
             LoadtSplits();
         }
         else

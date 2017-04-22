@@ -109,7 +109,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent intent = new Intent(MainActivity.this, LoadActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_statistics || id == R.id.btnStats) {
-
+            Intent intent = new Intent(MainActivity.this, StatsActivity.class);
+            startActivity(intent);
         } else if (id == R.id.nav_pebble) {
             sideloadInstall(MainActivity.this,WATCHAPP_FILENAME);
         }

@@ -70,8 +70,8 @@ public class LoadActivity extends AppCompatActivity {
                     //Ici on fait les actions si on la SpeedRun
                     ActiveSpeedrun.getInstance().SetCurrentSpeedrun(db.getSpeedRunEntity(speedRunId));
                     //Renvoyer l'utilisateur à l'édition des splits de la speedrun choisie
-                    Intent EditIntent = new Intent(LoadActivity.this, TimerActivity.class);
-                    startActivity(EditIntent);
+                    Intent TimerIntent = new Intent(LoadActivity.this, TimerActivity.class);
+                    startActivity(TimerIntent);
                     finish();
                 }
             }

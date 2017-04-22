@@ -47,7 +47,7 @@ class ActiveSpeedrun {
     {
         for (Attempt a : Run.getAttemptHistory())
         {
-            if (a.getBestAttempt())
+            if (a.getIsBestAttempt())
             {
                 return a.getId();
             }
@@ -105,7 +105,7 @@ class ActiveSpeedrun {
 
     public void AddAttempt(Attempt _NewAttempt)
     {
-        if (_NewAttempt.getBestAttempt())
+        if (_NewAttempt.getIsBestAttempt())
         {
             //le new attempt est le personnal best, met les autre attempts a false
             for (Attempt a : Run.getAttemptHistory())
@@ -126,7 +126,7 @@ class ActiveSpeedrun {
     {
         for (Attempt a : Run.getAttemptHistory())
         {
-            if (a.getBestAttempt())
+            if (a.getIsBestAttempt())
             {
                 a.getSplits().get(id).setSplitTime(NewTime);
             }
