@@ -123,7 +123,12 @@ public class CustomTime {
         return String.format("%02d:%02d:%02d.%02d", Heures,Minutes,Secondes,Millisecondes);
     }
 
-    public long ToMiliseconds(CustomTime _Time)
+    public long ToMiliseconds()
+    {
+        return ToMiliseconds(this);
+    }
+
+    private long ToMiliseconds(CustomTime _Time)
     {
         long Duration = 0;
 

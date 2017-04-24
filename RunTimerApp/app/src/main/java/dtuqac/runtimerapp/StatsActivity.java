@@ -1,15 +1,18 @@
 package dtuqac.runtimerapp;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.ValueDependentColor;
+import com.jjoe64.graphview.series.BarGraphSeries;
+import com.jjoe64.graphview.series.DataPoint;
 
 import java.util.List;
 
@@ -31,6 +34,45 @@ public class StatsActivity extends AppCompatActivity {
 
     }
 
+    void AjouterDonneesGraphique(List<Attempt> listeAttempts){
+        Attempt BestAttempt = null;
+        for (Attempt att:listeAttempts) {
+            if(att.getIsBestAttempt())
+            {
+                BestAttempt = att;
+                break;
+            }
+        }
+
+        int i = 0;
+        DataPoint data[] = new DataPoint[BestAttempt.getSplits().size()];
+
+        for (Split split:BestAttempt.getSplits()) {
+            data[i] = new DataPoint(i,(split.getDuration().ToMiliseconds()/1000));
+            i++;
+        }
+
+        GraphView graph = (GraphView) findViewById(R.id.graph);
+        BarGraphSeries<DataPoint> series = new BarGraphSeries<>(data);
+
+        series.setSpacing(0);
+
+        graph.addSeries(series);
+
+        // styling
+        series.setValueDependentColor(new ValueDependentColor<DataPoint>() {
+            @Override
+            public int get(DataPoint data) {
+                return Color.rgb((int) data.getX()*255/4, (int) Math.abs(data.getY()*255/6), 100);
+            }
+        });
+
+        // draw values on top
+        series.setDrawValuesOnTop(true);
+        series.setValuesOnTopColor(Color.RED);
+        //series.setValuesOnTopSize(50);
+    }
+
     //Mettre à jour les statistiques
     void MettreAJourStatsRun(){
         SGBD db = new SGBD(StatsActivity.this);
@@ -48,6 +90,10 @@ public class StatsActivity extends AppCompatActivity {
         TextView t3 = (TextView)this.findViewById(R.id.txtC2L3);
 
         if(listeAttempts.size() >0) {
+            //------------------------------------------------------
+            //Ajouter les données dans le graphique
+            //------------------------------------------------------
+            AjouterDonneesGraphique(listeAttempts);
 
             Attempt BestAttempt = null;
             for (Attempt att : listeAttempts) {
@@ -92,7 +138,7 @@ public class StatsActivity extends AppCompatActivity {
             t4.setText("("+ db.getSplitDefinitionById(court.getIdSplitDefinition()).getSplitName() +") " + court.getDuration().getString());
             t5.setText("("+ db.getSplitDefinitionById(slong.getIdSplitDefinition()).getSplitName() +") " + slong.getDuration().getString());
 
-            long moyenne = cumul.ToMiliseconds(cumul)/nbSplit;
+            long moyenne = cumul.ToMiliseconds()/nbSplit;
             cumul = new CustomTime(moyenne);
             t6.setText(cumul.getString());
         }

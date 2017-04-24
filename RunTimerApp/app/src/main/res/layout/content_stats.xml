@@ -17,7 +17,7 @@
             android:id="@+id/txtHeaderC1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="10sp"
             android:padding="1sp"
             android:textSize="25sp"
             android:textColor="@color/colorMainText"
@@ -188,11 +188,41 @@
         </TableRow>
 
         <View
-            android:layout_height="2sp"
+            android:layout_height="10sp"
             android:background="#FF909090" />
 
 
     </TableLayout>
+
+        <TextView
+            android:id="@+id/txtHeaderC2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10sp"
+            android:textSize="25sp"
+            android:textColor="@color/colorMainText"
+            android:text="Statistiques Meilleur Essai"
+            android:layout_gravity="center_horizontal"/>
+        <TextView
+            android:id="@+id/txtHeaderC22"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10sp"
+            android:textSize="15sp"
+            android:textColor="@color/colorMainText"
+            android:text="(temps en secondes)"
+            android:layout_gravity="center_horizontal"/>
+
+        <View
+            android:layout_height="2sp"
+            android:layout_width="match_parent"
+            android:background="#FF909090" />
+
+        <com.jjoe64.graphview.GraphView
+            android:layout_width="match_parent"
+            android:layout_height="200sp"
+            android:padding="2sp"
+            android:id="@+id/graph" />
 
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>
