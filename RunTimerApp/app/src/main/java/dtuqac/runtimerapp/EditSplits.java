@@ -86,13 +86,13 @@ public class EditSplits extends AppCompatActivity implements AdapterView.OnItemC
         if (DefList.size() != 0)
         {
             //Cree un nouveau split avec un nom temporaire
-            SplitDefinition NewSplit = new SplitDefinition(ID + 1, ActiveSpeedrun.getInstance().GetSpeedrunID(), "New Split");
-            ActiveSpeedrun.getInstance().AddSplitDefinition(NewSplit);
+            SplitDefinition NewSplit = new SplitDefinition(ID, ActiveSpeedrun.getInstance().GetSpeedrunID(), "New Split");
+            ActiveSpeedrun.getInstance().AddSplitDefinition(NewSplit, getBaseContext());
         }
         else
         {
             SplitDefinition NewSplit = new SplitDefinition(ID, ActiveSpeedrun.getInstance().GetSpeedrunID(), "New Split");
-            ActiveSpeedrun.getInstance().AddSplitDefinition(NewSplit);
+            ActiveSpeedrun.getInstance().AddSplitDefinition(NewSplit, getBaseContext());
         }
 
         //TODO Le principe pourrait être de garder toujours un split qui est le PB et ce serait lui qu'on mettrait à jour avec les SplitDefinition
@@ -100,7 +100,7 @@ public class EditSplits extends AppCompatActivity implements AdapterView.OnItemC
         //ActiveSpeedrun.getInstance().GetActiveSpeedrun().getBestAttempt().addSplit(new Split(-1,ActiveSpeedrun.getInstance().GetPersonnalBestID(),ID, new CustomTime(0,0,0,0), new CustomTime(9999,9999,9999,9999), false));
 
         //refresh la list
-        ActiveSpeedrun.getInstance().SaveInstance(this);
+        ActiveSpeedrun.getInstance().SaveInstance(getBaseContext());
         LoadtSplits();
 
     }

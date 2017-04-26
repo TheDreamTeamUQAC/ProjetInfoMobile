@@ -421,7 +421,15 @@ public class SGBD extends SQLiteOpenHelper {
 
         //Mettre à jour les splits dans l'attempt
         for (Split split: att.getSplits()) {
-            updateSplit(split);
+            Split test = getSplitById(split.getId());
+            if (test == null)
+            {
+                addSplit(split);
+            }
+            else
+            {
+                updateSplit(split);
+            }
         }
 
         return true;

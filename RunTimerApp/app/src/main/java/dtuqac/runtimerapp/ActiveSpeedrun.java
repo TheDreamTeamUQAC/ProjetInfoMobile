@@ -90,9 +90,12 @@ class ActiveSpeedrun {
         return Run.getSpeedRunSplits();
     }
 
-    public void AddSplitDefinition(SplitDefinition NewSplitDef)
+    public void AddSplitDefinition(SplitDefinition NewSplitDef, Context _ctx)
     {
         Run.addSplitDefinition(NewSplitDef);
+
+        SGBD db = new SGBD(_ctx);
+        int AtID = db.getNextSplitId();
 
         //TODO: This is really bad
         //Pour sauver du temps, on considere qu'on ajoute juste a la fin. Donc on ajoute un extra split bidon a tous les attempts
@@ -100,13 +103,14 @@ class ActiveSpeedrun {
         {
             if (a.getSplits().size() == 0)
             {
-                Split temp = new Split(-1, a.getId(), NewSplitDef.getId(), new CustomTime(0,0,0,0), new CustomTime(0,0,0,0), false);
+                Split temp = new Split(AtID++, a.getId(), NewSplitDef.getId(), new CustomTime(0,0,0,0), new CustomTime(0,0,0,0), false);
                 a.addSplit(temp);
             }
             else
             {
                 Split LastSplit = a.getSplits().get(a.getSplits().size() - 1);
-                Split temp = new Split(LastSplit.getId() + 1, a.getId(), NewSplitDef.getId(), LastSplit.getDuration(), LastSplit.getSplitTime(), false);
+                //LastSplit.getId() + 1
+                Split temp = new Split(AtID++, a.getId(), NewSplitDef.getId(), LastSplit.getDuration(), LastSplit.getSplitTime(), false);
                 a.addSplit(temp);
             }
         }
