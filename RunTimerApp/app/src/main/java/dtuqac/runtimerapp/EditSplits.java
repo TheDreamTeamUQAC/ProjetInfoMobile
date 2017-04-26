@@ -57,6 +57,7 @@ public class EditSplits extends AppCompatActivity implements AdapterView.OnItemC
             SGBD db = new SGBD(getBaseContext());
             int ID = db.getNextAttemptId();
             Attempt newAttempt = new Attempt(ID, ActiveSpeedrun.getInstance().GetSpeedrunID(), new CustomTime(0,0,0,0), new CustomTime(0,0,0,0), true);
+            //Attempt newAttempt = new Attempt(ID, ActiveSpeedrun.getInstance().GetSpeedrunID(), new CustomTime(0,0,0,0), new CustomTime(9999,9999,9999,9999), true);
             ActiveSpeedrun.getInstance().AddAttempt(newAttempt);
 
             PBID = ActiveSpeedrun.getInstance().GetPersonnalBestID();
@@ -79,21 +80,24 @@ public class EditSplits extends AppCompatActivity implements AdapterView.OnItemC
     {
         //get l'ID du dernier split
         List<SplitDefinition> DefList = ActiveSpeedrun.getInstance().GetSplitDefinition();
+
+        SGBD db = new SGBD(getBaseContext());
+        int ID = db.getNextSplitDefinitionId();
         if (DefList.size() != 0)
         {
-            int LastID = DefList.get(DefList.size() - 1).getId();
             //Cree un nouveau split avec un nom temporaire
-            SplitDefinition NewSplit = new SplitDefinition(LastID + 1, ActiveSpeedrun.getInstance().GetSpeedrunID(), "New Split");
+            SplitDefinition NewSplit = new SplitDefinition(ID + 1, ActiveSpeedrun.getInstance().GetSpeedrunID(), "New Split");
             ActiveSpeedrun.getInstance().AddSplitDefinition(NewSplit);
         }
         else
         {
-            SGBD db = new SGBD(getBaseContext());
-            int ID = db.getNextSplitDefinitionId();
             SplitDefinition NewSplit = new SplitDefinition(ID, ActiveSpeedrun.getInstance().GetSpeedrunID(), "New Split");
             ActiveSpeedrun.getInstance().AddSplitDefinition(NewSplit);
         }
 
+        //TODO Le principe pourrait être de garder toujours un split qui est le PB et ce serait lui qu'on mettrait à jour avec les SplitDefinition
+        //ActiveSpeedrun.getInstance().GetPersonnalBestID();
+        //ActiveSpeedrun.getInstance().GetActiveSpeedrun().getBestAttempt().addSplit(new Split(-1,ActiveSpeedrun.getInstance().GetPersonnalBestID(),ID, new CustomTime(0,0,0,0), new CustomTime(9999,9999,9999,9999), false));
 
         //refresh la list
         ActiveSpeedrun.getInstance().SaveInstance(this);
@@ -129,6 +133,7 @@ public class EditSplits extends AppCompatActivity implements AdapterView.OnItemC
 
         ValiderEdit(SplitName, SplitTime);
         ActiveSpeedrun.getInstance().SaveInstance(this);
+        LoadtSplits();
     }
 
     @Override
@@ -181,6 +186,5 @@ public class EditSplits extends AppCompatActivity implements AdapterView.OnItemC
 
         ActiveSpeedrun.getInstance().UpdateSplitDefinition(LastClickedItem, SplitName);
         ActiveSpeedrun.getInstance().UpdateSplitTime(LastClickedItem, time);
-        LoadtSplits();
     }
 }

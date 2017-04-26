@@ -89,6 +89,16 @@ class SpeedRunEntity {
         SpeedRunSplits.add(splitDefinition);
     }
 
+    public Attempt getBestAttempt(){
+        for (Attempt att: AttemptHistory) {
+            if(att.getIsBestAttempt()) {
+                return att;
+            }
+        }
+
+        return null;
+    }
+
 }
 
 /*********************************************************************
