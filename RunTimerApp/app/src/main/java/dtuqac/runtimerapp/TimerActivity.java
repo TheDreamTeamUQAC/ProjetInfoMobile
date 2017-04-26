@@ -243,7 +243,7 @@ public class TimerActivity extends AppCompatActivity {
         //Set delta
         int PBid = ActiveSpeedrun.getInstance().GetPersonnalBestID();
         List<Split> sl = ActiveSpeedrun.getInstance().GetSplitsByAttemptID(PBid);
-        CustomTime hi = sl.get(CurrentSplitIndex).getSplitTime();
+        CustomTime hi = new CustomTime(sl.get(CurrentSplitIndex).getSplitTime().getHeures(),sl.get(CurrentSplitIndex).getSplitTime().getMinutes(),sl.get(CurrentSplitIndex).getSplitTime().getSecondes(),sl.get(CurrentSplitIndex).getSplitTime().getMillisecondes());
         CustomTime tempst = SplitTime;
         CustomTime diff = new CustomTime(hi.soustraire(tempst));
         String delta;
@@ -325,6 +325,14 @@ public class TimerActivity extends AppCompatActivity {
         {
             lv.getChildAt(i).setBackgroundResource(R.color.light_grey);
         }
+
+        ListDelta.clear();
+        for (int i=0;i<ActiveSpeedrun.getInstance().GetSplitDefinition().size();i++)
+        {
+            String d = "-";
+            ListDelta.add(d);
+        }
+        LoadSplits();
 
         CurrentSplitIndex = 0;
         LastSplitTime = new CustomTime(0,0,0,0);
