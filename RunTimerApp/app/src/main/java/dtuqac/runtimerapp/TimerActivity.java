@@ -207,9 +207,13 @@ public class TimerActivity extends AppCompatActivity {
     private void Split()
     {
         //Report le Split Time dans l'attempt
+        CustomTime SegmentTime; //TODO: Gestion des segments (IsBestSegment, Sauver le segment time, etc)
         CustomTime SplitTime = new CustomTime((int)MonTimer.GetHeures(), (int)MonTimer.GetMinutes() % 60, (int)MonTimer.GetSecondes() % 60, (int)MonTimer.GetMiliseconds() % 100);
-        CustomTime SegmentTime = new CustomTime(SplitTime.soustraire(LastSplitTime).ToMiliseconds());
-        Split MonSplit = new Split(-1,CurrentAttempt.getId(),ActiveSpeedrun.getInstance().GetSplitDefinition().get(CurrentSplitIndex).getId(),SegmentTime,SplitTime,false); //TODO: fixer les ID des splits
+        Split MonSplit = new Split(CurrentSplitIndex,CurrentAttempt.getId(),CurrentAttempt.getId(),SplitTime,SplitTime,false); //TODO: fixer les ID des splits
+        
+        //CustomTime SplitTime = new CustomTime((int)MonTimer.GetHeures(), (int)MonTimer.GetMinutes() % 60, (int)MonTimer.GetSecondes() % 60, (int)MonTimer.GetMiliseconds() % 100);
+        //CustomTime SegmentTime = new CustomTime(SplitTime.soustraire(LastSplitTime).ToMiliseconds());
+        //Split MonSplit = new Split(-1,CurrentAttempt.getId(),ActiveSpeedrun.getInstance().GetSplitDefinition().get(CurrentSplitIndex).getId(),SegmentTime,SplitTime,false); //TODO: fixer les ID des splits
 
         //Split(int id, int idAttempt, int idSplitDefinition, CustomTime duration, CustomTime splitTime, Boolean isBestSegment)
 
