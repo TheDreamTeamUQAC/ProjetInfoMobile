@@ -28,6 +28,7 @@ public class TimerActivity extends AppCompatActivity {
     private int CurrentSplitIndex = 0;
     private Attempt CurrentAttempt;
     private String DernierTempsPebble;
+    private List<String> ListDelta;
 
     private CustomTime LastSplitTime;
 
@@ -66,6 +67,14 @@ public class TimerActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(ActiveSpeedrun.getInstance().GetGameName() + " - " + ActiveSpeedrun.getInstance().GetCategoryName());
             if (ActiveSpeedrun.getInstance().GetSplitDefinition().size() > 0) {
                 txt.setVisibility(View.INVISIBLE);
+
+                //Initialise les delta
+                ListDelta = new LinkedList<>();
+                for (int i=0; i<ActiveSpeedrun.getInstance().GetSplitDefinition().size(); i++)
+                {
+                    String del = "-";
+                    ListDelta.add(del);
+                }
                 LoadSplits();
             }
             else {
@@ -78,8 +87,6 @@ public class TimerActivity extends AppCompatActivity {
             txt.setVisibility(View.VISIBLE);
             txt.setText("Aucune SpeedRun sélectionnée. Choisir une SpeedRun dans Gérer.");
         }
-
-
 
         final ListView lv = (ListView) findViewById(R.id.Liste_Splits);
 
@@ -147,7 +154,7 @@ public class TimerActivity extends AppCompatActivity {
         List<SplitDefinition> SplitsList = ActiveSpeedrun.getInstance().GetActiveSpeedrun().getSpeedRunSplits();
 
         //Map la liste dans le listview
-        TimerSplit_Adapter ListAdapter = new TimerSplit_Adapter(this, SplitsList, PBSplits);
+        TimerSplit_Adapter ListAdapter = new TimerSplit_Adapter(this, SplitsList, PBSplits, ListDelta);
 
         ListView lv = (ListView) findViewById(R.id.Liste_Splits);
         lv.setAdapter(ListAdapter);
@@ -218,8 +225,6 @@ public class TimerActivity extends AppCompatActivity {
 
         //Split MonSplit = new Split(-1,CurrentAttempt.getId(),ActiveSpeedrun.getInstance().GetSplitDefinition().get(CurrentSplitIndex).getId(),SegmentTime,SplitTime,false); //TODO: fixer les ID des splits
 
-        //Split(int id, int idAttempt, int idSplitDefinition, CustomTime duration, CustomTime splitTime, Boolean isBestSegment)
-
         CurrentAttempt.addSplit(MonSplit);
 
         //Set le Split Time sur l'item du list view
@@ -237,7 +242,7 @@ public class TimerActivity extends AppCompatActivity {
 
         ListView lv = (ListView) findViewById(R.id.Liste_Splits);
         //Refresh la liste
-        ((TimerSplit_Adapter) lv.getAdapter()).refreshSplits(SplitsListe);
+        ((TimerSplit_Adapter) lv.getAdapter()).refreshSplits(SplitsListe, ListDelta);
 
         LastSplitTime = SplitTime;
     }
