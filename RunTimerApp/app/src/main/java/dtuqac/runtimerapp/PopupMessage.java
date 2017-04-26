@@ -89,4 +89,27 @@ public class PopupMessage {
         builder.show();
     }
 
+    public void SauvegarderAttempt(String _nomFenetre){
+        AlertDialog.Builder builder = new AlertDialog.Builder(popupActivity);
+        builder.setTitle(_nomFenetre);
+        builder.setIcon(android.R.drawable.ic_dialog_alert);
+
+        // Set up the buttons
+        builder.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ActiveSpeedrun.getInstance().SaveInstance(popupActivity);
+                popupActivity.finish();
+            }
+        });
+        builder.setNegativeButton("Non", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+                popupActivity.finish();
+            }
+        });
+        builder.show();
+    }
+
 }

@@ -41,10 +41,10 @@
     Strings pour le menu
     ************************************************************
     <!-->
-    <string name="Menu_Timer">Timer</string>
-    <string name="Menu_Edit">Éditer les segments</string>
-    <string name="Menu_Add">Gérer Speed Run</string>
-    <string name="Menu_Stats">Statistiques</string>
+    <string name="Menu_Timer">3)\nTimer</string>
+    <string name="Menu_Edit">2)\nÉditer les segments</string>
+    <string name="Menu_Add">1)\nGérer Speed Run</string>
+    <string name="Menu_Stats">4)\nStatistiques</string>
     <string name="Menu_Pebble">Pebble</string>
 
 

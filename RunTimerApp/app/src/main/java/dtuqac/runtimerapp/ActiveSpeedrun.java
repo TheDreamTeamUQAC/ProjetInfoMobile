@@ -13,6 +13,7 @@ import dtuqac.runtimerapp.SpeedRunEntity;
 class ActiveSpeedrun {
 
     private SpeedRunEntity Run;
+    private int AddedAttempts;
 
     private static final ActiveSpeedrun ourInstance = new ActiveSpeedrun();
 
@@ -25,7 +26,7 @@ class ActiveSpeedrun {
 
     public void SetCurrentSpeedrun(SpeedRunEntity _Run)
     {
-        Run = _Run;
+        Run = _Run; AddedAttempts =0;
     }
 
     public SpeedRunEntity GetActiveSpeedrun()
@@ -115,6 +116,11 @@ class ActiveSpeedrun {
         }
 
         Run.addAttempt(_NewAttempt);
+        AddedAttempts++;
+    }
+
+    public int GetNumberOfAddedAttemps(){
+        return AddedAttempts;
     }
 
     public void UpdateSplitDefinition(int id, String NewName)
@@ -136,5 +142,10 @@ class ActiveSpeedrun {
     public void SaveInstance(Context _ctx){
         SGBD db = new SGBD(_ctx);
         db.SaveInstance(Run);
+    }
+
+    public int GetNextAttemptId(Context _ctx){
+        SGBD db = new SGBD(_ctx);
+        return db.getNextAttemptId() + AddedAttempts;
     }
 }

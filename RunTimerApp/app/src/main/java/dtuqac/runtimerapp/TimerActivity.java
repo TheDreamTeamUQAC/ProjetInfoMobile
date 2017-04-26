@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -111,6 +112,26 @@ public class TimerActivity extends AppCompatActivity {
         lv.setOnItemClickListener(itemClickListener);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // app icon in action bar clicked; go home
+                if(ActiveSpeedrun.getInstance().GetNumberOfAddedAttemps()>0)
+                {
+                    PopupMessage popupMaker = new PopupMessage(TimerActivity.this);
+                    popupMaker.SauvegarderAttempt("Un essai a été enregistré: voulez-vous l'enregistrer?");
+                    //finish() dans le popup
+                }
+                else{
+                    finish();
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     public void TestButtonClick(View view)
     {
         ActiveSpeedrun.getInstance().SaveInstance(this);
@@ -154,11 +175,7 @@ public class TimerActivity extends AppCompatActivity {
                     lv.performItemClick(view,CurrentSplitIndex,1);
 
                     //Get l'ID du dernier attempt
-                    List<Attempt> listA = ActiveSpeedrun.getInstance().GetActiveSpeedrun().getAttemptHistory();
-                    Attempt A = listA.get(listA.size()-1);
-                    int ID = A.getId();
-
-                    CurrentAttempt = new Attempt(++ID,A.getSpeedRunId(), new CustomTime(0,0,0,0), new CustomTime(0,0,0,0), false);
+                    CurrentAttempt = new Attempt(ActiveSpeedrun.getInstance().GetNextAttemptId(TimerActivity.this),ActiveSpeedrun.getInstance().GetSpeedrunID(), new CustomTime(0,0,0,0), new CustomTime(0,0,0,0), false);
                 }
             }
         }
@@ -190,9 +207,9 @@ public class TimerActivity extends AppCompatActivity {
     private void Split()
     {
         //Report le Split Time dans l'attempt
-        CustomTime SegmentTime; //TODO: Gestion des segments (IsBestSegment, Sauver le segment time, etc)
         CustomTime SplitTime = new CustomTime((int)MonTimer.GetHeures(), (int)MonTimer.GetMinutes() % 60, (int)MonTimer.GetSecondes() % 60, (int)MonTimer.GetMiliseconds() % 100);
-        Split MonSplit = new Split(CurrentSplitIndex,CurrentAttempt.getId(),CurrentAttempt.getId(),SplitTime,SplitTime,false); //TODO: fixer les ID des splits
+        CustomTime SegmentTime = new CustomTime(SplitTime.soustraire(LastSplitTime).ToMiliseconds());
+        Split MonSplit = new Split(-1,CurrentAttempt.getId(),ActiveSpeedrun.getInstance().GetSplitDefinition().get(CurrentSplitIndex).getId(),SegmentTime,SplitTime,false); //TODO: fixer les ID des splits
 
         //Split(int id, int idAttempt, int idSplitDefinition, CustomTime duration, CustomTime splitTime, Boolean isBestSegment)
 
