@@ -28,6 +28,8 @@ public class TimerActivity extends AppCompatActivity {
     private int CurrentSplitIndex = 0;
     private Attempt CurrentAttempt;
     private String DernierTempsPebble;
+    private List<String> ListDelta;
+    private boolean RunComplete = false;
 
     private CustomTime LastSplitTime;
 
@@ -66,6 +68,14 @@ public class TimerActivity extends AppCompatActivity {
             getSupportActionBar().setTitle(ActiveSpeedrun.getInstance().GetGameName() + " - " + ActiveSpeedrun.getInstance().GetCategoryName());
             if (ActiveSpeedrun.getInstance().GetSplitDefinition().size() > 0) {
                 txt.setVisibility(View.INVISIBLE);
+
+                //Initialise les delta
+                ListDelta = new LinkedList<>();
+                for (int i=0; i<ActiveSpeedrun.getInstance().GetSplitDefinition().size(); i++)
+                {
+                    String del = "-";
+                    ListDelta.add(del);
+                }
                 LoadSplits();
             }
             else {
@@ -78,8 +88,6 @@ public class TimerActivity extends AppCompatActivity {
             txt.setVisibility(View.VISIBLE);
             txt.setText("Aucune SpeedRun sélectionnée. Choisir une SpeedRun dans Gérer.");
         }
-
-
 
         final ListView lv = (ListView) findViewById(R.id.Liste_Splits);
 
@@ -134,7 +142,14 @@ public class TimerActivity extends AppCompatActivity {
 
     public void TestButtonClick(View view)
     {
-        ActiveSpeedrun.getInstance().SaveInstance(this);
+        if (RunComplete)
+        {
+            ActiveSpeedrun.getInstance().SaveInstance(this);
+        }
+        else
+        {
+            Toast.makeText(getBaseContext(),"Impossible de sauvegarder une run incomplete" ,Toast.LENGTH_LONG).show();
+        }
     }
 
     public void LoadSplits()
@@ -147,7 +162,7 @@ public class TimerActivity extends AppCompatActivity {
         List<SplitDefinition> SplitsList = ActiveSpeedrun.getInstance().GetActiveSpeedrun().getSpeedRunSplits();
 
         //Map la liste dans le listview
-        TimerSplit_Adapter ListAdapter = new TimerSplit_Adapter(this, SplitsList, PBSplits);
+        TimerSplit_Adapter ListAdapter = new TimerSplit_Adapter(this, SplitsList, PBSplits, ListDelta);
 
         ListView lv = (ListView) findViewById(R.id.Liste_Splits);
         lv.setAdapter(ListAdapter);
@@ -218,13 +233,35 @@ public class TimerActivity extends AppCompatActivity {
 
         //Split MonSplit = new Split(-1,CurrentAttempt.getId(),ActiveSpeedrun.getInstance().GetSplitDefinition().get(CurrentSplitIndex).getId(),SegmentTime,SplitTime,false); //TODO: fixer les ID des splits
 
-        //Split(int id, int idAttempt, int idSplitDefinition, CustomTime duration, CustomTime splitTime, Boolean isBestSegment)
-
         CurrentAttempt.addSplit(MonSplit);
 
         //Set le Split Time sur l'item du list view
         List<Split> SplitsListe = new LinkedList<Split>();
         SplitsListe.addAll(CurrentAttempt.getSplits());
+
+
+        //Set delta
+        int PBid = ActiveSpeedrun.getInstance().GetPersonnalBestID();
+        List<Split> sl = ActiveSpeedrun.getInstance().GetSplitsByAttemptID(PBid);
+        CustomTime hi = sl.get(CurrentSplitIndex).getSplitTime();
+        CustomTime tempst = SplitTime;
+        CustomTime diff = new CustomTime(hi.soustraire(tempst));
+        String delta;
+        if (diff.getMillisecondes() < 0 || diff.getSecondes() < 0)
+        {
+            diff.setMillisecondes(-diff.getMillisecondes());
+            diff.setSecondes(-diff.getSecondes());
+            diff.setMinutes(-diff.getMinutes());
+            diff.setHeures(-diff.getHeures());
+            delta = "+ " + diff.getStringWithoutZero();
+        }
+        else
+        {
+            delta = "- " + diff.getStringWithoutZero();
+        }
+        ListDelta.set(CurrentSplitIndex, delta);
+        List<String> JavaCestStupid = new LinkedList<>();
+        JavaCestStupid.addAll(ListDelta);
 
         //Récupère la liste des splits time
         int PBID = ActiveSpeedrun.getInstance().GetPersonnalBestID();
@@ -237,7 +274,7 @@ public class TimerActivity extends AppCompatActivity {
 
         ListView lv = (ListView) findViewById(R.id.Liste_Splits);
         //Refresh la liste
-        ((TimerSplit_Adapter) lv.getAdapter()).refreshSplits(SplitsListe);
+        ((TimerSplit_Adapter) lv.getAdapter()).refreshSplits(SplitsListe, JavaCestStupid);
 
         LastSplitTime = SplitTime;
     }
@@ -261,6 +298,7 @@ public class TimerActivity extends AppCompatActivity {
         ActiveSpeedrun.getInstance().AddAttempt(CurrentAttempt);
 
         Toast.makeText(getBaseContext(),"Fini" ,Toast.LENGTH_LONG).show();
+        RunComplete = true;
     }
 
     public void PauseTimer(View view)

@@ -24,13 +24,15 @@ public class TimerSplit_Adapter extends BaseAdapter
     private Context context;
     private List<SplitDefinition> DefData;
     private List<Split> TimeData;
+    private List<String> DeltaData;
     private int selectedItem = -1;
     private static LayoutInflater inflater = null;
 
-    public TimerSplit_Adapter(Context context, List<SplitDefinition> DefData, List<Split> TimeData)
+    public TimerSplit_Adapter(Context context, List<SplitDefinition> DefData, List<Split> TimeData, List<String> DeltaData)
     {
         this.context = context;
         this.DefData = DefData;
+        this.DeltaData = DeltaData;
 
         this.TimeData = new LinkedList<Split>();
         for (int i=0; i< TimeData.size(); i++)
@@ -68,8 +70,10 @@ public class TimerSplit_Adapter extends BaseAdapter
         }
         TextView NameText = (TextView) vi.findViewById(R.id.lblSplitName);
         TextView TimeText = (TextView) vi.findViewById(R.id.lblSplitTime);
+        TextView DeltaText = (TextView) vi.findViewById(R.id.lblDelta);
         NameText.setText(DefData.get(position).getSplitName());
         TimeText.setText(TimeData.get(position).getSplitTime().getStringWithoutZero());
+        DeltaText.setText(DeltaData.get(position));
 
         return vi;
     }
@@ -91,10 +95,12 @@ public class TimerSplit_Adapter extends BaseAdapter
         this.selectedItem = selectedItem;
     }
 
-    public void refreshSplits(List<Split> _TimeData)
+    public void refreshSplits(List<Split> _TimeData, List<String> _DeltaData)
     {
         TimeData.clear();
         TimeData.addAll(_TimeData);
+        DeltaData.clear();
+        DeltaData.addAll(_DeltaData);
         notifyDataSetChanged();
     }
 }
