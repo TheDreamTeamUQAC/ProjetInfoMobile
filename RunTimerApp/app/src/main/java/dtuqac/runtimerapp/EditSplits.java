@@ -52,6 +52,17 @@ public class EditSplits extends AppCompatActivity implements AdapterView.OnItemC
         int PBID = ActiveSpeedrun.getInstance().GetPersonnalBestID();
         List<Split> PBSplits = ActiveSpeedrun.getInstance().GetSplitsByAttemptID(PBID);
 
+        if (PBSplits == null) //dans le cas d'une nouvelle run
+        {
+            SGBD db = new SGBD(getBaseContext());
+            int ID = db.getNextAttemptId();
+            Attempt newAttempt = new Attempt(ID, ActiveSpeedrun.getInstance().GetSpeedrunID(), new CustomTime(0,0,0,0), new CustomTime(0,0,0,0), true);
+            ActiveSpeedrun.getInstance().AddAttempt(newAttempt);
+
+            PBID = ActiveSpeedrun.getInstance().GetPersonnalBestID();
+            PBSplits = ActiveSpeedrun.getInstance().GetSplitsByAttemptID(PBID);
+        }
+
         //Récupère la liste des splits name
         List<SplitDefinition> SplitsList = ActiveSpeedrun.getInstance().GetActiveSpeedrun().getSpeedRunSplits();
 
@@ -68,15 +79,26 @@ public class EditSplits extends AppCompatActivity implements AdapterView.OnItemC
     {
         //get l'ID du dernier split
         List<SplitDefinition> DefList = ActiveSpeedrun.getInstance().GetSplitDefinition();
-        int LastID = DefList.get(DefList.size() - 1).getId();
-        //Cree un nouveau split avec un nom temporaire
-        SplitDefinition NewSplit = new SplitDefinition(LastID + 1, ActiveSpeedrun.getInstance().GetSpeedrunID(), "New Split");
+        if (DefList.size() != 0)
+        {
+            int LastID = DefList.get(DefList.size() - 1).getId();
+            //Cree un nouveau split avec un nom temporaire
+            SplitDefinition NewSplit = new SplitDefinition(LastID + 1, ActiveSpeedrun.getInstance().GetSpeedrunID(), "New Split");
+            ActiveSpeedrun.getInstance().AddSplitDefinition(NewSplit);
+        }
+        else
+        {
+            SGBD db = new SGBD(getBaseContext());
+            int ID = db.getNextSplitDefinitionId();
+            SplitDefinition NewSplit = new SplitDefinition(ID, ActiveSpeedrun.getInstance().GetSpeedrunID(), "New Split");
+            ActiveSpeedrun.getInstance().AddSplitDefinition(NewSplit);
+        }
 
-        ActiveSpeedrun.getInstance().AddSplitDefinition(NewSplit);
 
         //refresh la list
-        LoadtSplits();
         ActiveSpeedrun.getInstance().SaveInstance(this);
+        LoadtSplits();
+
     }
 
     @Override

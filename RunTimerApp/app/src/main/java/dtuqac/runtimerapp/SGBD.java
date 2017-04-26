@@ -429,7 +429,7 @@ public class SGBD extends SQLiteOpenHelper {
 
     public int getNextAttemptId(){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select max(id) from as maximum " + ATTEMPT_TABLE_NAME, null );
+        Cursor res = db.rawQuery("select max(id) as maximum from " + ATTEMPT_TABLE_NAME, null);
 
         int count = res.getCount();
         res.moveToNext();

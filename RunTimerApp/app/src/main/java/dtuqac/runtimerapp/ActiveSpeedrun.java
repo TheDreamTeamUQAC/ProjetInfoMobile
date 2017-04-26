@@ -98,9 +98,17 @@ class ActiveSpeedrun {
         //Pour sauver du temps, on considere qu'on ajoute juste a la fin. Donc on ajoute un extra split bidon a tous les attempts
         for (Attempt a : Run.getAttemptHistory())
         {
-            Split LastSplit = a.getSplits().get(a.getSplits().size() - 1);
-            Split temp = new Split(LastSplit.getId() + 1, a.getId(), NewSplitDef.getId(), LastSplit.getDuration(), LastSplit.getSplitTime(), false);
-            a.addSplit(temp);
+            if (a.getSplits().size() == 0)
+            {
+                Split temp = new Split(-1, a.getId(), NewSplitDef.getId(), new CustomTime(0,0,0,0), new CustomTime(0,0,0,0), false);
+                a.addSplit(temp);
+            }
+            else
+            {
+                Split LastSplit = a.getSplits().get(a.getSplits().size() - 1);
+                Split temp = new Split(LastSplit.getId() + 1, a.getId(), NewSplitDef.getId(), LastSplit.getDuration(), LastSplit.getSplitTime(), false);
+                a.addSplit(temp);
+            }
         }
     }
 
